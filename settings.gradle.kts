@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "CS300-Chatchit"
+rootProject.name = "ChatChit"
 include(":app")
  
