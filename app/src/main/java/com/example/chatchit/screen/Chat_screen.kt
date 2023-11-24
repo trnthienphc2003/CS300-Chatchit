@@ -1,6 +1,7 @@
 package com.example.chatchit.screen
 
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,13 +36,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -247,7 +255,7 @@ fun chatRow(
     }
 }
 //--------------------------
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun chatInput(
     message: String,
@@ -255,9 +263,12 @@ fun chatInput(
     modifierText: Modifier = Modifier,
     onValueChange: (String) -> Unit
 ){
+    var messageNew = message
+    val context = LocalContext.current.applicationContext
+    val keyboardController = LocalSoftwareKeyboardController.current
     Row(modifier = modifier.fillMaxWidth()) {
         TextField(
-            value = message,
+            value = messageNew,
             onValueChange = onValueChange,
 //            modifier = modifier.fillMaxWidth(),
             modifier = modifier.width(220.dp),
@@ -271,7 +282,20 @@ fun chatInput(
                     )
                 )
             },
-            trailingIcon = { IconButtonEmoji(modifier = modifierText) }
+            trailingIcon = { IconButtonEmoji(modifier = modifierText) },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Send
+            ),
+            keyboardActions = KeyboardActions(
+                onSend = {
+                    keyboardController?.hide()
+                    messageNew = ""
+                    Toast.makeText(context, "On Search Click: value = $messageNew", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
+            )
         )
 //        SpacerWidth()
         IconButtonRecord(modifier = modifierText)
