@@ -40,4 +40,6 @@
     <string name="total">Total</string>
     <string name="_600">$600</string>
     <string name="welsome_back">Welsome back</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 </resources>
