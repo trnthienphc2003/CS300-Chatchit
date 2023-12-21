@@ -2,9 +2,7 @@ package com.example.chatchit.screen
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -41,9 +39,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.chatchit.R
-import com.google.android.gms.wallet.button.ButtonConstants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,9 +67,9 @@ fun LoginScreen(){
     val password = passwordInput.trim()
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 30.dp, vertical = 30.dp)
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = "Log in to Chatchit",
