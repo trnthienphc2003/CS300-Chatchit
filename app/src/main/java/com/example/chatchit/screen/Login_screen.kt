@@ -39,7 +39,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.chatchit.R
+import com.example.chatchit.navigation.SignUp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,8 +61,10 @@ fun UserInput(
 }
 
 @Composable
-@Preview(showBackground = true)
-fun LoginScreen(){
+//@Preview(showBackground = true)
+fun LoginScreen(
+    navHostController: NavHostController
+){
     var usernameInput by remember { mutableStateOf("") }
     var passwordInput by remember { mutableStateOf("") }
     val username = usernameInput.trim()
@@ -167,7 +171,9 @@ fun LoginScreen(){
         }
 
         Button(
-            onClick = { },
+            onClick = {
+                navHostController.navigate(SignUp)
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,

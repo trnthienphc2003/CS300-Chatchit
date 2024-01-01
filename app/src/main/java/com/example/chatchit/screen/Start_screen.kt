@@ -35,6 +35,7 @@ import com.example.chatchit.component.ButtonComponent
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.navigation.Home
+import com.example.chatchit.navigation.Login
 import com.example.chatchit.ui.theme.Aqua
 
 @Composable
@@ -76,7 +77,7 @@ fun StartScreen(
                 .align(Alignment.BottomCenter)
                 .height(60.dp)
         ) {
-             navHostController.navigate(Home)
+             navHostController.navigate(Login)
         }
     }
 }
