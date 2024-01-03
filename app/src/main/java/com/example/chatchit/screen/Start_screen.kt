@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -34,9 +35,11 @@ import com.example.chatchit.component.ButtonComponent
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.navigation.Home
+import com.example.chatchit.navigation.Login
 import com.example.chatchit.ui.theme.Aqua
 
 @Composable
+@Preview
 fun StartScreen(
     navHostController: NavHostController
 ){
@@ -74,7 +77,7 @@ fun StartScreen(
                 .align(Alignment.BottomCenter)
                 .height(60.dp)
         ) {
-             navHostController.navigate(Home)
+             navHostController.navigate(Login)
         }
     }
 }
