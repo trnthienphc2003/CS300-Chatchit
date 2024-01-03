@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.chatchit.screen.ChatScreen
+import com.example.chatchit.screen.ChatSettingScreen
 import com.example.chatchit.screen.HomeScreen
 import com.example.chatchit.screen.LoginScreen
 import com.example.chatchit.screen.SignUpScreen
@@ -13,7 +14,7 @@ import com.example.chatchit.screen.StartScreen
 @Composable
 fun MainNavigation(){
     val navHostController = rememberNavController()
-    NavHost(navController = navHostController, startDestination = Start){
+    NavHost(navController = navHostController, startDestination = Home){
         composable(Start){
             StartScreen(
                 navHostController
@@ -39,6 +40,11 @@ fun MainNavigation(){
                 navHostController
             )
         }
+        composable(ChatSetting){
+            ChatSettingScreen(
+                navHostController
+            )
+        }
     }
 }
 
@@ -49,3 +55,4 @@ const val Home = "home_screen"
 const val Chat = "chat_screen"
 const val Login = "login_screen"
 const val SignUp = "signup_screen"
+const val ChatSetting = "chat_setting_screen"

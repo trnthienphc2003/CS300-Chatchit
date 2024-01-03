@@ -3,6 +3,7 @@ package com.example.chatchit.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -60,6 +62,8 @@ import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.component.data.Chat
 import com.example.chatchit.component.data.Person
 import com.example.chatchit.component.data.chatList
+import com.example.chatchit.navigation.Chat
+import com.example.chatchit.navigation.ChatSetting
 
 @Composable
 fun ChatScreen(
@@ -146,7 +150,7 @@ fun IconButtonVideoCall(modifier: Modifier = Modifier, navHostController: NavHos
 fun inforBar(
     person: Person,
     modifier: Modifier = Modifier,
-    navHostController: NavHostController
+    navHostController: NavHostController,
 ){
     Row (
         modifier = modifier.fillMaxWidth(),
@@ -156,7 +160,15 @@ fun inforBar(
 //            IconComponentDrawable(icon = R.drawable.baseline_arrow_back_24, modifier = Modifier.align(CenterVertically), size = 25.dp)
             IconButtonBack(modifier = Modifier.align(CenterVertically), navHostController)
             SpacerWidth()
-            IconComponentDrawable(icon = person.icon, size = 42.dp)
+
+            IconButton(onClick = {
+                navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                    "data",
+                    person
+                )
+                navHostController.navigate(ChatSetting)}) {
+                IconComponentDrawable(icon = person.icon, size = 42.dp)
+            }
             SpacerWidth()
             Column {
                 Text(
