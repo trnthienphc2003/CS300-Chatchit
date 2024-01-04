@@ -1,6 +1,7 @@
 package com.example.chatchit.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,7 +15,7 @@ import com.example.chatchit.screen.StartScreen
 @Composable
 fun MainNavigation(){
     val navHostController = rememberNavController()
-    NavHost(navController = navHostController, startDestination = Home){
+    NavHost(navController = navHostController, startDestination = Start){
         composable(Start){
             StartScreen(
                 navHostController
@@ -22,7 +23,8 @@ fun MainNavigation(){
         }
         composable(Login) {
             LoginScreen(
-                navHostController
+                navHostController,
+                LocalContext.current
             )
         }
         composable(SignUp) {

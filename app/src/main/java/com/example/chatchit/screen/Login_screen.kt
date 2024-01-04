@@ -1,5 +1,6 @@
 package com.example.chatchit.screen
 
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +42,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
+import com.example.chatchit.api.UsersApi
+import com.example.chatchit.models.data.LoginDataModel
+import com.example.chatchit.models.response.StatusResponse
+import com.example.chatchit.navigation.Home
 import com.example.chatchit.navigation.SignUp
+import com.example.chatchit.utilities.ApiUtilityClass
+import javax.net.ssl.SSLEngineResult.Status
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +70,8 @@ fun UserInput(
 @Composable
 //@Preview(showBackground = true)
 fun LoginScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    context: Context
 ){
     var usernameInput by remember { mutableStateOf("") }
     var passwordInput by remember { mutableStateOf("") }
@@ -160,7 +168,32 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = { },
+            onClick = {
+                val apiService: UsersApi = ApiUtilityClass.getApiClient(context).create(UsersApi::class.java)
+                val call = apiService.userLogin(LoginDataModel(username, password))
+
+                call.enqueue(object : retrofit2.Callback<StatusResponse> {
+                    override fun onResponse(
+                        call: retrofit2.Call<StatusResponse>,
+                        response: retrofit2.Response<StatusResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val loginDataModel: StatusResponse? = response.body()
+                            if (loginDataModel != null) {
+                                navHostController.navigate(Home)
+                            }
+                        }
+
+                        else {
+                            println("Error: ${response.message()}")
+                        }
+                    }
+
+                    override fun onFailure(call: retrofit2.Call<StatusResponse>, t: Throwable) {
+                        println("Error: ${t.message}")
+                    }
+                })
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF24786D),
