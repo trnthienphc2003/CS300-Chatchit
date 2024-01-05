@@ -1,7 +1,6 @@
 package com.example.chatchit.screen
 
 import android.content.Context
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -42,13 +41,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
-import com.example.chatchit.services.api.AuthAPI
-import com.example.chatchit.services.api.form.LoginForm
-import com.example.chatchit.services.api.APIResponse
-import com.example.chatchit.navigation.Home
+import com.example.chatchit.models.Room
 import com.example.chatchit.navigation.SignUp
 import com.example.chatchit.services.APIService
-import java.util.logging.Logger
+import com.example.chatchit.services.api.APIResponse
+import com.example.chatchit.services.api.AuthAPI
+import com.example.chatchit.services.api.FriendAPI
+import com.example.chatchit.services.api.MessageAPI
+import com.example.chatchit.services.api.RoomAPI
+import com.example.chatchit.services.api.form.FriendIdField
+import com.example.chatchit.services.api.form.LoginForm
+import com.example.chatchit.services.api.form.NameField
+import com.example.chatchit.services.api.form.UserIdField
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
+import java.util.Date
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -169,28 +178,20 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                val apiService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
-                val call = apiService.login(LoginForm(username, password))
-
+                val apiService = APIService.getApiClient(context).create(FriendAPI::class.java)
+                val call = apiService.getFriends()
                 call.enqueue(object : retrofit2.Callback<APIResponse> {
                     override fun onResponse(
                         call: retrofit2.Call<APIResponse>,
                         response: retrofit2.Response<APIResponse>
                     ) {
                         if (response.isSuccessful) {
-                            val loginDataModel: APIResponse? = response.body()
-                            if (loginDataModel != null) {
-                                navHostController.navigate(Home)
-                            }
-                        }
 
-                        else {
-                            println("Error: ${response.message()}")
                         }
                     }
 
                     override fun onFailure(call: retrofit2.Call<APIResponse>, t: Throwable) {
-                        println("Error: ${t.message}")
+                        println(t.message)
                     }
                 })
             },
