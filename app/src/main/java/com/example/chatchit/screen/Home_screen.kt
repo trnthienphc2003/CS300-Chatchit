@@ -1,5 +1,6 @@
 package com.example.chatchit.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -50,7 +51,11 @@ import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.component.data.Person
 import com.example.chatchit.component.data.personList
+import com.example.chatchit.models.Room
+import com.example.chatchit.models.data.ChatModel
+import com.example.chatchit.models.response.ListRoom
 import com.example.chatchit.navigation.Chat
+import com.example.chatchit.services.api.APIResponse
 import com.example.chatchit.ui.theme.Gray400
 
 
@@ -58,6 +63,8 @@ import com.example.chatchit.ui.theme.Gray400
 fun HomeScreen(
     navHostController: NavHostController
 ){
+    val listRoom = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<Room>>("listRoom") ?: emptyList<Room>()
+
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -72,7 +79,7 @@ fun HomeScreen(
             "Pranav",
                 R.drawable.person_1
             )
-            HeaderAndStory(user, navHostController)
+            HeaderAndStory(listRoom, user, navHostController)
             Box(modifier = Modifier
                 .fillMaxSize()
                 .clip(
@@ -89,7 +96,7 @@ fun HomeScreen(
 //
 //                )
                 LazyColumn(modifier = Modifier.padding(top = 30.dp, bottom = 15.dp) ){
-                    items(personList, key = { it.id }) {
+                    items(listRoom, key = { it.id?:Int }) {
                         UserEachRow(person = it) {
                             navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                 "data",
@@ -107,7 +114,7 @@ fun HomeScreen(
 @Composable
 fun UserEachRow(
     modifier: Modifier = Modifier,
-    person: Person,
+    person: Room,
     onClick: () -> Unit
 ){
     Box(modifier = modifier
@@ -122,11 +129,11 @@ fun UserEachRow(
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Row{
-                    IconComponentDrawable(icon = person.icon, size = 60.dp)
+                    IconComponentDrawable(icon = R.drawable.person_2, size = 60.dp)
                     SpacerWidth()
                     Column{
                         Text(
-                            text = person.name, style = TextStyle(
+                            text = person.name?:String(), style = TextStyle(
                                 color = Color.Black,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold
@@ -173,24 +180,24 @@ fun BottomSheetSwipe(
 }
 
 @Composable
-fun HeaderAndStory(user: Person, navHostController: NavHostController){
+fun HeaderAndStory(listRoom: List<Room>, user: Person, navHostController: NavHostController){
     Column (
         modifier = Modifier.padding(start = 20.dp)
     ){
         Header(user, navHostController)
-        ViewStoryLayout(navHostController)
+        ViewStoryLayout(listRoom, navHostController)
     }
 }
 
 
 @Composable
-fun ViewStoryLayout(navHostController: NavHostController){
+fun ViewStoryLayout(listRoom: List<Room>, navHostController: NavHostController){
     LazyRow(modifier = Modifier.padding(vertical = 20.dp)){
 //        item {
 //            AddStoryLayout()
 //            SpacerWidth()
 //        }
-        items(personList, key = {it.id}){
+        items(listRoom, key = {it.id?: Int}){
             UserStoryLayout(person = it){
                 navHostController.currentBackStackEntry?.savedStateHandle?.set(
                     "data",
@@ -231,7 +238,7 @@ fun IconButtonSearch(modifier: Modifier = Modifier, navHostController: NavHostCo
 @Composable
 fun UserStoryLayout(
     modifier: Modifier = Modifier,
-    person: Person,
+    person: Room,
     onClick: () -> Unit
 ){
     Column(
@@ -244,11 +251,11 @@ fun UserStoryLayout(
             .size(70.dp),
         contentAlignment = Center
         ){
-            IconComponentDrawable(icon = person.icon, size = 65.dp)
+            IconComponentDrawable(icon = R.drawable.person_2, size = 65.dp)
         }
         SpacerHeight(8.dp)
         Text(
-            text = person.name,
+            text = person.name?:String(),
             style = TextStyle(
                 fontSize = 13.sp,
                 color = Color.Black,

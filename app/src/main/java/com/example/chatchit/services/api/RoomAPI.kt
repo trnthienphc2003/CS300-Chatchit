@@ -9,7 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface RoomAPI {
-    @GET("api/v1/room/")
+    @GET("api/v1/room")
     fun listRoom(): Call<APIResponse>
 
     @POST("api/v1/room/create")
