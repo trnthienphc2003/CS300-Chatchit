@@ -8,8 +8,10 @@ import com.example.chatchit.services.api.APIResponse
 import com.example.chatchit.services.api.AuthAPI
 import com.example.chatchit.services.api.form.LoginForm
 import com.google.gson.Gson
+import com.google.gson.JsonObject
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -32,7 +34,9 @@ class APIService {
             context: Context,
             clearCookie: Boolean = false,
         ): OkHttpClient {
-            val clientBuilder = OkHttpClient.Builder()
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+            val clientBuilder = OkHttpClient.Builder().addNetworkInterceptor(loggingInterceptor)
             val cookiePrefs: SharedPreferences = context.getSharedPreferences("Cookies", Context.MODE_PRIVATE)
             val cookies = cookiePrefs.getStringSet("Cookies-Set", HashSet())
 
@@ -56,8 +60,11 @@ class APIService {
                     editor.putStringSet("Cookies-Set", cookies)
                     editor.apply()
                 }
+
                 response
             }
+
+
 
             clientBuilder.addInterceptor(interceptor)
             return clientBuilder.build()
