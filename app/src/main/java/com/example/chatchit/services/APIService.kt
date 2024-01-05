@@ -1,66 +1,31 @@
-package com.example.chatchit.utilities
+package com.example.chatchit.services
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.foundation.layout.ColumnScope
-import com.example.chatchit.models.response.StatusResponse
+import android.util.Log
+import com.example.chatchit.models.User
+import com.example.chatchit.services.api.APIResponse
+import com.example.chatchit.services.api.AuthAPI
+import com.example.chatchit.services.api.form.LoginForm
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 
-class ApiUtilityClass {
+class APIService {
     companion object {
-        private fun getBaseUrl(debug: Boolean = false): String {
-            if(debug) return "https://chatchit.1kkfunk.id.vn/"
-            return "https://chatchit.1kkfunk.id.vn/"
-        }
-
-        // source: https://shorturl.at/oABF9
-        fun parseError(
-            errorBody: ResponseBody?
-        ) : StatusResponse {
-            val gson = Gson()
-            val type = object : TypeToken<StatusResponse>() {}.type
-            var errorResponse: StatusResponse? = null
-            try {
-                errorResponse = gson.fromJson(errorBody!!.charStream(), type)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            return errorResponse!!
-        }
+        const val BASE_URL = "https://chatchit.1kkfunk.id.vn/"
 
         fun getApiClient(
             context: Context,
             clearCookie: Boolean = false,
         ): Retrofit {
             return Retrofit.Builder()
-                .baseUrl(getBaseUrl())
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(createOkHttpClient(context, clearCookie))
                 .build()
-        }
-
-        fun <T> debug(
-            response: retrofit2.Response<T>
-        ) {
-            println("Oh no, oh no, Error errorBody: ${response.errorBody()}")
-            println("Oh no, oh no, Error message: ${response.message()}")
-            println("Oh no, oh no, Error code: ${response.code()}")
-            println("Oh no, oh no, Error raw: ${response.raw()}")
-            println("Oh no, oh no, Error body: ${response.body()}")
-            try {
-                val error = parseError(response.errorBody())
-                println("Oh no, oh no, Error error: $error")
-            } catch (e: Exception) {
-                println("charStream: ${response.errorBody()?.charStream()}")
-                println("Cannot parse Error: ${e.message}")
-            }
         }
 
         private fun createOkHttpClient(
@@ -81,6 +46,7 @@ class ApiUtilityClass {
                 }
                 val request = requestBuilder.build()
                 val response = chain.proceed(request)
+
                 if (response.headers("Set-Cookie").isNotEmpty()) {
                     val cookies = HashSet<String>()
                     for (header in response.headers("Set-Cookie")) {
@@ -90,12 +56,12 @@ class ApiUtilityClass {
                     editor.putStringSet("Cookies-Set", cookies)
                     editor.apply()
                 }
-
                 response
             }
 
             clientBuilder.addInterceptor(interceptor)
             return clientBuilder.build()
         }
+
     }
 }

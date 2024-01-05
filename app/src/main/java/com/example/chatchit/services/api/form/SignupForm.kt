@@ -1,8 +1,8 @@
-package com.example.chatchit.models.data
+package com.example.chatchit.services.api.form
 
 import com.google.gson.annotations.SerializedName
 
-data class SignupDataModel(
+data class SignupForm(
     @SerializedName("name")
     var name: String = "",
     @SerializedName("email")
