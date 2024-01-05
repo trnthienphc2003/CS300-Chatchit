@@ -62,6 +62,7 @@ import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.component.data.Chat
 import com.example.chatchit.component.data.Person
 import com.example.chatchit.component.data.chatList
+import com.example.chatchit.models.Room
 import com.example.chatchit.navigation.Chat
 import com.example.chatchit.navigation.ChatSetting
 
@@ -72,7 +73,7 @@ fun ChatScreen(
     var message by remember {
         mutableStateOf("")
     }
-    val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Person>("data") ?: Person()
+    val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
 
     Box(
         modifier = Modifier
@@ -148,7 +149,7 @@ fun IconButtonVideoCall(modifier: Modifier = Modifier, navHostController: NavHos
 
 @Composable
 fun inforBar(
-    person: Person,
+    person: Room,
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
 ){
@@ -167,12 +168,12 @@ fun inforBar(
                     person
                 )
                 navHostController.navigate(ChatSetting)}) {
-                IconComponentDrawable(icon = person.icon, size = 42.dp)
+                IconComponentDrawable(icon = R.drawable.person_2, size = 42.dp)
             }
             SpacerWidth()
             Column {
                 Text(
-                    text = person.name,
+                    text = person.name?:String(),
                     style = TextStyle(
                         color = Color.Black,
                         fontWeight = Bold,
@@ -201,7 +202,7 @@ fun inforBar(
 @Composable
 fun chatRow(
     chat:Chat,
-    person: Person
+    person: Room
 ){
     Column (
         modifier = Modifier.fillMaxWidth(),
@@ -211,7 +212,7 @@ fun chatRow(
             if (!chat.isUser) {
                 if (chat.lastMes) {
                     IconComponentDrawable(
-                        icon = person.icon,
+                        icon = R.drawable.person_2,
                         size = 42.dp,
                         modifier = Modifier.align(CenterVertically)
                     )

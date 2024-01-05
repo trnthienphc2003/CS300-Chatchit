@@ -42,12 +42,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
+import com.example.chatchit.models.Room
 import com.example.chatchit.services.api.AuthAPI
 import com.example.chatchit.services.api.form.LoginForm
 import com.example.chatchit.services.api.APIResponse
 import com.example.chatchit.navigation.Home
 import com.example.chatchit.navigation.SignUp
 import com.example.chatchit.services.APIService
+import com.example.chatchit.services.api.RoomAPI
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import retrofit2.create
 import java.util.logging.Logger
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -180,7 +185,37 @@ fun LoginScreen(
                         if (response.isSuccessful) {
                             val loginDataModel: APIResponse? = response.body()
                             if (loginDataModel != null) {
-                                navHostController.navigate(Home)
+                                val roomAPI: RoomAPI = APIService.getApiClient(context).create(RoomAPI::class.java)
+                                val call = roomAPI.listRoom()
+                                call.enqueue(object : retrofit2.Callback<APIResponse> {
+                                    override fun onResponse(
+                                        call: retrofit2.Call<APIResponse>,
+                                        response: retrofit2.Response<APIResponse>
+                                    ) {
+                                        if (response.isSuccessful) {
+
+                                            val json = Gson().toJson(response.body()?.data)
+                                            val itemType = object : TypeToken<List<Room>>() {}.type
+                                            val listRoom = Gson().fromJson<List<Room>>(json, itemType)
+
+                                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                                "listRoom",
+                                                listRoom
+                                            )
+                                            navHostController.navigate(Home)
+
+
+                                        }
+                                        else {
+                                            println("Error: ${response.message()}")
+                                        }
+                                    }
+
+                                    override fun onFailure(call: retrofit2.Call<APIResponse>, t: Throwable) {
+                                        println("Error: ${t.message}")
+                                    }
+                                })
+//                                navHostController.navigate(Home)
                             }
                         }
 
