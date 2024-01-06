@@ -2,13 +2,6 @@ package com.example.chatchit.services
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
-import com.example.chatchit.models.User
-import com.example.chatchit.services.api.APIResponse
-import com.example.chatchit.services.api.AuthAPI
-import com.example.chatchit.services.api.form.LoginForm
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -28,6 +21,12 @@ class APIService {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(createOkHttpClient(context, clearCookie))
                 .build()
+        }
+
+        fun getCookies(context: Context): MutableSet<String>? {
+            val cookiePrefs: SharedPreferences =
+                context.getSharedPreferences("Cookies", Context.MODE_PRIVATE)
+            return cookiePrefs.getStringSet("Cookies-Set", HashSet())
         }
 
         private fun createOkHttpClient(
