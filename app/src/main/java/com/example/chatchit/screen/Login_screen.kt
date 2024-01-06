@@ -39,9 +39,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -57,6 +59,7 @@ import com.example.chatchit.navigation.Home
 import com.example.chatchit.navigation.SignUp
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.RoomAPI
+import com.example.chatchit.ui.theme.Gray
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.create
@@ -75,11 +78,21 @@ fun UserInput(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            label = { Text(stringResource(label)) },
+            label = { Text(
+                stringResource(label),
+                color = Color(0xFF24786D)
+            ) },
             modifier = modifier,
             maxLines = 1,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            visualTransformation = visualTransformation
+            visualTransformation = visualTransformation,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF24786D),
+                unfocusedBorderColor = Gray,
+                errorBorderColor = Color.Red,
+                errorLabelColor = Color.Red,
+                errorLeadingIconColor = Color.Red
+            )
         )
     }
     
@@ -87,9 +100,19 @@ fun UserInput(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            label = { Text(stringResource(label)) },
+            label = { Text(
+                stringResource(label),
+                color = Color(0xFF24786D)
+            ) },
             maxLines = 1,
-            modifier = modifier
+            modifier = modifier,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF24786D),
+                unfocusedBorderColor = Gray,
+                errorBorderColor = Color.Red,
+                errorLabelColor = Color.Red,
+                errorLeadingIconColor = Color.Red
+            )
         )
     }
 }
@@ -100,10 +123,14 @@ fun LoginScreen(
     navHostController: NavHostController,
     context: Context
 ){
-    var usernameInput by remember { mutableStateOf("") }
+    var emailInput by remember { mutableStateOf("") }
     var passwordInput by remember { mutableStateOf("") }
-    val username = usernameInput.trim()
+    val email = emailInput.trim()
     val password = passwordInput.trim()
+
+    var emailValid by remember { mutableStateOf(true) }
+    var passwordValid by remember { mutableStateOf(true) }
+//    var buttonEnable by remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -112,14 +139,14 @@ fun LoginScreen(
     ) {
         Text(
             text = "Log in to Chatchit",
-            style = MaterialTheme.typography.headlineLarge,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             fontFamily = FontFamily.SansSerif,
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "Welcome back! Sign in using your social account or email to continue with us.",
@@ -172,9 +199,12 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(30.dp))
 
         UserInput(
-            label = R.string.username,
-            value = usernameInput,
-            onValueChange = { usernameInput = it },
+            label = R.string.email,
+            value = emailInput,
+            onValueChange = {
+                emailInput = it
+                emailValid = it.isValidEmail()
+                            },
             modifier = Modifier.fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp,
                     bottom = 10.dp),
@@ -184,7 +214,10 @@ fun LoginScreen(
 
         UserInput(
             value = passwordInput,
-            onValueChange = { passwordInput = it },
+            onValueChange = {
+                passwordInput = it
+                passwordValid = !it.isEmpty()
+                            },
             label = R.string.password,
             modifier = Modifier.fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp,
@@ -197,7 +230,7 @@ fun LoginScreen(
         Button(
             onClick = {
                 val apiService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
-                val call = apiService.login(LoginForm(username, password))
+                val call = apiService.login(LoginForm(email, password))
 
                 call.enqueue(object : retrofit2.Callback<APIResponse> {
                     override fun onResponse(
@@ -254,13 +287,17 @@ fun LoginScreen(
             },
             modifier = Modifier.fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp),
+            enabled = emailValid && passwordValid,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF24786D),
                 contentColor = Color.White
             ),
             shape = RoundedCornerShape(25)
         ) {
-            Text("Log in")
+            Text(
+                "Log in",
+                fontWeight = FontWeight.Bold,
+            )
         }
 
         Button(
@@ -275,6 +312,7 @@ fun LoginScreen(
         ) {
             Text(
                 "Forgot password?",
+                fontWeight = FontWeight.Bold,
                 color = Color(0xFF24786D)
             )
         }
