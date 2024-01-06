@@ -4,7 +4,7 @@ import java.util.Date
 
 class User {
     @SerializedName("ID")
-    var id: String? = null
+    var id: Int? = null
     @SerializedName("name")
     var name: String? = null
     @SerializedName("email")
