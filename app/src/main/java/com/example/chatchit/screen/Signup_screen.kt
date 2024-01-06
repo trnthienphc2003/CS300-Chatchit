@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -139,8 +140,8 @@ fun String.isValidEmail(): Boolean {
     return contains("@") && contains(".") && !isDigitsOnly()
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewSignUpScreen() {
-//    SignUpScreen()
-//}
+@Preview(showBackground = true)
+@Composable
+fun PreviewSignUpScreen() {
+    SignUpScreen(rememberNavController())
+}
