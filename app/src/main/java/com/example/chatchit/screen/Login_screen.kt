@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.models.Room
+import com.example.chatchit.navigation.Home
 import com.example.chatchit.navigation.SignUp
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.APIResponse
@@ -59,10 +60,15 @@ import com.example.chatchit.services.api.AuthAPI
 import com.example.chatchit.services.api.FriendAPI
 import com.example.chatchit.services.api.MessageAPI
 import com.example.chatchit.services.api.RoomAPI
+import com.example.chatchit.services.api.await
+import com.example.chatchit.services.api.form.LoginForm
 import com.example.chatchit.ui.theme.Gray
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.util.Date
 
 
@@ -230,51 +236,27 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                val apiService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
-                val call = apiService.login(LoginForm(email, password))
 
-                call.enqueue(object : retrofit2.Callback<APIResponse> {
-                    override fun onResponse(
-                        call: retrofit2.Call<APIResponse>,
-                        response: retrofit2.Response<APIResponse>
-                    ) {
-                        if (response.isSuccessful) {
-
-                                            val json = Gson().toJson(response.body()?.data)
-                                            val itemType = object : TypeToken<List<Room>>() {}.type
-                                            val listRoom = Gson().fromJson<List<Room>>(json, itemType)
-
-                                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                                "listRoom",
-                                                listRoom
-                                            )
-                                            navHostController.navigate(Home)
-
-
-                                        }
-                                        else {
-                                            println("Error: ${response.message()}")
-                                        }
-                                    }
-
-                                    override fun onFailure(call: retrofit2.Call<APIResponse>, t: Throwable) {
-                                        println("Error: ${t.message}")
-                                    }
-                                })
-//                                navHostController.navigate(Home)
-                            }
-                        }
-
-                        else {
-                            Toast.makeText(context, "The email address or password is incorrect. Please try again!", Toast.LENGTH_SHORT).show()
-                            println("Error: ${response.message()}")
-                        }
+                val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
+                var success = false
+                MainScope().launch {
+                    try {
+                        val loginAPIResponse = authService.login(LoginForm(email, password)).await()
+                        val roomService: RoomAPI = APIService.getApiClient(context).create(RoomAPI::class.java)
+                        val roomAPIResponse = roomService.listRoom().await()
+                        val json = Gson().toJson(roomAPIResponse.data)
+                        val itemType = object : TypeToken<List<Room>>() {}.type
+                        val listRoom = Gson().fromJson<List<Room>>(json, itemType)
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "listRoom",
+                            listRoom
+                        )
+                        navHostController.navigate(Home)
+                    } catch (e: Exception) {
+                        Log.e("LoginScreen", e.toString())
+                        Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
                     }
-
-                    override fun onFailure(call: retrofit2.Call<APIResponse>, t: Throwable) {
-                        println(t.message)
-                    }
-                })
+                }
             },
             modifier = Modifier.fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp),
