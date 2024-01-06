@@ -1,6 +1,8 @@
 package com.example.chatchit.screen
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -23,8 +27,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,11 +39,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
@@ -49,10 +59,7 @@ import com.example.chatchit.services.api.AuthAPI
 import com.example.chatchit.services.api.FriendAPI
 import com.example.chatchit.services.api.MessageAPI
 import com.example.chatchit.services.api.RoomAPI
-import com.example.chatchit.services.api.form.FriendIdField
-import com.example.chatchit.services.api.form.LoginForm
-import com.example.chatchit.services.api.form.NameField
-import com.example.chatchit.services.api.form.UserIdField
+import com.example.chatchit.ui.theme.Gray
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -68,12 +75,47 @@ fun UserInput(
     modifier: Modifier = Modifier,
     visualTransformation: PasswordVisualTransformation? = null
 ) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(stringResource(label)) },
-        modifier = modifier
-    )
+    if (visualTransformation != null) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            label = { Text(
+                stringResource(label),
+                color = Color(0xFF24786D)
+            ) },
+            modifier = modifier,
+            maxLines = 1,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            visualTransformation = visualTransformation,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF24786D),
+                unfocusedBorderColor = Gray,
+                errorBorderColor = Color.Red,
+                errorLabelColor = Color.Red,
+                errorLeadingIconColor = Color.Red
+            )
+        )
+    }
+    
+    else {
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            label = { Text(
+                stringResource(label),
+                color = Color(0xFF24786D)
+            ) },
+            maxLines = 1,
+            modifier = modifier,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color(0xFF24786D),
+                unfocusedBorderColor = Gray,
+                errorBorderColor = Color.Red,
+                errorLabelColor = Color.Red,
+                errorLeadingIconColor = Color.Red
+            )
+        )
+    }
 }
 
 @Composable
@@ -82,10 +124,14 @@ fun LoginScreen(
     navHostController: NavHostController,
     context: Context
 ){
-    var usernameInput by remember { mutableStateOf("") }
+    var emailInput by remember { mutableStateOf("") }
     var passwordInput by remember { mutableStateOf("") }
-    val username = usernameInput.trim()
+    val email = emailInput.trim()
     val password = passwordInput.trim()
+
+    var emailValid by remember { mutableStateOf(true) }
+    var passwordValid by remember { mutableStateOf(true) }
+//    var buttonEnable by remember { mutableStateOf(true) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -94,14 +140,14 @@ fun LoginScreen(
     ) {
         Text(
             text = "Log in to Chatchit",
-            style = MaterialTheme.typography.headlineLarge,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             fontFamily = FontFamily.SansSerif,
             textAlign = TextAlign.Center
         )
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "Welcome back! Sign in using your social account or email to continue with us.",
@@ -154,23 +200,29 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(30.dp))
 
         UserInput(
-            label = R.string.username,
-            value = usernameInput,
-            onValueChange = { usernameInput = it },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 32.dp)
+            label = R.string.email,
+            value = emailInput,
+            onValueChange = {
+                emailInput = it
+                emailValid = it.isValidEmail()
+                            },
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp,
+                    bottom = 10.dp),
         )
 
         Spacer(modifier = Modifier.height(15.dp))
 
         UserInput(
             value = passwordInput,
-            onValueChange = { passwordInput = it },
+            onValueChange = {
+                passwordInput = it
+                passwordValid = !it.isEmpty()
+                            },
             label = R.string.password,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 32.dp),
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp,
+                    bottom = 10.dp),
             visualTransformation = PasswordVisualTransformation()
         )
 
@@ -178,8 +230,9 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                val apiService = APIService.getApiClient(context).create(FriendAPI::class.java)
-                val call = apiService.getFriends()
+                val apiService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
+                val call = apiService.login(LoginForm(email, password))
+
                 call.enqueue(object : retrofit2.Callback<APIResponse> {
                     override fun onResponse(
                         call: retrofit2.Call<APIResponse>,
@@ -187,6 +240,34 @@ fun LoginScreen(
                     ) {
                         if (response.isSuccessful) {
 
+                                            val json = Gson().toJson(response.body()?.data)
+                                            val itemType = object : TypeToken<List<Room>>() {}.type
+                                            val listRoom = Gson().fromJson<List<Room>>(json, itemType)
+
+                                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                                "listRoom",
+                                                listRoom
+                                            )
+                                            navHostController.navigate(Home)
+
+
+                                        }
+                                        else {
+                                            println("Error: ${response.message()}")
+                                        }
+                                    }
+
+                                    override fun onFailure(call: retrofit2.Call<APIResponse>, t: Throwable) {
+                                        println("Error: ${t.message}")
+                                    }
+                                })
+//                                navHostController.navigate(Home)
+                            }
+                        }
+
+                        else {
+                            Toast.makeText(context, "The email address or password is incorrect. Please try again!", Toast.LENGTH_SHORT).show()
+                            println("Error: ${response.message()}")
                         }
                     }
 
@@ -195,13 +276,19 @@ fun LoginScreen(
                     }
                 })
             },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp),
+            enabled = emailValid && passwordValid,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF24786D),
                 contentColor = Color.White
-            )
+            ),
+            shape = RoundedCornerShape(25)
         ) {
-            Text("Log in")
+            Text(
+                "Log in",
+                fontWeight = FontWeight.Bold,
+            )
         }
 
         Button(
@@ -216,9 +303,18 @@ fun LoginScreen(
         ) {
             Text(
                 "Forgot password?",
+                fontWeight = FontWeight.Bold,
                 color = Color(0xFF24786D)
             )
         }
     }
 }
 
+@Composable
+@Preview(showBackground = true)
+fun previewLogin() {
+    LoginScreen(
+        navHostController = NavHostController(androidx.compose.ui.platform.LocalContext.current),
+        context = androidx.compose.ui.platform.LocalContext.current
+    )
+}

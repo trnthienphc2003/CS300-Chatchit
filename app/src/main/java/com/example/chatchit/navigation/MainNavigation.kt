@@ -29,7 +29,8 @@ fun MainNavigation(){
         }
         composable(SignUp) {
             SignUpScreen(
-                navHostController
+                navHostController,
+                LocalContext.current
             )
         }
         composable(Home){
