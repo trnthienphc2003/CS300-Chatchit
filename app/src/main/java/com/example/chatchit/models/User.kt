@@ -1,18 +1,20 @@
 package com.example.chatchit.models
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 import java.util.Date
-
-class User {
+@Parcelize
+class User (
     @SerializedName("ID")
-    var id: Int? = null
+    val id: Int? = null,
     @SerializedName("name")
-    var name: String? = null
+    val name: String? = null,
     @SerializedName("email")
-    var email: String? = null
+    val email: String? = null,
     @SerializedName("CreatedAt")
-    var createdAt: Date? = null
+    val createdAt: Date? = null,
     @SerializedName("UpdatedAt")
-    var updatedAt: Date? = null
+    val updatedAt: Date? = null,
     @SerializedName("DeletedAt")
-    var deletedAt: Date? = null
-}
+    val deletedAt: Date? = null,
+) : Parcelable

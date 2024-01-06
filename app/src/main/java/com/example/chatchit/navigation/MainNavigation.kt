@@ -35,7 +35,8 @@ fun MainNavigation(){
         }
         composable(Home){
             HomeScreen(
-                navHostController
+                navHostController,
+                LocalContext.current
             )
         }
         composable(Chat){

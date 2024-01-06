@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.models.Room
+import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Home
 import com.example.chatchit.navigation.SignUp
 import com.example.chatchit.services.APIService
@@ -247,9 +248,19 @@ fun LoginScreen(
                         val json = Gson().toJson(roomAPIResponse.data)
                         val itemType = object : TypeToken<List<Room>>() {}.type
                         val listRoom = Gson().fromJson<List<Room>>(json, itemType)
+
+                        val userResponse = authService.getUser().await()
+                        val jsonUser = Gson().toJson(userResponse.data)
+                        val itemUserType = object : TypeToken<User>() {}.type
+                        val user = Gson().fromJson<User>(jsonUser, itemUserType)
+
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
                             "listRoom",
                             listRoom
+                        )
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "user",
+                            user
                         )
                         navHostController.navigate(Home)
                     } catch (e: Exception) {

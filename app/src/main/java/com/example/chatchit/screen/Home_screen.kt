@@ -1,6 +1,8 @@
 package com.example.chatchit.screen
 
 import android.util.Log
+import android.widget.Toast
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -51,19 +53,33 @@ import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.component.data.Person
 import com.example.chatchit.component.data.personList
+import com.example.chatchit.models.Mess
 import com.example.chatchit.models.Room
+import com.example.chatchit.models.User
 import com.example.chatchit.models.data.ChatModel
 import com.example.chatchit.models.response.ListRoom
 import com.example.chatchit.navigation.Chat
+import com.example.chatchit.navigation.Home
+import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.APIResponse
+import com.example.chatchit.services.api.MessageAPI
+import com.example.chatchit.services.api.RoomAPI
+import com.example.chatchit.services.api.await
+import com.example.chatchit.services.api.form.LoginForm
 import com.example.chatchit.ui.theme.Gray400
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun HomeScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    context: Context
 ){
     val listRoom = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<Room>>("listRoom") ?: emptyList<Room>()
+    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -74,12 +90,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(top = 20.dp)
         ){
-            val user = Person(
-                1,
-            "Pranav",
-                R.drawable.person_1
-            )
-            HeaderAndStory(listRoom, user, navHostController)
+            HeaderAndStory(context, listRoom, user, navHostController)
             Box(modifier = Modifier
                 .fillMaxSize()
                 .clip(
@@ -98,11 +109,43 @@ fun HomeScreen(
                 LazyColumn(modifier = Modifier.padding(top = 30.dp, bottom = 15.dp) ){
                     items(listRoom, key = { it.id?:Int }) {
                         UserEachRow(person = it) {
-                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                "data",
-                                it
-                            )
-                            navHostController.navigate(Chat)
+//                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+//                                "data",
+//                                it
+//                            )
+//                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+//                                "user",
+//                                user
+//                            )
+//                            navHostController.navigate(Chat)
+                            MainScope().launch {
+                                try {
+                                    val mesService: MessageAPI =
+                                        APIService.getApiClient(context).create(
+                                            MessageAPI::class.java
+                                        )
+                                    val messAPIResponse =
+                                        mesService.getMessage(it.id ?: 0, 1, 100).await()
+                                    val json = Gson().toJson(messAPIResponse.data)
+                                    val itemType = object : TypeToken<Mess>() {}.type
+                                    val mess = Gson().fromJson<Mess>(json, itemType)
+                                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "data",
+                                        it
+                                    )
+                                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "user",
+                                        user
+                                    )
+                                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "mess",
+                                        mess
+                                    )
+                                    navHostController.navigate(Chat)
+                                } catch (e: Exception) {
+                                    Log.e("moveChat", e.toString())
+                                }
+                            }
                         }
                     }
                 }
@@ -180,18 +223,18 @@ fun BottomSheetSwipe(
 }
 
 @Composable
-fun HeaderAndStory(listRoom: List<Room>, user: Person, navHostController: NavHostController){
+fun HeaderAndStory(context:Context, listRoom: List<Room>, user: User, navHostController: NavHostController){
     Column (
         modifier = Modifier.padding(start = 20.dp)
     ){
         Header(user, navHostController)
-        ViewStoryLayout(listRoom, navHostController)
+        ViewStoryLayout(context, user, listRoom, navHostController)
     }
 }
 
 
 @Composable
-fun ViewStoryLayout(listRoom: List<Room>, navHostController: NavHostController){
+fun ViewStoryLayout(context:Context, user: User, listRoom: List<Room>, navHostController: NavHostController){
     LazyRow(modifier = Modifier.padding(vertical = 20.dp)){
 //        item {
 //            AddStoryLayout()
@@ -199,11 +242,34 @@ fun ViewStoryLayout(listRoom: List<Room>, navHostController: NavHostController){
 //        }
         items(listRoom, key = {it.id?: Int}){
             UserStoryLayout(person = it){
-                navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                    "data",
-                    it
-                )
-                navHostController.navigate(Chat)
+                MainScope().launch {
+                    try {
+                        val mesService: MessageAPI =
+                            APIService.getApiClient(context).create(
+                                MessageAPI::class.java
+                            )
+                        val messAPIResponse =
+                            mesService.getMessage(it.id ?: 0, 1, 100).await()
+                        val json = Gson().toJson(messAPIResponse.data)
+                        val itemType = object : TypeToken<Mess>() {}.type
+                        val mess = Gson().fromJson<Mess>(json, itemType)
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "data",
+                            it
+                        )
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "user",
+                            user
+                        )
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "mess",
+                            mess
+                        )
+                        navHostController.navigate(Chat)
+                    } catch (e: Exception) {
+                        Log.e("moveChat", e.toString())
+                    }
+                }
             }
         }
     }
@@ -211,7 +277,7 @@ fun ViewStoryLayout(listRoom: List<Room>, navHostController: NavHostController){
 
 
 @Composable
-fun Header(user: Person, navHostController: NavHostController){
+fun Header(user: User, navHostController: NavHostController){
     Row(modifier = Modifier.fillMaxWidth().padding(end=20.dp), horizontalArrangement = Arrangement.SpaceBetween){
         IconButtonSearch(modifier = Modifier.align(CenterVertically), navHostController = navHostController)
         Text(text = "Home", modifier = Modifier.align(CenterVertically), style = TextStyle(
@@ -219,7 +285,7 @@ fun Header(user: Person, navHostController: NavHostController){
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp
         ))
-        IconComponentDrawable(icon = user.icon, modifier = Modifier.align(CenterVertically), size = 50.dp)
+        IconComponentDrawable(icon = R.drawable.person_3, modifier = Modifier.align(CenterVertically), size = 50.dp)
     }
 }
 

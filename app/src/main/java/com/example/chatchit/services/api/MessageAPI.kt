@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface MessageAPI {
     @GET("api/v1/message")
     fun getMessage(
-        @Query("RoomId") roomId: String,
+        @Query("RoomId") roomId: Int,
         @Query("Page") page: Int,
         @Query("Limit") limit: Int
     ): Call<APIResponse>

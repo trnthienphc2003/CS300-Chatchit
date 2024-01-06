@@ -18,7 +18,7 @@ interface AuthAPI {
         @Body signupForm: SignupForm
     ): Call<APIResponse>
 
-    @GET("api/v1/auth/user")
+    @GET("api/v1/user")
     fun getUser(): Call<APIResponse>
 
     @POST("api/v1/auth/logout")
