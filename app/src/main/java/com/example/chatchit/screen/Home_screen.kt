@@ -1,7 +1,6 @@
 package com.example.chatchit.screen
 
 import android.util.Log
-import android.widget.Toast
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,10 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -46,26 +42,17 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.IconComponentImageVector
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
-import com.example.chatchit.component.data.Person
-import com.example.chatchit.component.data.personList
-import com.example.chatchit.models.Mess
+import com.example.chatchit.models.Conversation
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
-import com.example.chatchit.models.data.ChatModel
-import com.example.chatchit.models.response.ListRoom
 import com.example.chatchit.navigation.Chat
-import com.example.chatchit.navigation.Home
 import com.example.chatchit.services.APIService
-import com.example.chatchit.services.api.APIResponse
 import com.example.chatchit.services.api.MessageAPI
-import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
-import com.example.chatchit.services.api.form.LoginForm
 import com.example.chatchit.ui.theme.Gray400
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -127,8 +114,8 @@ fun HomeScreen(
                                     val messAPIResponse =
                                         mesService.getMessage(it.id ?: 0, 1, 100).await()
                                     val json = Gson().toJson(messAPIResponse.data)
-                                    val itemType = object : TypeToken<Mess>() {}.type
-                                    val mess = Gson().fromJson<Mess>(json, itemType)
+                                    val itemType = object : TypeToken<Conversation>() {}.type
+                                    val conversation = Gson().fromJson<Conversation>(json, itemType)
                                     navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                         "data",
                                         it
@@ -138,8 +125,8 @@ fun HomeScreen(
                                         user
                                     )
                                     navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "mess",
-                                        mess
+                                        "conversation",
+                                        conversation
                                     )
                                     navHostController.navigate(Chat)
                                 } catch (e: Exception) {
@@ -251,8 +238,8 @@ fun ViewStoryLayout(context:Context, user: User, listRoom: List<Room>, navHostCo
                         val messAPIResponse =
                             mesService.getMessage(it.id ?: 0, 1, 100).await()
                         val json = Gson().toJson(messAPIResponse.data)
-                        val itemType = object : TypeToken<Mess>() {}.type
-                        val mess = Gson().fromJson<Mess>(json, itemType)
+                        val itemType = object : TypeToken<Conversation>() {}.type
+                        val mess = Gson().fromJson<Conversation>(json, itemType)
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
                             "data",
                             it

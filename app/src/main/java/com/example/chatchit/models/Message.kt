@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class chatRow (
+class Message (
     @SerializedName("id")
     val id:Int ?= null,
     @SerializedName("content")
@@ -13,9 +13,9 @@ class chatRow (
     @SerializedName("roomId")
     val roomId:Int ?= null,
     @SerializedName("senderId")
-    val senderid:Int ?= null,
+    val senderId:Int ?= null,
     @SerializedName("user")
-    val user: Sender ?= null,
+    val user: User ?= null,
     @SerializedName("metadata")
     val metadata:String ?= "test",
 

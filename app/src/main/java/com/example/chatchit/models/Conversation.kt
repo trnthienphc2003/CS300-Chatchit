@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-class Mess(
+class Conversation(
     @SerializedName("page")
     val page : Int ?= null,
     @SerializedName("limit")
@@ -15,5 +15,5 @@ class Mess(
     @SerializedName("totalRows")
     val totalRows : Int ?= null,
     @SerializedName("rows")
-    val rows : List<chatRow> ?= null
+    val rows : List<Message> ?= null
 )  : Parcelable

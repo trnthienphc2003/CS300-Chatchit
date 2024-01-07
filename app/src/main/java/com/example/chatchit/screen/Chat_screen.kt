@@ -61,11 +61,11 @@ import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.component.data.Chat
 import com.example.chatchit.component.data.Person
+import com.example.chatchit.models.Conversation
 //import com.example.chatchit.component.data.chatList
-import com.example.chatchit.models.Mess
+import com.example.chatchit.models.Message
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
-import com.example.chatchit.models.chatRow
 import com.example.chatchit.navigation.Chat
 import com.example.chatchit.navigation.ChatSetting
 
@@ -78,8 +78,8 @@ fun ChatScreen(
     }
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
-    val mess = navHostController.previousBackStackEntry?.savedStateHandle?.get<Mess>("mess") ?: Mess()
-    val chatList = mess.rows ?: emptyList<chatRow>()
+    val mess = navHostController.previousBackStackEntry?.savedStateHandle?.get<Conversation>("conversation") ?: Conversation()
+    val chatList = mess.rows ?: emptyList<Message>()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -218,15 +218,15 @@ fun inforBar(
 @Composable
 fun chatRow(
     user: User,
-    chat:chatRow,
+    chat: Message,
     person: Room
 ){
     Column (
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = if (chat.senderid == user.id) Alignment.End else Alignment.Start
+        horizontalAlignment = if (chat.senderId == user.id) Alignment.End else Alignment.Start
     ) {
         Row {
-            if (chat.senderid != user.id) {
+            if (chat.senderId != user.id) {
                 if (true) {
                     IconComponentDrawable(
                         icon = R.drawable.person_2,
@@ -241,7 +241,7 @@ fun chatRow(
             }
             Box(
                 modifier = Modifier.background(
-                    if (chat.senderid == user.id) Color.Green else Color.LightGray,
+                    if (chat.senderId == user.id) Color.Green else Color.LightGray,
                     RoundedCornerShape(20.dp)
                 )
             ) {
@@ -256,7 +256,7 @@ fun chatRow(
             }
         }
         if (true) {
-            if (chat.senderid != user.id) {
+            if (chat.senderId != user.id) {
                 Text(
                     text = "12:55", style = TextStyle(
                         fontSize = 12.sp,

@@ -1,14 +1,14 @@
 package com.example.chatchit.component.data
 
-import com.example.chatchit.models.Sender
+import com.example.chatchit.models.User
 
 data class Chat(
-    val id:Int,
+    val id: Int,
 //    val lastMes:Boolean = true,
-    val content:String,
-    val roomId:Int,
-    val senderid:Int,
-    val user: Sender,
+    val content: String,
+    val roomId: Int,
+    val senderId: Int,
+    val user: User,
     val metadata:String ?= "test",
     val lastMes: Boolean
 //    val isUser:Boolean
@@ -20,7 +20,7 @@ val chatList = listOf(
         "Hey! How have you been?",
         4,
         3,
-        Sender(0),
+        User(0),
         lastMes = false
     ),
     Chat(
@@ -28,7 +28,7 @@ val chatList = listOf(
         "Wanna catch up for a beer?",
         4,
         3,
-        Sender(),
+        User(),
         lastMes = true
     ),
     Chat(
@@ -36,7 +36,7 @@ val chatList = listOf(
         "Awesome! Let’s meet up",
         4,
         1,
-        Sender(),
+        User(),
         lastMes = false
     ),
     Chat(
@@ -44,7 +44,7 @@ val chatList = listOf(
         "Can I also get my cousin along? Will that be okay?",
         4,
         1,
-        Sender(),
+        User(),
         lastMes = true
     ),
 //    Chat(
