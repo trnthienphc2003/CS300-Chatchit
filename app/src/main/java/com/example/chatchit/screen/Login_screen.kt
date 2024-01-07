@@ -92,7 +92,7 @@ fun UserInput(
             ) },
             modifier = modifier,
             maxLines = 1,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = visualTransformation,
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Color(0xFF24786D),
@@ -114,6 +114,7 @@ fun UserInput(
             ) },
             maxLines = 1,
             modifier = modifier,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Color(0xFF24786D),
                 unfocusedBorderColor = Gray,
