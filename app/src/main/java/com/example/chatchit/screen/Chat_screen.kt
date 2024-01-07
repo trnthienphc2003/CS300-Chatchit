@@ -61,9 +61,11 @@ import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.component.data.Chat
 import com.example.chatchit.component.data.Person
-import com.example.chatchit.component.data.chatList
+//import com.example.chatchit.component.data.chatList
+import com.example.chatchit.models.Mess
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
+import com.example.chatchit.models.chatRow
 import com.example.chatchit.navigation.Chat
 import com.example.chatchit.navigation.ChatSetting
 
@@ -76,6 +78,8 @@ fun ChatScreen(
     }
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
+    val mess = navHostController.previousBackStackEntry?.savedStateHandle?.get<Mess>("mess") ?: Mess()
+    val chatList = mess.rows ?: emptyList<chatRow>()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -95,8 +99,10 @@ fun ChatScreen(
             ){
                 LazyColumn(modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 10.dp, bottom = 75.dp) ){
-                    items(chatList, key = {it.id}){
+                    .padding(top = 10.dp, bottom = 75.dp),
+                    reverseLayout = true
+                ){
+                    items(chatList, key = {it.id?:Int}){
                         chatRow(user, chat = it, person)
                     }
                 }
@@ -212,7 +218,7 @@ fun inforBar(
 @Composable
 fun chatRow(
     user: User,
-    chat:Chat,
+    chat:chatRow,
     person: Room
 ){
     Column (
@@ -221,7 +227,7 @@ fun chatRow(
     ) {
         Row {
             if (chat.senderid != user.id) {
-                if (chat.lastMes) {
+                if (true) {
                     IconComponentDrawable(
                         icon = R.drawable.person_2,
                         size = 42.dp,
@@ -240,7 +246,7 @@ fun chatRow(
                 )
             ) {
                 Text(
-                    text = chat.content, style = TextStyle(
+                    text = chat.content?: String(), style = TextStyle(
                         fontSize = 15.sp,
                         color = Color.Black,
                     ),
@@ -249,7 +255,7 @@ fun chatRow(
 
             }
         }
-        if (chat.lastMes) {
+        if (true) {
             if (chat.senderid != user.id) {
                 Text(
                     text = "12:55", style = TextStyle(

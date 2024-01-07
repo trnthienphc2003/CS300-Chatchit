@@ -18,4 +18,5 @@ class chatRow (
     val user: Sender ?= null,
     @SerializedName("metadata")
     val metadata:String ?= "test",
+
 )  : Parcelable

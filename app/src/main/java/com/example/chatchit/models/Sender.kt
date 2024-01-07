@@ -5,10 +5,10 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class Sender (
-//    @SerializedName("ID")
+    @SerializedName("ID")
     val id: Int? = null,
-//    @SerializedName("name")
+    @SerializedName("name")
     val name: String? = null,
-//    @SerializedName("email")
+    @SerializedName("email")
     val email: String? = null,
 ) : Parcelable
