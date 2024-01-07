@@ -56,6 +56,7 @@ import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Home
 import com.example.chatchit.navigation.SignUp
 import com.example.chatchit.services.APIService
+import com.example.chatchit.services.WebSocketService
 import com.example.chatchit.services.api.APIResponse
 import com.example.chatchit.services.api.AuthAPI
 import com.example.chatchit.services.api.FriendAPI
@@ -240,7 +241,6 @@ fun LoginScreen(
             onClick = {
 
                 val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
-                var success = false
                 MainScope().launch {
                     try {
                         val loginAPIResponse = authService.login(LoginForm(email, password)).await()
@@ -254,6 +254,8 @@ fun LoginScreen(
                         val jsonUser = Gson().toJson(userResponse.data)
                         val itemUserType = object : TypeToken<User>() {}.type
                         val user = Gson().fromJson<User>(jsonUser, itemUserType)
+
+                        WebSocketService.getInstance().setup(context, user.id!!)
 
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
                             "listRoom",

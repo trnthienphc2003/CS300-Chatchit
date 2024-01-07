@@ -1,6 +1,7 @@
 package com.example.chatchit.screen
 
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -68,6 +69,10 @@ import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Chat
 import com.example.chatchit.navigation.ChatSetting
+import com.example.chatchit.services.WebSocketCallback
+import com.example.chatchit.services.WebSocketService
+import com.example.chatchit.services.api.form.MessageForm
+import okhttp3.internal.notify
 
 @Composable
 fun ChatScreen(
@@ -78,8 +83,10 @@ fun ChatScreen(
     }
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
-    val mess = navHostController.previousBackStackEntry?.savedStateHandle?.get<Conversation>("conversation") ?: Conversation()
-    val chatList = mess.rows ?: emptyList<Message>()
+    val conversation = navHostController.previousBackStackEntry?.savedStateHandle?.get<Conversation>("conversation") ?: Conversation()
+    val roomId = navHostController.previousBackStackEntry?.savedStateHandle?.get<Int>("roomId") ?: -1
+    val chatList = conversation.rows ?: emptyList<Message>()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -106,7 +113,7 @@ fun ChatScreen(
                         chatRow(user, chat = it, person)
                     }
                 }
-                chatInput(message = message, modifier = Modifier.align(BottomCenter), modifierText = Modifier.align(
+                chatInput(roomId = roomId, message = message, modifier = Modifier.align(BottomCenter), modifierText = Modifier.align(
                     Center)){
                     message = it
                 }
@@ -288,19 +295,19 @@ fun chatRow(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun chatInput(
+    roomId: Int,
     message: String,
     modifier: Modifier = Modifier,
     modifierText: Modifier = Modifier,
     onValueChange: (String) -> Unit
 ){
-    var messageNew = message
+    var newMessage = message
     val context = LocalContext.current.applicationContext
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(modifier = modifier.fillMaxWidth()) {
         TextField(
-            value = messageNew,
+            value = newMessage,
             onValueChange = onValueChange,
-//            modifier = modifier.fillMaxWidth(),
             modifier = modifier.width(220.dp),
             shape = RoundedCornerShape(160.dp),
             placeholder = {
@@ -314,16 +321,20 @@ fun chatInput(
             },
             trailingIcon = { IconButtonEmoji(modifier = modifierText) },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
+                keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Send
             ),
             keyboardActions = KeyboardActions(
                 onSend = {
                     keyboardController?.hide()
-                    messageNew = ""
-                    Toast.makeText(context, "On Search Click: value = $messageNew", Toast.LENGTH_SHORT)
-                        .show()
-
+                    val content = message.trim()
+                    onValueChange("")
+                    WebSocketService.getInstance().sendMessage(
+                        MessageForm(
+                            content = content,
+                            roomId = roomId
+                        )
+                    )
                 }
             )
         )

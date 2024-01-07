@@ -128,6 +128,10 @@ fun HomeScreen(
                                         "conversation",
                                         conversation
                                     )
+                                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                        "roomId",
+                                        it.id
+                                    )
                                     navHostController.navigate(Chat)
                                 } catch (e: Exception) {
                                     Log.e("moveChat", e.toString())
