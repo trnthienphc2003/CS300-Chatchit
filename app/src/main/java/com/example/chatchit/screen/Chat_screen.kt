@@ -137,6 +137,17 @@ fun IconButtonCall(modifier: Modifier = Modifier, navHostController: NavHostCont
 }
 
 @Composable
+fun IconButtonTranslate(modifier: Modifier = Modifier, navHostController: NavHostController) {
+    IconButton(onClick = { /* do something */ }) {
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_g_translate_24),
+            contentDescription = "",
+            modifier = modifier.size(size = 25.dp),
+            tint = Color.Unspecified
+        )
+    }
+}
+@Composable
 fun IconButtonVideoCall(modifier: Modifier = Modifier, navHostController: NavHostController) {
     IconButton(onClick = { /* do something */ }) {
         Icon(
@@ -192,9 +203,7 @@ fun inforBar(
         }
 
         Row {
-            IconButtonCall(modifier = Modifier.align(CenterVertically), navHostController)
-            SpacerWidth()
-            IconButtonVideoCall(modifier = Modifier.align(CenterVertically), navHostController)
+            IconButtonTranslate(modifier = Modifier.align(CenterVertically), navHostController)
         }
     }
 }

@@ -31,13 +31,14 @@ import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.component.data.Person
+import com.example.chatchit.models.Room
 import com.example.chatchit.navigation.ChatSetting
 
 @Composable
 fun ChatSettingScreen(
     navHostController: NavHostController
 ){
-    val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Person>("data") ?: Person()
+    val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -71,7 +72,7 @@ fun Bar(
 
 @Composable
 fun info(
-    person: Person,
+    person: Room,
     modifier: Modifier = Modifier
 ){
     Column(
@@ -84,11 +85,11 @@ fun info(
             .size(150.dp),
             contentAlignment = Alignment.Center
         ){
-            IconComponentDrawable(icon = person.icon, size = 145.dp)
+            IconComponentDrawable(icon = R.drawable.person_2, size = 145.dp)
         }
         SpacerHeight(8.dp)
         Text(
-            text = person.name,
+            text = person.name?: String(),
             style = TextStyle(
                 fontSize = 30.sp,
                 color = Color.Black,
