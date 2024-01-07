@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.outlined.MailOutline
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class NavItem(
@@ -32,7 +33,7 @@ val listOfNavItems = listOf(
     ),
     NavItem(
         label = "Settings",
-        icon = Icons.Outlined.AccountCircle,
+        icon = Icons.Outlined.Settings,
         route = ChatSetting
     )
 )
