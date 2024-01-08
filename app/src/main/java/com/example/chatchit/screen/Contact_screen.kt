@@ -1,7 +1,6 @@
 package com.example.chatchit.screen
 
 import android.content.Context
-import android.provider.Contacts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,8 +19,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,13 +43,6 @@ import com.example.chatchit.component.data.personList
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import kotlinx.coroutines.launch
-import androidx.compose.material3.SearchBar
-import androidx.compose.ui.input.key.Key.Companion.Search
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.ImeAction.Companion.Search
-import kotlin.reflect.KProperty
-//import androidx.compose.runtime.getValue
-//import androidx.compose.runtime.livedata.observeAsState
 
 @Composable
 fun ContactScreen(
@@ -73,23 +65,6 @@ fun ContactScreen(
             }
         }
     }
-//    Column (
-//        modifier = androidx.compose.ui.Modifier.fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center
-//    ){
-//        Text(
-//            text = "Contacts",
-//            fontWeight = FontWeight.Bold,
-////            modifier = Modifier.fillMaxSize(),
-//        )
-//
-//        Row(
-//            modifier = Modifier.fillMaxSize()
-//        ) {
-//            ContactList(grouped = grouped, modifier = Modifier.weight(1f), listState)
-//        }
-//    }
 }
 
 val grouped = personList.sortedBy { it.name } .groupBy { it.name[0] }
