@@ -37,14 +37,14 @@ fun SettingScreen(
     context: Context
 ) {
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
-    Row (
-        modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 12.dp, horizontal = 8.dp),
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween
-    ){
-        IconButtonBack(modifier = Modifier.align(Alignment.CenterVertically), navHostController)
-
-    }
+//    Row (
+//        modifier = Modifier.fillMaxWidth()
+//            .padding(vertical = 12.dp, horizontal = 8.dp),
+//        horizontalArrangement = Arrangement.Absolute.SpaceBetween
+//    ){
+//        IconButtonBack(modifier = Modifier.align(Alignment.CenterVertically), navHostController)
+//
+//    }
     Column (
         modifier = Modifier.fillMaxSize()
             .padding(vertical = 16.dp, horizontal = 8.dp),
