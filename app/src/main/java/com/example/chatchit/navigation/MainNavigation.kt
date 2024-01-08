@@ -22,12 +22,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
+import com.example.chatchit.screen.AddFriendScreen
 import com.example.chatchit.screen.CallScreen
 import com.example.chatchit.screen.ChatScreen
 import com.example.chatchit.screen.ChatSettingScreen
 import com.example.chatchit.screen.ContactScreen
 import com.example.chatchit.screen.HomeScreen
 import com.example.chatchit.screen.LoginScreen
+import com.example.chatchit.screen.SearchScreen
 import com.example.chatchit.screen.SignUpScreen
 import com.example.chatchit.screen.StartScreen
 import com.example.chatchit.services.APIService
@@ -174,6 +176,12 @@ fun MainNavigation(
                     navHostController
                 )
             }
+            composable(Search){
+                SearchScreen(navHostController)
+            }
+            composable(AddFriend){
+                AddFriendScreen(navHostController)
+            }
         }
     }
 }
@@ -187,3 +195,5 @@ const val SignUp = "signup_screen"
 const val ChatSetting = "chat_setting_screen"
 const val Call = "call_screen"
 const val Contact = "contact_screen"
+const val Search = "search_screen"
+const val AddFriend = "add_friend_screen"

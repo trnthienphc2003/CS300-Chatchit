@@ -51,6 +51,8 @@ import com.example.chatchit.models.Conversation
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Chat
+import com.example.chatchit.navigation.ChatSetting
+import com.example.chatchit.navigation.Search
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.MessageAPI
 import com.example.chatchit.services.api.await
@@ -283,7 +285,9 @@ fun Header(user: User, navHostController: NavHostController){
 
 @Composable
 fun IconButtonSearch(modifier: Modifier = Modifier, navHostController: NavHostController) {
-    IconButton(onClick = { /* do something */ }) {
+    IconButton(onClick = {
+        navHostController.navigate(Search)
+}) {
         Icon(
             painter = painterResource(id = R.drawable.baseline_search_24),
             contentDescription = "",
