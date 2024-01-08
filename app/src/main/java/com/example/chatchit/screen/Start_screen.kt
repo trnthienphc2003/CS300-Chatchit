@@ -1,5 +1,6 @@
 package com.example.chatchit.screen
 
+import androidx.compose.material3.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -47,9 +49,10 @@ fun StartScreen(
         .fillMaxSize()
         .background(Color.Black)){
         Image(
-            painter = painterResource(id = R.drawable.background),
+            painter = painterResource(id = R.drawable.splash),
             contentDescription = "",
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.fillMaxSize()
 
         )
 //        Box(
@@ -71,13 +74,15 @@ fun StartScreen(
 //                CustomCheckBox()
 //            }
 //        }
-        ButtonComponent(
+        Button(
+            onClick = {navHostController.navigate(Login)},
             modifier = Modifier
                 .padding(20.dp)
                 .align(Alignment.BottomCenter)
                 .height(60.dp)
+                .width(300.dp)
         ) {
-             navHostController.navigate(Login)
+            Text(text = "Get started")
         }
     }
 }
