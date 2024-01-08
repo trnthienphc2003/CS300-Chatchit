@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Green
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -182,11 +183,11 @@ fun LoginScreen(
                 shape = CircleShape,
                 border= BorderStroke(1.dp, Color.Blue),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+//                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
             ) {
                 Icon (
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "content description"
+                    painterResource(id = R.drawable.group_459),
+                    contentDescription = "Login by Google"
                 )
             }
 
@@ -197,11 +198,11 @@ fun LoginScreen(
                 shape = CircleShape,
                 border= BorderStroke(1.dp, Color.Blue),
                 contentPadding = PaddingValues(0.dp),  //avoid the little icon
-                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+//                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
             ) {
                 Icon (
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "content description"
+                    painterResource(id = R.drawable.group_458),
+                    contentDescription = "Login by Facebook"
                 )
             }
 
@@ -216,9 +217,12 @@ fun LoginScreen(
                 emailInput = it
                 emailValid = it.isValidEmail()
                             },
-            modifier = Modifier.fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp,
-                    bottom = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp, end = 16.dp,
+                    bottom = 10.dp
+                ),
         )
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -230,9 +234,12 @@ fun LoginScreen(
                 passwordValid = !it.isEmpty()
                             },
             label = R.string.password,
-            modifier = Modifier.fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp,
-                    bottom = 10.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp, end = 16.dp,
+                    bottom = 10.dp
+                ),
             visualTransformation = PasswordVisualTransformation()
         )
 
@@ -275,7 +282,8 @@ fun LoginScreen(
                     }
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp),
             enabled = emailValid && passwordValid,
             colors = ButtonDefaults.buttonColors(
