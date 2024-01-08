@@ -1,6 +1,7 @@
 package com.example.chatchit.screen
 
 import android.content.Context
+import android.provider.Contacts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,6 +44,10 @@ import com.example.chatchit.component.data.personList
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import kotlinx.coroutines.launch
+import androidx.compose.material3.SearchBar
+import androidx.compose.ui.input.key.Key.Companion.Search
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.ImeAction.Companion.Search
 import kotlin.reflect.KProperty
 //import androidx.compose.runtime.getValue
 //import androidx.compose.runtime.livedata.observeAsState
@@ -54,32 +60,72 @@ fun ContactScreen(
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("user") ?: User()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    Column (
-        modifier = androidx.compose.ui.Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ){
-        Text(
-            text = "Contacts",
-            fontWeight = FontWeight.Bold,
-//            modifier = Modifier.fillMaxSize(),
-        )
 
-        Row(
-            modifier = Modifier.fillMaxSize()
-        ) {
+    Box {
+        SearchContact(grouped = grouped)
+        Row(modifier = Modifier.fillMaxSize().padding(top = 60.dp)) {
+            ContactList(grouped = grouped, modifier = Modifier.weight(1f), listState)
+
             AlphabetBar(grouped = grouped) {pos ->
                 coroutineScope.launch{
                     listState.animateScrollToItem(pos)
                 }
             }
-            ContactList(grouped = grouped, modifier = Modifier.weight(1f), listState)
         }
     }
+//    Column (
+//        modifier = androidx.compose.ui.Modifier.fillMaxSize(),
+//        horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.Center
+//    ){
+//        Text(
+//            text = "Contacts",
+//            fontWeight = FontWeight.Bold,
+////            modifier = Modifier.fillMaxSize(),
+//        )
+//
+//        Row(
+//            modifier = Modifier.fillMaxSize()
+//        ) {
+//            ContactList(grouped = grouped, modifier = Modifier.weight(1f), listState)
+//        }
+//    }
 }
 
 val grouped = personList.sortedBy { it.name } .groupBy { it.name[0] }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchContact(grouped: Map<Char, List<Person>>) {
+    var text by rememberSaveable { mutableStateOf("") }
+    var active by rememberSaveable { mutableStateOf(false) }
+
+    // search bar
+    SearchBar(
+        modifier = Modifier.fillMaxWidth(),
+        query = text,
+        onQueryChange = { text = it },
+        onSearch = { active = false },
+        active = active,
+        onActiveChange = {
+            active = it
+        },
+        placeholder = { Text("Hinted search text") },
+    ) {
+        val flat = grouped.values.flatten().filter { it.name.contains(text, ignoreCase = true) }
+
+        LazyColumn(
+            modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            content = {
+                item { Text(text = "${flat.size} contacts found") }
+
+                items(items = flat) { contact ->
+                    contactListItem(person = contact)
+                }
+            })
+    }
+}
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContactList (
