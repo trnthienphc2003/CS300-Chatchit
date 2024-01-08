@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -31,10 +32,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
@@ -54,6 +58,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
@@ -72,20 +78,52 @@ import com.example.chatchit.navigation.ChatSetting
 import com.example.chatchit.services.WebSocketCallback
 import com.example.chatchit.services.WebSocketService
 import com.example.chatchit.services.api.form.MessageForm
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.internal.notify
+
+class ChatViewModel : ViewModel() {
+    private val chatList = mutableStateOf<List<Message>>(emptyList())
+
+    fun getChatList(): State<List<Message>> = chatList
+
+    fun setChatList(list: List<Message>) {
+        chatList.value = list
+    }
+    fun addMessage(message: Message) {
+        chatList.value = listOf(message) + chatList.value
+    }
+}
 
 @Composable
 fun ChatScreen(
     navHostController: NavHostController
 ){
-    var message by remember {
-        mutableStateOf("")
-    }
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
     val conversation = navHostController.previousBackStackEntry?.savedStateHandle?.get<Conversation>("conversation") ?: Conversation()
     val roomId = navHostController.previousBackStackEntry?.savedStateHandle?.get<Int>("roomId") ?: -1
-    val chatList = conversation.rows ?: emptyList<Message>()
+    val viewModel = ChatViewModel()
+    viewModel.setChatList(conversation.rows?: emptyList())
+    val lazyColumnListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    WebSocketService.getInstance().setCallback(object : WebSocketCallback {
+        override fun onReceiveMessage(message: Message) {
+            if (message.roomId == roomId) {
+                viewModel.addMessage(message)
+                if (message.senderId == user.id) {
+                    coroutineScope.launch {
+                        lazyColumnListState.animateScrollToItem(0)
+                    }
+                }
+            }
+        }
+    })
+
 
     Box(
         modifier = Modifier
@@ -107,18 +145,14 @@ fun ChatScreen(
                 LazyColumn(modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 10.dp, bottom = 75.dp),
-                    reverseLayout = true
+                    reverseLayout = true,
+                    state = lazyColumnListState
                 ){
-                    items(chatList, key = {it.id?:Int}){
+                    items(viewModel.getChatList().value, key = {it.id?:Int}){
                         chatRow(user, chat = it, person)
                     }
                 }
-                chatInput(roomId = roomId, message = message, modifier = Modifier.align(BottomCenter), modifierText = Modifier.align(
-                    Center)){
-                    message = it
-                }
-
-
+                chatInput(roomId = roomId, modifier = Modifier.align(BottomCenter), modifierText = Modifier.align(Center))
             }
         }
     }
@@ -296,18 +330,15 @@ fun chatRow(
 @Composable
 fun chatInput(
     roomId: Int,
-    message: String,
     modifier: Modifier = Modifier,
     modifierText: Modifier = Modifier,
-    onValueChange: (String) -> Unit
 ){
-    var newMessage = message
-    val context = LocalContext.current.applicationContext
+    var message by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(modifier = modifier.fillMaxWidth()) {
         TextField(
-            value = newMessage,
-            onValueChange = onValueChange,
+            value = message,
+            onValueChange = {message = it},
             modifier = modifier.width(220.dp),
             shape = RoundedCornerShape(160.dp),
             placeholder = {
@@ -328,7 +359,7 @@ fun chatInput(
                 onSend = {
                     keyboardController?.hide()
                     val content = message.trim()
-                    onValueChange("")
+                    message = ""
                     WebSocketService.getInstance().sendMessage(
                         MessageForm(
                             content = content,

@@ -2,6 +2,7 @@ package com.example.chatchit.services
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.widget.Toast
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class APIService {
     companion object {
-        const val BASE_URL = "https://chatchit.1kkfunk.id.vn/"
+        const val BASE_URL = "http://103.82.39.199:8000"
 
         fun getApiClient(
             context: Context,

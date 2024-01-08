@@ -71,6 +71,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 import java.util.Date
 
 
@@ -269,6 +270,8 @@ fun LoginScreen(
                     } catch (e: Exception) {
                         Log.e("LoginScreen", e.toString())
                         Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
+                    } catch (e: ConnectException) {
+                        Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
                     }
                 }
             },

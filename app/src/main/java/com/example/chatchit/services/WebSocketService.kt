@@ -70,7 +70,7 @@ class WebSocketService private constructor() {
         callback?.onReceiveMessage(Gson().fromJson(message, Message::class.java))
     }
 
-    fun closeConnection() {
+    private fun closeConnection() {
         webSocket?.close(1000, "Close connection")
         webSocket = null
     }
