@@ -37,7 +37,6 @@ fun SettingScreen(
     context: Context
 ) {
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
-
     Row (
         modifier = Modifier.fillMaxWidth()
             .padding(vertical = 12.dp, horizontal = 8.dp),
@@ -70,7 +69,7 @@ fun SettingScreen(
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(0.5f)
+                    .fillMaxWidth(0.8f)
 //                    .fillMaxSize()
             ) {
                 IconComponentDrawable(
@@ -84,8 +83,9 @@ fun SettingScreen(
                 Text(
                     text = user.name?: String(),
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    fontSize = 24.sp,
+                    textAlign = TextAlign.Left,
+                    fontSize = 20.sp,
+                    maxLines = 2,
                     modifier = Modifier
 //                        .align(Alignment.CenterHorizontally)
                         .padding(top = 20.dp),

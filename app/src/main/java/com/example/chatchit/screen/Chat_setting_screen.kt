@@ -261,7 +261,6 @@ fun setting(
                     modifier = Modifier.align((Alignment.CenterVertically))
 
                 )
-
             }
         }
         SpacerHeight()

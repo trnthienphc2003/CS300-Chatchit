@@ -309,7 +309,7 @@ fun LoginScreen(
             )
         ) {
             Text(
-                "Forgot password?",
+                "First time trying our app?",
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF24786D)
             )

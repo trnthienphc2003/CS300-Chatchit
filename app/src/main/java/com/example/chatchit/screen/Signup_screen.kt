@@ -41,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Home
+import com.example.chatchit.navigation.Login
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.WebSocketService
 import com.example.chatchit.services.api.AuthAPI
@@ -196,32 +197,34 @@ fun SignUpScreen(
 //                } else {
 //                    // Display error message or visual cue for invalid input
 //                }
-                val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
+//                val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
                 MainScope().launch {
                     try {
-                        val signupAPIResponse = authService.signup(SignupForm(name, email, password)).await()
-                        val roomService: RoomAPI = APIService.getApiClient(context).create(RoomAPI::class.java)
-                        val roomAPIResponse = roomService.listRoom().await()
-                        val json = Gson().toJson(roomAPIResponse.data)
-                        val itemType = object : TypeToken<List<Room>>() {}.type
-                        val listRoom = Gson().fromJson<List<Room>>(json, itemType)
+//                        val signupAPIResponse = authService.signup(SignupForm(name, email, password)).await()
+//                        val roomService: RoomAPI = APIService.getApiClient(context).create(RoomAPI::class.java)
+//                        val roomAPIResponse = roomService.listRoom().await()
+//                        val json = Gson().toJson(roomAPIResponse.data)
+//                        val itemType = object : TypeToken<List<Room>>() {}.type
+//                        val listRoom = Gson().fromJson<List<Room>>(json, itemType)
+//
+//                        val userResponse = authService.getUser().await()
+//                        val jsonUser = Gson().toJson(userResponse.data)
+//                        val itemUserType = object : TypeToken<User>() {}.type
+//                        val user = Gson().fromJson<User>(jsonUser, itemUserType)
+//
+//                        WebSocketService.getInstance().setup(context, user.id!!)
+//
+//                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+//                            "listRoom",
+//                            listRoom
+//                        )
+//                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+//                            "user",
+//                            user
+//                        )
+                        Toast.makeText(context, "Sign Up successfully, please login!", Toast.LENGTH_SHORT).show()
 
-                        val userResponse = authService.getUser().await()
-                        val jsonUser = Gson().toJson(userResponse.data)
-                        val itemUserType = object : TypeToken<User>() {}.type
-                        val user = Gson().fromJson<User>(jsonUser, itemUserType)
-
-                        WebSocketService.getInstance().setup(context, user.id!!)
-
-                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                            "listRoom",
-                            listRoom
-                        )
-                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                            "user",
-                            user
-                        )
-                        navHostController.navigate(Home)
+                        navHostController.navigate(Login)
                     } catch (e: Exception) {
                         Log.e("SignupScreen", e.toString())
                         Toast.makeText(context, "Sign Up failed", Toast.LENGTH_SHORT).show()
