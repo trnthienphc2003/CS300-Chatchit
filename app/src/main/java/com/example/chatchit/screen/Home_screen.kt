@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.IconComponentImageVector
 import com.example.chatchit.component.SpacerHeight
@@ -356,4 +357,3 @@ fun AddStoryLayout(){
             )
     }
 }
-
