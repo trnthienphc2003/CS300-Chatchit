@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -37,10 +38,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
-import com.example.chatchit.component.data.Person
-import com.example.chatchit.component.data.personList
-import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import kotlinx.coroutines.launch
 
@@ -49,16 +48,18 @@ fun ContactScreen(
     navHostController: NavHostController,
     context: Context,
 ) {
-    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
+    val friends = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<User>>("friends") ?: List<User>(0) { User() }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+
+    val grouped = friends.sortedBy { it.name } .groupBy { it.name?.get(0) ?: '$' }
 
     Box {
         SearchContact(grouped = grouped)
         Row(modifier = Modifier.fillMaxSize().padding(top = 60.dp)) {
             ContactList(grouped = grouped, modifier = Modifier.weight(1f), listState)
 
-            AlphabetBar(grouped = grouped) {pos ->
+            AlphabetBar(grouped = grouped) { pos ->
                 coroutineScope.launch{
                     listState.animateScrollToItem(pos)
                 }
@@ -67,11 +68,9 @@ fun ContactScreen(
     }
 }
 
-val grouped = personList.sortedBy { it.name } .groupBy { it.name[0] }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchContact(grouped: Map<Char, List<Person>>) {
+fun SearchContact(grouped: Map<Char, List<User>>) {
     var text by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
 
@@ -87,7 +86,7 @@ fun SearchContact(grouped: Map<Char, List<Person>>) {
         },
         placeholder = { Text("Hinted search text") },
     ) {
-        val flat = grouped.values.flatten().filter { it.name.contains(text, ignoreCase = true) }
+        val flat = grouped.values.flatten().filter { it.name?.contains(text, ignoreCase = true) ?: false  }
 
         LazyColumn(
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp),
@@ -104,9 +103,9 @@ fun SearchContact(grouped: Map<Char, List<Person>>) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContactList (
-    grouped: Map<Char, List<Person>>,
-    modifier: androidx.compose.ui.Modifier,
-    listState: androidx.compose.foundation.lazy.LazyListState
+    grouped: Map<Char, List<User>>,
+    modifier: Modifier,
+    listState: LazyListState
 ) {
     LazyColumn(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -134,7 +133,7 @@ fun ContactList (
 
 @Composable
 fun AlphabetBar(
-    grouped: Map<Char, List<Person>>,
+    grouped: Map<Char, List<User>>,
     toHeader: (Int) -> Unit
 ) {
     val letterPos = mutableMapOf<Char, Int>()
@@ -187,7 +186,7 @@ fun contactListHeader(
 }
 
 @Composable
-fun contactListItem(person: Person) {
+fun contactListItem(person: User) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -200,20 +199,18 @@ fun contactListItem(person: Person) {
             contentAlignment = Alignment.Center
         ) {
             IconComponentDrawable(
-                icon = person.icon,
+                icon = R.drawable.person_2,
                 size = 36.dp
             )
-//            Text(
-//                text = person.name.first().toString(),
-//                color = Color.White,
-//            )
         }
 
-        Text(
-            text = person.name,
-            fontWeight = FontWeight.Medium,
-            color = Color.DarkGray
-        )
+        person.name?.let {
+            Text(
+                text = it,
+                fontWeight = FontWeight.Medium,
+                color = Color.DarkGray
+            )
+        }
     }
 }
 

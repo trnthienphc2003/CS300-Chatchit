@@ -36,6 +36,7 @@ import com.example.chatchit.screen.StartScreen
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.WebSocketService
 import com.example.chatchit.services.api.AuthAPI
+import com.example.chatchit.services.api.FriendAPI
 import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
 import com.example.chatchit.services.api.form.LoginForm
@@ -99,6 +100,29 @@ fun MainNavigation(
                                         } catch (e: Exception) {
                                             Log.e("Main Navigation", e.toString())
                                             Toast.makeText(context, "Fail to navigate home", Toast.LENGTH_SHORT).show()
+                                        } catch (e: ConnectException) {
+                                            Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }
+
+                                else if(navItem.route == Contact) {
+                                    MainScope().launch {
+                                        try {
+                                            val friendService: FriendAPI = APIService.getApiClient(context).create(FriendAPI::class.java)
+                                            val roomAPIResponse = friendService.getFriends().await()
+                                            val json = Gson().toJson(roomAPIResponse.data)
+                                            val itemType = object : TypeToken<List<User>>() {}.type
+                                            val listFriends = Gson().fromJson<List<User>>(json, itemType)
+
+                                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                                "friends",
+                                                listFriends
+                                            )
+                                            navHostController.navigate(Contact)
+                                        } catch (e: Exception) {
+                                            Log.e("Main Navigation", e.toString())
+                                            Toast.makeText(context, "Fail to navigate settings", Toast.LENGTH_SHORT).show()
                                         } catch (e: ConnectException) {
                                             Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
                                         }
