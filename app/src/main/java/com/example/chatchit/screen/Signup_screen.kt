@@ -197,10 +197,10 @@ fun SignUpScreen(
 //                } else {
 //                    // Display error message or visual cue for invalid input
 //                }
-//                val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
+                val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
                 MainScope().launch {
                     try {
-//                        val signupAPIResponse = authService.signup(SignupForm(name, email, password)).await()
+                        val signupAPIResponse = authService.signup(SignupForm(name, email, password)).await()
 //                        val roomService: RoomAPI = APIService.getApiClient(context).create(RoomAPI::class.java)
 //                        val roomAPIResponse = roomService.listRoom().await()
 //                        val json = Gson().toJson(roomAPIResponse.data)
