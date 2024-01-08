@@ -49,7 +49,7 @@ fun ContactScreen(
     navHostController: NavHostController,
     context: Context,
 ) {
-    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("user") ?: User()
+    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 

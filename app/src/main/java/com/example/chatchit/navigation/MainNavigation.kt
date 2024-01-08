@@ -30,6 +30,7 @@ import com.example.chatchit.screen.ContactScreen
 import com.example.chatchit.screen.HomeScreen
 import com.example.chatchit.screen.LoginScreen
 import com.example.chatchit.screen.SearchScreen
+import com.example.chatchit.screen.SettingScreen
 import com.example.chatchit.screen.SignUpScreen
 import com.example.chatchit.screen.StartScreen
 import com.example.chatchit.services.APIService
@@ -69,7 +70,7 @@ fun MainNavigation(
                         NavigationBarItem(
                             selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
                             onClick = {
-                                if(navItem == listOfNavItems[0]) {
+                                if(navItem.route == Home) {
                                     val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
                                     MainScope().launch {
                                         try {
@@ -97,7 +98,31 @@ fun MainNavigation(
                                             navHostController.navigate(Home)
                                         } catch (e: Exception) {
                                             Log.e("Main Navigation", e.toString())
-                                            Toast.makeText(context, "Fail to navigate", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Fail to navigate home", Toast.LENGTH_SHORT).show()
+                                        } catch (e: ConnectException) {
+                                            Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }
+
+                                else if(navItem.route == Setting) {
+                                    val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
+                                    MainScope().launch {
+                                        try {
+                                            val userResponse = authService.getUser().await()
+                                            val jsonUser = Gson().toJson(userResponse.data)
+                                            val itemUserType = object : TypeToken<User>() {}.type
+                                            val user = Gson().fromJson<User>(jsonUser, itemUserType)
+
+                                            WebSocketService.getInstance().setup(context, user.id!!)
+                                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                                "user",
+                                                user
+                                            )
+                                            navHostController.navigate(Setting)
+                                        } catch (e: Exception) {
+                                            Log.e("Main Navigation", e.toString())
+                                            Toast.makeText(context, "Fail to navigate settings", Toast.LENGTH_SHORT).show()
                                         } catch (e: ConnectException) {
                                             Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
                                         }
@@ -176,6 +201,12 @@ fun MainNavigation(
                     navHostController
                 )
             }
+            composable(Setting) {
+                SettingScreen(
+                    navHostController,
+                    context
+                )
+            }
             composable(Search){
                 SearchScreen(navHostController)
             }
@@ -197,3 +228,4 @@ const val Call = "call_screen"
 const val Contact = "contact_screen"
 const val Search = "search_screen"
 const val AddFriend = "add_friend_screen"
+const val Setting = "setting_screen"

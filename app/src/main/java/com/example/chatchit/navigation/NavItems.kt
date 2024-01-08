@@ -34,6 +34,6 @@ val listOfNavItems = listOf(
     NavItem(
         label = "Settings",
         icon = Icons.Outlined.Settings,
-        route = ChatSetting
+        route = Setting
     )
 )
