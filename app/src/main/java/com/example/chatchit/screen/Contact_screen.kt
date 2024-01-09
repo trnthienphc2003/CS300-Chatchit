@@ -1,6 +1,7 @@
 package com.example.chatchit.screen
 
 import android.content.Context
+import android.provider.ContactsContract
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,6 +42,7 @@ import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.models.User
+import com.example.chatchit.navigation.Profile
 import kotlinx.coroutines.launch
 
 @Composable
@@ -57,7 +59,7 @@ fun ContactScreen(
     Box {
         SearchContact(grouped = grouped)
         Row(modifier = Modifier.fillMaxSize().padding(top = 60.dp)) {
-            ContactList(grouped = grouped, modifier = Modifier.weight(1f), listState)
+            ContactList(grouped = grouped, modifier = Modifier.weight(1f), listState, navHostController)
 
             AlphabetBar(grouped = grouped) { pos ->
                 coroutineScope.launch{
@@ -105,7 +107,8 @@ fun SearchContact(grouped: Map<Char, List<User>>) {
 fun ContactList (
     grouped: Map<Char, List<User>>,
     modifier: Modifier,
-    listState: LazyListState
+    listState: LazyListState,
+    navHostController: NavHostController
 ) {
     LazyColumn(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -119,7 +122,39 @@ fun ContactList (
             }
             items(items = contactForLetter) { person ->
 //                Items component
-                contactListItem(person = person)
+//                contactListItem(person = person)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.clickable {
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "view_person",
+                            person
+                        )
+                        navHostController.navigate(Profile)
+                    }
+                ) {
+                    Box(
+                        modifier = androidx.compose.ui.Modifier
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .size(36.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        IconComponentDrawable(
+                            icon = R.drawable.person_2,
+                            size = 36.dp
+                        )
+                    }
+
+                    person.name?.let {
+                        Text(
+                            text = it,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.DarkGray
+                        )
+                    }
+                }
                 if(contactForLetter.indexOf(person) != contactForLetter.lastIndex) {
                     Divider(
                         modifier = Modifier.padding(horizontal = 12.dp),
