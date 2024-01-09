@@ -34,13 +34,14 @@ import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.data.Person
 import com.example.chatchit.component.data.personList
+import com.example.chatchit.models.User
 
 @Composable
 fun ProfileScreen(
     navHostController: NavHostController,
     context: Context,
 ) {
-    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<Person>("user") ?: Person(1, "Pranav", R.drawable.person_1)
+    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("view_person") ?: User()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -58,7 +59,7 @@ fun ProfileScreen(
                 .background(color = Color.LightGray, shape = MaterialTheme.shapes.medium)
         ) {
             IconComponentDrawable(
-                icon = user.icon,
+                icon = R.drawable.person_2,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(vertical = 8.dp),

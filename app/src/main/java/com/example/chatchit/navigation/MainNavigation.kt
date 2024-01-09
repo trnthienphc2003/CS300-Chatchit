@@ -1,6 +1,7 @@
 package com.example.chatchit.navigation
 
 import android.content.Context
+import android.provider.ContactsContract.Profile
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ import com.example.chatchit.screen.ContactScreen
 import com.example.chatchit.screen.GroupScreen
 import com.example.chatchit.screen.HomeScreen
 import com.example.chatchit.screen.LoginScreen
+import com.example.chatchit.screen.ProfileScreen
 import com.example.chatchit.screen.SearchScreen
 import com.example.chatchit.screen.SettingScreen
 import com.example.chatchit.screen.SignUpScreen
@@ -248,9 +250,16 @@ fun MainNavigation(
                 GroupScreen(navHostController,
                     LocalContext.current)
             }
-            composable(AddGroup){
-                AddGroupScreen(navHostController,
-                    LocalContext.current)
+            composable(AddGroup) {
+                AddGroupScreen(
+                    navHostController,
+                    LocalContext.current
+                )
+            }
+            composable(Profile){
+                ProfileScreen(
+                    navHostController = navHostController,
+                    context = LocalContext.current)
             }
         }
     }
@@ -270,3 +279,4 @@ const val AddFriend = "add_friend_screen"
 const val Setting = "setting_screen"
 const val Group = "group_screen"
 const val AddGroup = "add_group_screen"
+const val Profile = "profile_screen"
