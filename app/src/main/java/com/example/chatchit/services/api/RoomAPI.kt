@@ -20,7 +20,7 @@ interface RoomAPI {
     @POST("api/v1/room/{id}/add-member")
     fun addMember(
         @Body userIdField: UserIdField,
-        @Path("id") roomId: String
+        @Path("id") roomId: Int
     ): Call<APIResponse>
 
     @GET("api/v1/room/{id}/list-members")

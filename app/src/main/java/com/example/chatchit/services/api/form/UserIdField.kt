@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class UserIdField(
     @SerializedName("userId")
-    var data: String = ""
+    var data: Int = -1
 )

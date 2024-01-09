@@ -11,10 +11,8 @@ class User (
     val name: String? = null,
     @SerializedName("email")
     val email: String? = null,
-    @SerializedName("CreatedAt")
-    val createdAt: Date? = null,
-    @SerializedName("UpdatedAt")
-    val updatedAt: Date? = null,
-    @SerializedName("DeletedAt")
-    val deletedAt: Date? = null,
+    @SerializedName("avatar")
+    val avatar: String? = null,
+    @SerializedName("language")
+    val language: Date? = null,
 ) : Parcelable

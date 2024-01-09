@@ -33,6 +33,7 @@ import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.component.data.Person
 import com.example.chatchit.models.Room
 import com.example.chatchit.navigation.ChatSetting
+import com.example.chatchit.navigation.Group
 
 @Composable
 fun ChatSettingScreen(
@@ -52,7 +53,7 @@ fun ChatSettingScreen(
                 navHostController
             )
             info(person = person, modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 20.dp))
-            setting(modifier = Modifier.padding(top = 6.dp))
+            setting(person,navHostController, modifier = Modifier.padding(top = 6.dp))
         }
     }
 }
@@ -102,6 +103,8 @@ fun info(
 
 @Composable
 fun setting(
+    person: Room,
+    navHostController: NavHostController,
     modifier: Modifier = Modifier,
 ){
     Column (
@@ -166,7 +169,11 @@ fun setting(
                 .fillMaxWidth()
                 .padding(top = 6.dp, start = 20.dp, end = 20.dp)
                 .clickable {
-                    // Your click logic goes here
+                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                        "roomID",
+                        person.id
+                    )
+                    navHostController.navigate(Group)
                     // For example, you can navigate to another screen or perform some action.
                 }
         ) {

@@ -87,6 +87,8 @@ fun GroupScreen(
 ){
     val viewModel = GroupViewModel()
     viewModel.setgroupList(listOf())
+
+    val roomID = navHostController.previousBackStackEntry?.savedStateHandle?.get<Int>("roomID") ?: -1
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -106,7 +108,10 @@ fun GroupScreen(
                             "addgroup",
                             it
                         )
-
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "roomID",
+                            roomID
+                        )
                         navHostController.navigate(AddGroup)
                     }
                 }

@@ -32,9 +32,11 @@ import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.FriendAPI
+import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
 import com.example.chatchit.services.api.form.EmailField
 import com.example.chatchit.services.api.form.FriendIdField
+import com.example.chatchit.services.api.form.UserIdField
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
@@ -46,6 +48,7 @@ fun AddGroupScreen(
     navHostController: NavHostController,
     context: Context
 ){
+    val roomID = navHostController.previousBackStackEntry?.savedStateHandle?.get<Int>("roomID") ?: -1
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("addgroup") ?: User()
     val check1 = false
     val check = CheckViewModel()
@@ -62,13 +65,14 @@ fun AddGroupScreen(
                 modifier = Modifier.padding(top = 30.dp, start = 10.dp, end = 20.dp),
                 navHostController
             )
-            groupAdd(context, check, person = person, modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 20.dp))
+            groupAdd(roomID, context, check, person = person, modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 20.dp))
         }
     }
 }
 
 @Composable
 fun groupAdd(
+    roomID: Int,
     context: Context,
     check:CheckViewModel,
     person: User,
@@ -99,33 +103,33 @@ fun groupAdd(
         SpacerHeight(8.dp)
         if(check.getCheck()){
             Button(enabled = !check.getCheck(), onClick = {
-                MainScope().launch {
-                    try {
-                        val removeService: FriendAPI =
-                            APIService.getApiClient(context).create(FriendAPI::class.java)
-                        val removeAPIResponse = removeService.deleteFriend(person.id?:-1).await()
-                        check.setCheck(false)
-                    } catch (e: Exception) {
-                        Log.e("Add", e.toString())
-                    }
-                }
+                check.setCheck(false)
+//                MainScope().launch {
+//                    try {
+//                        val removeService: FriendAPI =
+//                            APIService.getApiClient(context).create(FriendAPI::class.java)
+//                        val removeAPIResponse = removeService.deleteFriend(person.id?:-1).await()
+//                        check.setCheck(false)
+//                    } catch (e: Exception) {
+//                        Log.e("Add", e.toString())
+//                    }
+//                }
             }) {
                 Text(text = "Add to Group")
             }
         }
         else{
             Button(enabled = !check.getCheck(), onClick = {
-                check.setCheck(true)
-//                MainScope().launch {
-//                    try {
-//                        val addService: FriendAPI =
-//                            APIService.getApiClient(context).create(FriendAPI::class.java)
-//                        val addAPIResponse = addService.addFriend(FriendIdField(person.id?:-1)).await()
-//                        check.setCheck(true)
-//                    } catch (e: Exception) {
-//                        Log.e("Add to Group", e.toString())
-//                    }
-//                }
+                MainScope().launch {
+                    try {
+                        val addService: RoomAPI =
+                            APIService.getApiClient(context).create(RoomAPI::class.java)
+                        val addAPIResponse = addService.addMember(UserIdField(person.id?:-1), roomID)
+                        check.setCheck(true)
+                    } catch (e: Exception) {
+                        Log.e("Add to Group", e.toString())
+                    }
+                }
             }) {
                 Text(text = "Add to Group")
             }
