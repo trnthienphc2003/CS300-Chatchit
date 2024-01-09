@@ -2,6 +2,7 @@ package com.example.chatchit.screen
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -102,6 +103,7 @@ fun groupAdd(
                         check.setCheck(false)
                     } catch (e: Exception) {
                         Log.e("Add to Group", e.toString())
+                        Toast.makeText(context, "This member exist in group", Toast.LENGTH_SHORT).show()
                     }
                 }
             }) {
