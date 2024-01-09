@@ -1,11 +1,8 @@
 package com.example.chatchit.screen
 
 
-import android.util.Log
-import android.widget.Toast
+import Avatar
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.layout.Box
 
@@ -21,18 +18,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -47,43 +41,31 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
-import com.example.chatchit.component.IconComponentImageVector
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
-import com.example.chatchit.component.data.Chat
-import com.example.chatchit.component.data.Person
 import com.example.chatchit.models.Conversation
 //import com.example.chatchit.component.data.chatList
 import com.example.chatchit.models.Message
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
-import com.example.chatchit.navigation.Chat
 import com.example.chatchit.navigation.ChatSetting
 import com.example.chatchit.services.WebSocketCallback
 import com.example.chatchit.services.WebSocketService
 import com.example.chatchit.services.api.form.MessageForm
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.internal.notify
 
 class ChatViewModel : ViewModel() {
     private val chatList = mutableStateOf<List<Message>>(emptyList())
@@ -227,7 +209,7 @@ fun inforBar(
                     person
                 )
                 navHostController.navigate(ChatSetting)}) {
-                IconComponentDrawable(icon = R.drawable.person_2, size = 42.dp)
+                Avatar(b64Image = person.avatar, modifier = Modifier.clip(RoundedCornerShape(21.dp)), size = 42.dp)
             }
             SpacerWidth()
             Column {
@@ -269,10 +251,10 @@ fun chatRow(
         Row {
             if (chat.senderId != user.id) {
                 if (true) {
-                    IconComponentDrawable(
-                        icon = R.drawable.person_2,
+                    Avatar(
+                        b64Image = person.avatar,
                         size = 42.dp,
-                        modifier = Modifier.align(CenterVertically)
+                        modifier = Modifier.align(CenterVertically).clip(RoundedCornerShape(21.dp))
                     )
                 }
                 else{

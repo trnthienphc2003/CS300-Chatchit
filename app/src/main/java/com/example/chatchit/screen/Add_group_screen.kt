@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,23 +21,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.SpacerHeight
-import com.example.chatchit.models.FriendAdd
-import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.services.APIService
-import com.example.chatchit.services.api.FriendAPI
 import com.example.chatchit.services.api.RoomAPI
-import com.example.chatchit.services.api.await
-import com.example.chatchit.services.api.form.EmailField
-import com.example.chatchit.services.api.form.FriendIdField
 import com.example.chatchit.services.api.form.UserIdField
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 

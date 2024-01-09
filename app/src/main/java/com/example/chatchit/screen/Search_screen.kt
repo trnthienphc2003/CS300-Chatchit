@@ -2,7 +2,6 @@ package com.example.chatchit.screen
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,14 +26,12 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -49,12 +45,10 @@ import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.models.FriendAdd
-import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.AddFriend
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.FriendAPI
-import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
 import com.example.chatchit.services.api.form.EmailField
 import com.google.gson.Gson

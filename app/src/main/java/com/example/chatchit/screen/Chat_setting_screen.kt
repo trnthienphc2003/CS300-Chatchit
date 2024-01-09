@@ -1,5 +1,6 @@
 package com.example.chatchit.screen
 
+import Avatar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -20,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,9 +31,7 @@ import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
-import com.example.chatchit.component.data.Person
 import com.example.chatchit.models.Room
-import com.example.chatchit.navigation.ChatSetting
 import com.example.chatchit.navigation.Group
 
 @Composable
@@ -82,11 +81,10 @@ fun info(
     ) {
         Box(modifier = Modifier
             .clip(CircleShape)
-            .background(Color.Yellow, CircleShape)
             .size(150.dp),
             contentAlignment = Alignment.Center
         ){
-            IconComponentDrawable(icon = R.drawable.person_2, size = 145.dp)
+            Avatar(b64Image = person.avatar, Modifier.clip(RoundedCornerShape(75.dp)), size = 150.dp)
         }
         SpacerHeight(8.dp)
         Text(

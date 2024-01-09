@@ -1,10 +1,9 @@
 package com.example.chatchit.screen
 
+import Avatar
 import android.util.Log
 import android.content.Context
-import android.widget.EditText
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,13 +32,10 @@ import androidx.navigation.NavHostController
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.example.chatchit.R
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,24 +46,18 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import com.example.chatchit.component.IconComponentDrawable
-import com.example.chatchit.component.IconComponentImageVector
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.models.Conversation
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Chat
-import com.example.chatchit.navigation.ChatSetting
-import com.example.chatchit.navigation.Group
 import com.example.chatchit.navigation.Search
 import com.example.chatchit.services.APIService
-import com.example.chatchit.services.api.FriendAPI
 import com.example.chatchit.services.api.MessageAPI
 import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
@@ -182,7 +172,7 @@ fun UserEachRow(
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Row{
-                    IconComponentDrawable(icon = R.drawable.person_2, size = 60.dp)
+                    Avatar(b64Image = person.avatar, modifier = Modifier.clip(RoundedCornerShape(30.dp)), size = 60.dp)
                     SpacerWidth()
                     Column{
                         Text(
@@ -297,7 +287,9 @@ fun Header(user: User, navHostController: NavHostController){
             fontWeight = FontWeight.Bold,
             fontSize = 40.sp
         ))
-        IconComponentDrawable(icon = R.drawable.person_3, modifier = Modifier.align(CenterVertically), size = 50.dp)
+        Avatar(b64Image = user.avatar, modifier = Modifier.align(CenterVertically).clip(
+            RoundedCornerShape(25.dp)
+        ), size = 50.dp)
     }
 }
 
@@ -331,7 +323,7 @@ fun UserStoryLayout(
             .size(70.dp),
         contentAlignment = Center
         ){
-            IconComponentDrawable(icon = R.drawable.person_2, size = 65.dp)
+            Avatar(b64Image = person.avatar, modifier = Modifier.clip(RoundedCornerShape(32.dp)), size = 64.dp)
         }
         SpacerHeight(8.dp)
         Text(

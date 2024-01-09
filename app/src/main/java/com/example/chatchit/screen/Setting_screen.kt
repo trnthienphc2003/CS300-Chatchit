@@ -2,10 +2,8 @@ package com.example.chatchit.screen
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.provider.FontsContractCompat.Columns
 import androidx.navigation.NavHostController
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
-import com.example.chatchit.component.data.Person
 import com.example.chatchit.models.User
 
 @Composable
