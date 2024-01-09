@@ -239,7 +239,8 @@ fun MainNavigation(
                 )
             }
             composable(AddFriend){
-                AddFriendScreen(navHostController)
+                AddFriendScreen(navHostController,
+                LocalContext.current)
             }
         }
     }
