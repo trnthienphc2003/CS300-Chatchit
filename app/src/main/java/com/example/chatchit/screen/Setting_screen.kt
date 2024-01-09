@@ -1,11 +1,7 @@
 package com.example.chatchit.screen
 
-import Avatar
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,29 +9,53 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
+import com.example.chatchit.models.Language
 import com.example.chatchit.models.User
+import com.example.chatchit.services.APIService
+import com.example.chatchit.services.api.LanguageAPI
+import com.example.chatchit.services.api.await
+import com.example.chatchit.services.api.form.LanguageIdField
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
     navHostController: NavHostController,
     context: Context
 ) {
+    var openLanguageLog by rememberSaveable { mutableStateOf(false) }
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
 //    Row (
 //        modifier = Modifier.fillMaxWidth()
@@ -45,8 +65,80 @@ fun SettingScreen(
 //        IconButtonBack(modifier = Modifier.align(Alignment.CenterVertically), navHostController)
 //
 //    }
+    val listOfLanguages = listOf<Language>(
+        Language(
+            24,
+            "Vietnamese",
+            "vi"
+        ),
+        Language(
+            25,
+            "English",
+            "en"
+        ),
+        Language(
+            26,
+            "Chinese (simplified)",
+            "zh-CN"
+        ),
+        Language(
+            27,
+            "Spanish",
+            "es"
+        ),
+        Language(
+            28,
+            "French",
+            "fr"
+        ),
+        Language(
+            29,
+            "German",
+            "de"
+        ),
+        Language(
+            30,
+            "Arabic",
+            "ar"
+        ),
+        Language(
+            31,
+            "Russian",
+            "ru"
+        ),
+        Language(
+            32,
+            "Japanese",
+            "ja"
+        ),
+        Language(
+            33,
+            "Korean",
+            "ko"
+        ),
+        Language(
+            34,
+            "Hindi",
+            "hi"
+        ),
+        Language(
+            35,
+            "Esperanto",
+            "eo"
+        ),
+    )
+    val decodeLanguage = emptyMap<String, Language>().toMutableMap()
+    for (language in listOfLanguages) {
+        decodeLanguage[language.name?: String()] = language
+    }
+
+//    println(decodeLanguage[""])
+
+    val languageNames = listOfLanguages.map { it.name?: String() }
+
     Column (
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(vertical = 16.dp, horizontal = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
 //        verticalArrangement = Arrangement.Center
@@ -72,13 +164,12 @@ fun SettingScreen(
                     .fillMaxWidth(0.8f)
 //                    .fillMaxSize()
             ) {
-                Avatar(
-                    b64Image = user.avatar,
+                IconComponentDrawable(
+                    icon = R.drawable.person_2,
                     modifier = Modifier
 //                        .align(Alignment.CenterHorizontally)
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
-                        .clip(RoundedCornerShape(32.dp)),
-                    size = 64.dp
+                        .padding(vertical = 8.dp, horizontal = 16.dp),
+                    size = 60.dp
                 )
 
                 Text(
@@ -97,7 +188,8 @@ fun SettingScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.qr_code),
                     contentDescription = "",
-                    modifier = Modifier.size(size = 36.dp)
+                    modifier = Modifier
+                        .size(size = 36.dp)
                         .padding(top = 10.dp),
                     tint = Color.Unspecified
                 )
@@ -114,7 +206,8 @@ fun SettingScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.group_503),
                     contentDescription = "",
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier
+                        .size(48.dp)
                         .padding(top = 10.dp, start = 16.dp),
                     tint = Color.Unspecified
                 )
@@ -158,7 +251,8 @@ fun SettingScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.group_504),
                     contentDescription = "",
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier
+                        .size(48.dp)
                         .padding(top = 10.dp, start = 16.dp),
                     tint = Color.Unspecified
                 )
@@ -194,14 +288,16 @@ fun SettingScreen(
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { openLanguageLog = !openLanguageLog }) {
                 Icon(
                     painter = painterResource(id = R.drawable.group_505),
                     contentDescription = "",
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier
+                        .size(48.dp)
                         .padding(top = 10.dp, start = 16.dp),
                     tint = Color.Unspecified
                 )
@@ -244,7 +340,8 @@ fun SettingScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.group_506),
                     contentDescription = "",
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier
+                        .size(48.dp)
                         .padding(top = 10.dp, start = 16.dp),
                     tint = Color.Unspecified
                 )
@@ -286,7 +383,8 @@ fun SettingScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.group_507),
                     contentDescription = "",
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier
+                        .size(48.dp)
                         .padding(top = 10.dp, start = 16.dp),
                     tint = Color.Unspecified
                 )
@@ -308,6 +406,59 @@ fun SettingScreen(
                 )
             }
 
+        }
+
+        var isExpanded by remember { mutableStateOf(false) }
+        var selectedItem by remember { mutableStateOf("") }
+        var textFiledSize by remember { mutableStateOf(Size.Zero) }
+        val icon = if (isExpanded) {
+            Icons.Filled.KeyboardArrowUp
+        } else {
+            Icons.Filled.KeyboardArrowDown
+        }
+        if(openLanguageLog) {
+            ExposedDropdownMenuBox(
+                expanded = isExpanded,
+                onExpandedChange = {
+                    isExpanded = !isExpanded
+                }
+            ) {
+                TextField(
+                    value = selectedItem,
+                    onValueChange = {},
+                    readOnly = true,
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
+                    modifier = Modifier.menuAnchor()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = isExpanded,
+                    onDismissRequest = { isExpanded = false },) {
+                    languageNames.forEach { item ->
+                        DropdownMenuItem(
+                            text = { Text(text = item) },
+                            onClick = {
+                                selectedItem = item
+                                isExpanded = false
+
+                                MainScope().launch {
+                                    try {
+                                        val id = decodeLanguage[item]?.id
+                                        val languageService: LanguageAPI = APIService.getApiClient(context).create(LanguageAPI::class.java)
+                                        val response = languageService.updateUserLanguage(
+                                            LanguageIdField(
+                                                id?: 0
+                                            )
+                                        ).await()
+                                    } catch (e: Exception) {
+                                        e.printStackTrace()
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }
