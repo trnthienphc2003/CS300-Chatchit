@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,7 +43,7 @@ fun ProfileScreen(
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("view_person") ?: User()
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Color.White),
     ) {
         Row (
             modifier = Modifier.fillMaxWidth(),
@@ -149,18 +150,24 @@ fun ProfileScreen(
 fun userPhone(phone: String) {
     Text(
         text = "Phone Number",
-        style = MaterialTheme.typography.bodySmall,
-        fontStyle = FontStyle.Italic,
-        fontSize = 15.sp,
+        style = TextStyle(
+            fontSize = 15.sp,
+            fontStyle = FontStyle.Italic,
+            color = Color(0xFF797C7B)
+        ),
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
     )
 
     Text (
         text = phone,
-        style = MaterialTheme.typography.bodySmall,
+        style = TextStyle(
+            fontSize = 20.sp,
+//            fontStyle = FontStyle.Italic,
+            color = Color.Black
+        ),
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
+//        fontSize = 20.sp,
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
     )
@@ -170,18 +177,24 @@ fun userPhone(phone: String) {
 fun userAddress(address: String) {
     Text(
         text = "Address",
-        style = MaterialTheme.typography.bodySmall,
-        fontStyle = FontStyle.Italic,
-        fontSize = 15.sp,
+        style = TextStyle(
+            fontSize = 15.sp,
+            fontStyle = FontStyle.Italic,
+            color = Color(0xFF797C7B)
+        ),
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
     )
 
     Text (
         text = address,
-        style = MaterialTheme.typography.bodySmall,
+        style = TextStyle(
+            fontSize = 20.sp,
+//            fontStyle = FontStyle.Italic,
+            color = Color.Black
+        ),
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
+//        fontSize = 20.sp,
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
     )
@@ -193,18 +206,24 @@ fun userEmail(
 ) {
     Text(
         text = "Email Address",
-        style = MaterialTheme.typography.bodySmall,
-        fontStyle = FontStyle.Italic,
-        fontSize = 15.sp,
+        style = TextStyle(
+            fontSize = 15.sp,
+            fontStyle = FontStyle.Italic,
+            color = Color(0xFF797C7B)
+        ),
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
     )
 
     Text (
         text = email,
-        style = MaterialTheme.typography.bodySmall,
+        style = TextStyle(
+            fontSize = 20.sp,
+//            fontStyle = FontStyle.Italic,
+            color = Color.Black
+        ),
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
+//        fontSize = 20.sp,
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
     )
@@ -216,18 +235,24 @@ fun userDisplayName(
 ) {
     Text(
         text = "Display Name",
-        style = MaterialTheme.typography.bodySmall,
-        fontStyle = FontStyle.Italic,
-        fontSize = 15.sp,
+        style = TextStyle(
+            fontSize = 15.sp,
+            fontStyle = FontStyle.Italic,
+            color = Color(0xFF797C7B)
+        ),
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
     )
 
     Text (
         text = name,
-        style = MaterialTheme.typography.bodySmall,
+        style = TextStyle(
+            fontSize = 20.sp,
+//            fontStyle = FontStyle.Italic,
+            color = Color.Black
+        ),
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
+//        fontSize = 20.sp,
         textAlign = TextAlign.Center,
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
     )

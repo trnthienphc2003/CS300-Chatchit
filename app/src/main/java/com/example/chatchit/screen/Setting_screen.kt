@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -152,7 +153,10 @@ fun SettingScreen(
     ) {
         Text (
             text = "Settings",
-            style = MaterialTheme.typography.headlineSmall,
+            style = TextStyle(
+                fontSize = 20.sp,
+                color = Color.Black
+            ),
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
 //                modifier = modifier.align(Alignment.CenterHorizontally),
 
@@ -234,12 +238,14 @@ fun SettingScreen(
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
                         .padding(top = 10.dp),
+                    color = Color.Black
                 )
                 Text(
                     text = "Security, change password",
 //                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 10.sp,
+                    color = Color(0xFF797C7B),
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
 //                        .padding(top = 5.dp),
@@ -279,12 +285,14 @@ fun SettingScreen(
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
                         .padding(top = 10.dp),
+                    color = Color.Black
                 )
                 Text(
                     text = "Messages, group and others",
 //                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 10.sp,
+                    color = Color(0xFF797C7B),
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
 //                        .padding(top = 5.dp),
@@ -321,15 +329,18 @@ fun SettingScreen(
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,
+//                    color = Color(0xFF797C7B),
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
                         .padding(top = 10.dp),
+                    color = Color.Black
                 )
                 Text(
                     text = "Translated message language",
 //                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 10.sp,
+                    color = Color(0xFF797C7B),
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
 //                        .padding(top = 5.dp),
@@ -368,12 +379,14 @@ fun SettingScreen(
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
                         .padding(top = 10.dp),
+                    color = Color.Black
                 )
                 Text(
                     text = "Help center, contact us, privacy policy",
 //                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 10.sp,
+                    color = Color(0xFF797C7B),
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
 //                        .padding(top = 5.dp),
@@ -408,6 +421,7 @@ fun SettingScreen(
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,
+                    color = Color.Black,
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
                         .padding(top = 15.dp),
