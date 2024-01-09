@@ -152,12 +152,14 @@ fun MainNavigation(
                                         }
                                     }
                                 }
-                                navHostController.navigate(navItem.route) {
-                                    popUpTo(navHostController.graph.findStartDestination().id) {
-                                        saveState = true
+                                else {
+                                    navHostController.navigate(navItem.route) {
+                                        popUpTo(navHostController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
                                 }
                             },
                             icon = {
@@ -228,7 +230,7 @@ fun MainNavigation(
             composable(Setting) {
                 SettingScreen(
                     navHostController,
-                    context
+                    LocalContext.current
                 )
             }
             composable(Search){
