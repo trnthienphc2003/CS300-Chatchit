@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -37,9 +40,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
+import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.models.Language
 import com.example.chatchit.models.User
 import com.example.chatchit.services.APIService
@@ -417,45 +422,73 @@ fun SettingScreen(
             Icons.Filled.KeyboardArrowDown
         }
         if(openLanguageLog) {
-            ExposedDropdownMenuBox(
-                expanded = isExpanded,
-                onExpandedChange = {
-                    isExpanded = !isExpanded
-                }
+            Dialog(
+                onDismissRequest = { openLanguageLog = false }
             ) {
-                TextField(
-                    value = selectedItem,
-                    onValueChange = {},
-                    readOnly = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
-                    modifier = Modifier.menuAnchor()
-                )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    shape = RoundedCornerShape(10.dp),
+                ) {
+                    Column (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Primary language",
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            fontSize = 16.sp,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 10.dp),
+                        )
+                        SpacerHeight(10.dp)
+                        ExposedDropdownMenuBox(
+                            expanded = isExpanded,
+                            onExpandedChange = {
+                                isExpanded = !isExpanded
+                            },
+                        ) {
+                            TextField(
+                                value = selectedItem,
+                                onValueChange = {},
+                                readOnly = true,
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
+                                modifier = Modifier.menuAnchor()
+                            )
 
-                ExposedDropdownMenu(
-                    expanded = isExpanded,
-                    onDismissRequest = { isExpanded = false },) {
-                    languageNames.forEach { item ->
-                        DropdownMenuItem(
-                            text = { Text(text = item) },
-                            onClick = {
-                                selectedItem = item
-                                isExpanded = false
+                            ExposedDropdownMenu(
+                                expanded = isExpanded,
+                                onDismissRequest = { isExpanded = false },) {
+                                languageNames.forEach { item ->
+                                    DropdownMenuItem(
+                                        text = { Text(text = item) },
+                                        onClick = {
+                                            selectedItem = item
+                                            isExpanded = false
 
-                                MainScope().launch {
-                                    try {
-                                        val id = decodeLanguage[item]?.id
-                                        val languageService: LanguageAPI = APIService.getApiClient(context).create(LanguageAPI::class.java)
-                                        val response = languageService.updateUserLanguage(
-                                            LanguageIdField(
-                                                id?: 0
-                                            )
-                                        ).await()
-                                    } catch (e: Exception) {
-                                        e.printStackTrace()
-                                    }
+                                            MainScope().launch {
+                                                try {
+                                                    val id = decodeLanguage[item]?.id
+                                                    val languageService: LanguageAPI = APIService.getApiClient(context).create(LanguageAPI::class.java)
+                                                    val response = languageService.updateUserLanguage(
+                                                        LanguageIdField(
+                                                            id?: 0
+                                                        )
+                                                    ).await()
+                                                } catch (e: Exception) {
+                                                    e.printStackTrace()
+                                                }
+                                            }
+                                        }
+                                    )
                                 }
                             }
-                        )
+                        }
                     }
                 }
             }
