@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -73,6 +74,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.net.ConnectException
+import java.time.format.TextStyle
 import java.util.Date
 
 
@@ -93,6 +95,9 @@ fun UserInput(
                 stringResource(label),
                 color = Color(0xFF24786D)
             ) },
+            textStyle = androidx.compose.ui.text.TextStyle(
+                color = Color.Black
+            ),
             modifier = modifier,
             maxLines = 1,
 //            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -115,6 +120,9 @@ fun UserInput(
                 stringResource(label),
                 color = Color(0xFF24786D)
             ) },
+            textStyle = androidx.compose.ui.text.TextStyle(
+                color = Color.Black
+            ),
             maxLines = 1,
             modifier = modifier,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -145,7 +153,7 @@ fun LoginScreen(
 //    var buttonEnable by remember { mutableStateOf(true) }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -155,7 +163,8 @@ fun LoginScreen(
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             fontFamily = FontFamily.SansSerif,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = Color.Black
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -168,7 +177,8 @@ fun LoginScreen(
                 .padding(bottom = 32.dp, start = 30.dp, end = 30.dp),
             fontStyle = FontStyle.Italic,
             fontFamily = FontFamily.SansSerif,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = Color(0xFF797C7B)
         )
 
         Row (
@@ -222,7 +232,7 @@ fun LoginScreen(
                 .padding(
                     start = 16.dp, end = 16.dp,
                     bottom = 10.dp
-                ),
+                )
         )
 
         Spacer(modifier = Modifier.height(15.dp))

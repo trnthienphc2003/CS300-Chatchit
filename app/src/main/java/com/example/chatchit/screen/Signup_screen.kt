@@ -3,6 +3,7 @@ package com.example.chatchit.screen
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -71,13 +73,16 @@ fun SignUpScreen(
     var isPasswordMatching by remember { mutableStateOf(true) }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = "Sign up with Email",
-            style = MaterialTheme.typography.headlineSmall,
+            style = androidx.compose.ui.text.TextStyle(
+                color = Color.Black,
+                fontSize = 24.sp
+            ),
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             fontFamily = FontFamily.SansSerif,
@@ -86,7 +91,9 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Get chatting with friends and family today\n by signing up for our chat app!",
-            style = MaterialTheme.typography.bodySmall,
+            style = androidx.compose.ui.text.TextStyle(
+                color = Color(0xFF797C7B)
+            ),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = 32.dp, start = 30.dp, end = 30.dp),
@@ -103,6 +110,9 @@ fun SignUpScreen(
                 "Name",
                 color = Color(0xFF24786D),
             ) },
+            textStyle = androidx.compose.ui.text.TextStyle(
+                color = Color.Black
+            ),
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp),
@@ -126,6 +136,9 @@ fun SignUpScreen(
                 "Email",
                 color = Color(0xFF24786D),
             ) },
+            textStyle = androidx.compose.ui.text.TextStyle(
+                color = Color.Black
+            ),
             singleLine = true,
             isError = !isEmailValid,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -149,6 +162,9 @@ fun SignUpScreen(
                 "Password",
                 color = Color(0xFF24786D),
                 ) },
+            textStyle = androidx.compose.ui.text.TextStyle(
+                color = Color.Black
+            ),
             singleLine = true,
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Color(0xFF24786D),
@@ -173,6 +189,9 @@ fun SignUpScreen(
                 "Confirm Password",
                 color = Color(0xFF24786D),
             ) },
+            textStyle = androidx.compose.ui.text.TextStyle(
+                color = Color.Black
+            ),
             singleLine = true,
             isError = !isPasswordMatching,
             // Highlight non-matching password field with red color

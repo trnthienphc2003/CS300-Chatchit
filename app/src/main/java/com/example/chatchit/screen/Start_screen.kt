@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
+import androidx.compose.material3.ButtonColors
 import com.example.chatchit.component.ButtonComponent
 //import com.example.chatchit.component.IconComponentImageVector
 import com.example.chatchit.component.SpacerHeight
@@ -80,7 +82,7 @@ fun StartScreen(
                 .padding(20.dp)
                 .align(Alignment.BottomCenter)
                 .height(60.dp)
-                .width(300.dp)
+                .width(300.dp),
         ) {
             Text(text = "Get started")
         }
