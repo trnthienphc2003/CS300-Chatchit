@@ -135,10 +135,6 @@ fun HomeScreen(
                                         user
                                     )
                                     navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "conversation",
-                                        conversation
-                                    )
-                                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                         "roomId",
                                         it.id
                                     )

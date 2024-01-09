@@ -32,6 +32,7 @@ import com.example.chatchit.screen.ContactScreen
 import com.example.chatchit.screen.GroupScreen
 import com.example.chatchit.screen.HomeScreen
 import com.example.chatchit.screen.LoginScreen
+import com.example.chatchit.screen.ManageMemberScreen
 import com.example.chatchit.screen.ProfileScreen
 import com.example.chatchit.screen.SearchScreen
 import com.example.chatchit.screen.SettingScreen
@@ -223,7 +224,8 @@ fun MainNavigation(
             }
             composable(Chat){
                 ChatScreen(
-                    navHostController
+                    navHostController,
+                    LocalContext.current
                 )
             }
             composable(ChatSetting){
@@ -261,6 +263,9 @@ fun MainNavigation(
                     navHostController = navHostController,
                     context = LocalContext.current)
             }
+            composable(ManageMember){
+                ManageMemberScreen(navHostController, LocalContext.current)
+            }
         }
     }
 }
@@ -280,3 +285,4 @@ const val Setting = "setting_screen"
 const val Group = "group_screen"
 const val AddGroup = "add_group_screen"
 const val Profile = "profile_screen"
+const val ManageMember = "manage_member_screen"

@@ -2,6 +2,8 @@ package com.example.chatchit.screen
 
 
 import Avatar
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.layout.Box
@@ -61,10 +63,17 @@ import com.example.chatchit.models.Conversation
 import com.example.chatchit.models.Message
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
+import com.example.chatchit.navigation.Chat
 import com.example.chatchit.navigation.ChatSetting
+import com.example.chatchit.services.APIService
 import com.example.chatchit.services.WebSocketCallback
 import com.example.chatchit.services.WebSocketService
+import com.example.chatchit.services.api.MessageAPI
+import com.example.chatchit.services.api.await
 import com.example.chatchit.services.api.form.MessageForm
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class ChatViewModel : ViewModel() {
@@ -78,18 +87,37 @@ class ChatViewModel : ViewModel() {
     fun addMessage(message: Message) {
         chatList.value = listOf(message) + chatList.value
     }
+
+    fun init(roomId: Int, context:Context){
+        MainScope().launch {
+            try {
+                val mesService: MessageAPI =
+                    APIService.getApiClient(context).create(
+                        MessageAPI::class.java
+                    )
+                val messAPIResponse =
+                    mesService.getMessage(roomId?: 0, 1, 100).await()
+                val json = Gson().toJson(messAPIResponse.data)
+                val itemType = object : TypeToken<Conversation>() {}.type
+                val conversation = Gson().fromJson<Conversation>(json, itemType)
+                setChatList(conversation.rows?: emptyList())
+            } catch (e: Exception) {
+                Log.e("moveChat", e.toString())
+            }
+        }
+    }
 }
 
 @Composable
 fun ChatScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    context: Context
 ){
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
-    val conversation = navHostController.previousBackStackEntry?.savedStateHandle?.get<Conversation>("conversation") ?: Conversation()
     val roomId = navHostController.previousBackStackEntry?.savedStateHandle?.get<Int>("roomId") ?: -1
     val viewModel = ChatViewModel()
-    viewModel.setChatList(conversation.rows?: emptyList())
+    viewModel.init(roomId, context)
     val lazyColumnListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 

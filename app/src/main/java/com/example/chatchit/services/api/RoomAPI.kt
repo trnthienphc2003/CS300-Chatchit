@@ -4,6 +4,7 @@ import com.example.chatchit.services.api.form.NameField
 import com.example.chatchit.services.api.form.UserIdField
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -25,6 +26,12 @@ interface RoomAPI {
 
     @GET("api/v1/room/{id}/list-members")
     fun listMember(
-        @Path("id") roomId: String
+        @Path("id") roomId: Int
+    ): Call<APIResponse>
+
+    @DELETE("api/v1/room/{id}/remove-member")
+    fun deleteMember(
+        @Path("id") roomId: Int,
+        @Body userIdField: UserIdField,
     ): Call<APIResponse>
 }
