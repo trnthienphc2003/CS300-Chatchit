@@ -106,43 +106,22 @@ fun HomeScreen(
                 LazyColumn(modifier = Modifier.padding(top = 30.dp, bottom = 15.dp) ){
                     items(listRoom, key = { it.id?:Int }) {
                         UserEachRow(person = it) {
-//                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
-//                                "data",
-//                                it
-//                            )
-//                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
-//                                "user",
-//                                user
-//                            )
-//                            navHostController.navigate(Chat)
-                            MainScope().launch {
-                                try {
-                                    val mesService: MessageAPI =
-                                        APIService.getApiClient(context).create(
-                                            MessageAPI::class.java
-                                        )
-                                    val messAPIResponse =
-                                        mesService.getMessage(it.id ?: 0, 1, 100).await()
-                                    val json = Gson().toJson(messAPIResponse.data)
-                                    val itemType = object : TypeToken<Conversation>() {}.type
-                                    val conversation = Gson().fromJson<Conversation>(json, itemType)
-                                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "data",
-                                        it
-                                    )
-                                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "user",
-                                        user
-                                    )
-                                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                        "roomId",
-                                        it.id
-                                    )
-                                    navHostController.navigate(Chat)
-                                } catch (e: Exception) {
-                                    Log.e("moveChat", e.toString())
-                                }
-                            }
+//
+                                navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                    "data",
+                                    it
+                                )
+                                navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                    "user",
+                                    user
+                                )
+                                navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                    "roomId",
+                                    it.id
+                                )
+                                navHostController.navigate(Chat)
+
+
                         }
                     }
                 }

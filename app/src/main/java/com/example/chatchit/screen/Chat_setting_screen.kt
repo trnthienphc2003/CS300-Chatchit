@@ -67,7 +67,7 @@ fun Bar(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Absolute.SpaceBetween
     ){
-        IconButtonBack(modifier = Modifier.align(Alignment.CenterVertically), navHostController)
+        IconButtonBack(modifier = Modifier.align(Alignment.CenterVertically), navHostController = navHostController)
     }
 }
 

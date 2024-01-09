@@ -87,6 +87,9 @@ class ChatViewModel : ViewModel() {
     fun addMessage(message: Message) {
         chatList.value = listOf(message) + chatList.value
     }
+    fun clear(){
+        chatList.value = emptyList()
+    }
 
     fun init(roomId: Int, context:Context){
         MainScope().launch {
@@ -143,7 +146,7 @@ fun ChatScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            inforBar (person, modifier = Modifier.padding(top = 30.dp, start = 10.dp, end = 20.dp), navHostController)
+            inforBar (viewModel, person, modifier = Modifier.padding(top = 30.dp, start = 10.dp, end = 20.dp), navHostController)
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -170,8 +173,23 @@ fun ChatScreen(
 }
 
 @Composable
+fun IconButtonBackChat(viewModel: ChatViewModel, modifier: Modifier = Modifier, navHostController: NavHostController) {
+    IconButton(onClick = {
+        viewModel.clear()
+        navHostController.popBackStack()}) {
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+            contentDescription = "",
+            modifier = modifier.size(size = 25.dp),
+            tint = Color.Unspecified
+        )
+    }
+}
+
+@Composable
 fun IconButtonBack(modifier: Modifier = Modifier, navHostController: NavHostController) {
-    IconButton(onClick = {navHostController.popBackStack()}) {
+    IconButton(onClick = {
+        navHostController.popBackStack()}) {
         Icon(
             painter = painterResource(id = R.drawable.baseline_arrow_back_24),
             contentDescription = "",
@@ -218,6 +236,7 @@ fun IconButtonVideoCall(modifier: Modifier = Modifier, navHostController: NavHos
 
 @Composable
 fun inforBar(
+    viewModel: ChatViewModel,
     person: Room,
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
@@ -228,7 +247,7 @@ fun inforBar(
     ){
         Row {
 //            IconComponentDrawable(icon = R.drawable.baseline_arrow_back_24, modifier = Modifier.align(CenterVertically), size = 25.dp)
-            IconButtonBack(modifier = Modifier.align(CenterVertically), navHostController)
+            IconButtonBackChat(viewModel, modifier = Modifier.align(CenterVertically), navHostController)
             SpacerWidth()
 
             IconButton(onClick = {
