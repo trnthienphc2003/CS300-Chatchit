@@ -9,8 +9,8 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface RoomAPI {
-    @GET("api/v1/room")
-    fun listRoom(): Call<APIResponse>
+    @GET("api/v1/room/friend-chat")
+    fun listFriendChat(): Call<APIResponse>
 
     @POST("api/v1/room/create")
     fun createRoom(

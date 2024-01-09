@@ -14,5 +14,5 @@ class User (
     @SerializedName("avatar")
     val avatar: String? = null,
     @SerializedName("language")
-    val language: Date? = null,
+    val language: Language? = null,
 ) : Parcelable

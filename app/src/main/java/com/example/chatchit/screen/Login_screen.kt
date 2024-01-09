@@ -253,7 +253,7 @@ fun LoginScreen(
                     try {
                         val loginAPIResponse = authService.login(LoginForm(email, password)).await()
                         val roomService: RoomAPI = APIService.getApiClient(context).create(RoomAPI::class.java)
-                        val roomAPIResponse = roomService.listRoom().await()
+                        val roomAPIResponse = roomService.listFriendChat().await()
                         val json = Gson().toJson(roomAPIResponse.data)
                         val itemType = object : TypeToken<List<Room>>() {}.type
                         val listRoom = Gson().fromJson<List<Room>>(json, itemType)
