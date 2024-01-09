@@ -9,7 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface RoomAPI {
-    @GET("api/v1/room/friend-chat")
+    @GET("api/v1/room/friend")
     fun listFriendChat(): Call<APIResponse>
 
     @POST("api/v1/room/create")
