@@ -2,6 +2,7 @@ package com.example.chatchit.screen
 
 import android.util.Log
 import android.content.Context
+import android.widget.EditText
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -34,15 +35,26 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import com.example.chatchit.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.window.Dialog
 import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.IconComponentImageVector
 import com.example.chatchit.component.SpacerHeight
@@ -337,6 +349,7 @@ fun UserStoryLayout(
 
 @Composable
 fun AddStoryLayout(context:Context, navHostController: NavHostController){
+    var openDialog by remember{ mutableStateOf(false)}
     Column {
 
         Box(modifier = Modifier
@@ -346,30 +359,83 @@ fun AddStoryLayout(context:Context, navHostController: NavHostController){
             contentAlignment = Alignment.Center
         ){
             IconButton(onClick = {
-                MainScope().launch {
-                    try {
-                        val groupService: RoomAPI =
-                            APIService.getApiClient(context).create(RoomAPI::class.java)
-
-                        val name = "SC203"
-                        val removeAPIResponse = groupService.createRoom(NameField(name)).await()
-                    } catch (e: Exception) {
-                        Log.e("Create group", e.toString())
-                    }
-                }
+                openDialog = !openDialog
+//                MainScope().launch {
+//                    try {
+//                        val groupService: RoomAPI =
+//                            APIService.getApiClient(context).create(RoomAPI::class.java)
+//
+//                        val name = "SC203"
+//                        val removeAPIResponse = groupService.createRoom(NameField(name)).await()
+//                    } catch (e: Exception) {
+//                        Log.e("Create group", e.toString())
+//                    }
+//                }
             }) {
                 IconComponentDrawable(icon = R.drawable.baseline_add_circle_24, size = 70.dp, tint = Color.Gray)
             }
-        }
 
-        SpacerHeight(8.dp)
-        Text(text = "Create group",
-                style = TextStyle(
-                    fontSize = 13.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.align(CenterHorizontally)
-            )
+            if(openDialog) {
+                var groupName by remember{ mutableStateOf("")}
+                Dialog(onDismissRequest = { openDialog = false }) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp),
+                        shape = RoundedCornerShape(10.dp),
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp),
+                            horizontalAlignment = CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Create group",
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    color = Color.Black,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.align(CenterHorizontally)
+                            )
+                            SpacerHeight(10.dp)
+                            TextField(
+                                value = groupName,
+                                onValueChange = {groupName = it},
+                                maxLines = 1,
+                                modifier = Modifier.align(CenterHorizontally)
+                            )
+                            SpacerHeight(10.dp)
+                            Button(onClick = {
+                                openDialog = false
+                                MainScope().launch {
+                                    try {
+                                        val groupService: RoomAPI =
+                                            APIService.getApiClient(context).create(RoomAPI::class.java)
+
+                                        val name = groupName
+                                        val removeAPIResponse = groupService.createRoom(NameField(name)).await()
+                                    } catch (e: Exception) {
+                                        Log.e("Create group", e.toString())
+                                    }
+                                }
+                            }) {
+                                Text(
+                                    text = "Create",
+                                    style = TextStyle(
+                                        fontSize = 20.sp,
+                                        color = Color.Black,
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    textAlign = TextAlign.Center,
+//                                    modifier = Modifier.align(CenterHorizontally)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
