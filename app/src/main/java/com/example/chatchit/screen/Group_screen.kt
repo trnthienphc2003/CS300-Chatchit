@@ -52,6 +52,7 @@ import com.example.chatchit.models.FriendAdd
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.AddFriend
+import com.example.chatchit.navigation.AddGroup
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.FriendAPI
 import com.example.chatchit.services.api.RoomAPI
@@ -63,39 +64,29 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 
-class SearchViewModel : ViewModel() {
-    private val searchList = mutableStateOf<List<User>>(emptyList())
+class GroupViewModel : ViewModel() {
+    private val groupList = mutableStateOf<List<User>>(emptyList())
 
-    fun getsearchList(): State<List<User>> = searchList
+    fun getgroupList(): State<List<User>> = groupList
 
-    fun setsearchList(list: List<User>) {
-        searchList.value = list
+    fun setgroupList(list: List<User>) {
+        groupList.value = list
     }
-    fun addSearch(friend: User) {
-        searchList.value = listOf(friend) + searchList.value
+    fun addgroup(friend: User) {
+        groupList.value = listOf(friend) + groupList.value
     }
-    fun getsize(): Int = searchList.value.size
+    fun getsize(): Int = groupList.value.size
 
 
 }
 
-class CheckViewModel : ViewModel(){
-    private val checkFriend = mutableStateOf<Boolean>(true)
-
-    fun setCheck(check:Boolean){
-        checkFriend.value = check
-    }
-
-    fun getCheck(): Boolean = checkFriend.value
-}
 @Composable
-fun SearchScreen(
+fun GroupScreen(
     navHostController: NavHostController,
     context: Context
 ){
-    val viewModel = SearchViewModel()
-    viewModel.setsearchList(listOf())
-    val checkViewModel = CheckViewModel()
+    val viewModel = GroupViewModel()
+    viewModel.setgroupList(listOf())
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -105,21 +96,18 @@ fun SearchScreen(
                 .fillMaxSize()
                 .padding(top = 20.dp)
         ){
-            searchInput(checkViewModel, context, viewModel, modifier = Modifier.align(alignment = Alignment.CenterHorizontally), modifierText = Modifier.align(
+            groupInput(context, viewModel, modifier = Modifier.align(alignment = Alignment.CenterHorizontally), modifierText = Modifier.align(
                 alignment = Alignment.CenterHorizontally
             ))
             LazyColumn(modifier = Modifier.padding(top = 30.dp, bottom = 15.dp) ){
-                items(viewModel.getsearchList().value, key = { it.id?:Int }) {
-                    FriendEachRow(person = it){
+                items(viewModel.getgroupList().value, key = { it.id?:Int }) {
+                    GroupEachRow(person = it){
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                            "addfriend",
+                            "addgroup",
                             it
                         )
-                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                            "checkfriend",
-                            checkViewModel.getCheck()
-                        )
-                        navHostController.navigate(AddFriend)
+
+                        navHostController.navigate(AddGroup)
                     }
                 }
             }
@@ -130,10 +118,9 @@ fun SearchScreen(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun searchInput(
-    checkViewModel: CheckViewModel,
+fun groupInput(
     context: Context,
-    viewModel: SearchViewModel,
+    viewModel: GroupViewModel,
     modifier: Modifier = Modifier,
     modifierText: Modifier = Modifier,
 ){
@@ -176,11 +163,8 @@ fun searchInput(
                             val json = Gson().toJson(friendAPIResponse.data)
                             val itemType = object : TypeToken<FriendAdd>() {}.type
                             val friendInfor = Gson().fromJson<FriendAdd>(json, itemType)
-                            println(Gson().toJson(friendInfor))
-                            checkViewModel.setCheck(friendInfor.isFriendAdded)
-                            if (friendInfor.user != null){
-                                viewModel.addSearch(friendInfor.user?: User())
-                            }
+
+                            viewModel.addgroup(friendInfor.user?: User())
                         } catch (e: Exception) {
                             Log.e("FindFriend", e.toString())
                         }
@@ -193,9 +177,9 @@ fun searchInput(
 }
 
 @Composable
-fun FriendEachRow(
+fun GroupEachRow(
     modifier: Modifier = Modifier,
-    person: User ?= null,
+    person: User,
     onClick: () -> Unit
 ){
     Box(modifier = modifier
@@ -210,32 +194,18 @@ fun FriendEachRow(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row {
-                    if (person != null){
-                        IconComponentDrawable(icon = R.drawable.person_2, size = 60.dp)
-                        SpacerWidth()
-                        Text(
-                            text = person?.name ?: String(), style = TextStyle(
-                                color = Color.Black,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            modifier = Modifier.align(
-                                alignment = Alignment.CenterVertically
-                            )
+                    IconComponentDrawable(icon = R.drawable.person_2, size = 60.dp)
+                    SpacerWidth()
+                    Text(
+                        text = person.name ?: String(), style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align(
+                            alignment = Alignment.CenterVertically
                         )
-                    }
-                    else{
-                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-                            Text(
-                                text = "There is no friend with this email", style = TextStyle(
-                                    color = Color.Black,
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Bold
-                                ),
-
-                            )
-                        }
-                    }
+                    )
                 }
             }
             SpacerHeight(15.dp)

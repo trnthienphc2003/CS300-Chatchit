@@ -23,10 +23,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.screen.AddFriendScreen
+import com.example.chatchit.screen.AddGroupScreen
 import com.example.chatchit.screen.CallScreen
 import com.example.chatchit.screen.ChatScreen
 import com.example.chatchit.screen.ChatSettingScreen
 import com.example.chatchit.screen.ContactScreen
+import com.example.chatchit.screen.GroupScreen
 import com.example.chatchit.screen.HomeScreen
 import com.example.chatchit.screen.LoginScreen
 import com.example.chatchit.screen.SearchScreen
@@ -242,6 +244,14 @@ fun MainNavigation(
                 AddFriendScreen(navHostController,
                 LocalContext.current)
             }
+            composable(Group){
+                GroupScreen(navHostController,
+                    LocalContext.current)
+            }
+            composable(AddGroup){
+                AddGroupScreen(navHostController,
+                    LocalContext.current)
+            }
         }
     }
 }
@@ -258,3 +268,5 @@ const val Contact = "contact_screen"
 const val Search = "search_screen"
 const val AddFriend = "add_friend_screen"
 const val Setting = "setting_screen"
+const val Group = "group_screen"
+const val AddGroup = "add_group_screen"

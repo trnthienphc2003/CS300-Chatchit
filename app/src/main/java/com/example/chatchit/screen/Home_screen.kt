@@ -52,10 +52,14 @@ import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Chat
 import com.example.chatchit.navigation.ChatSetting
+import com.example.chatchit.navigation.Group
 import com.example.chatchit.navigation.Search
 import com.example.chatchit.services.APIService
+import com.example.chatchit.services.api.FriendAPI
 import com.example.chatchit.services.api.MessageAPI
+import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
+import com.example.chatchit.services.api.form.NameField
 import com.example.chatchit.ui.theme.Gray400
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -230,10 +234,10 @@ fun HeaderAndStory(context:Context, listRoom: List<Room>, user: User, navHostCon
 @Composable
 fun ViewStoryLayout(context:Context, user: User, listRoom: List<Room>, navHostController: NavHostController){
     LazyRow(modifier = Modifier.padding(vertical = 20.dp)){
-//        item {
-//            AddStoryLayout()
-//            SpacerWidth()
-//        }
+        item {
+            AddStoryLayout(context, navHostController)
+            SpacerWidth()
+        }
         items(listRoom, key = {it.id?: Int}){
             UserStoryLayout(person = it){
                 MainScope().launch {
@@ -272,7 +276,9 @@ fun ViewStoryLayout(context:Context, user: User, listRoom: List<Room>, navHostCo
 
 @Composable
 fun Header(user: User, navHostController: NavHostController){
-    Row(modifier = Modifier.fillMaxWidth().padding(end=20.dp), horizontalArrangement = Arrangement.SpaceBetween){
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(end = 20.dp), horizontalArrangement = Arrangement.SpaceBetween){
         IconButtonSearch(modifier = Modifier.align(CenterVertically), navHostController = navHostController)
         Text(text = "Home", modifier = Modifier.align(CenterVertically), style = TextStyle(
             color = Gray,
@@ -330,32 +336,38 @@ fun UserStoryLayout(
 
 
 @Composable
-fun AddStoryLayout(){
+fun AddStoryLayout(context:Context, navHostController: NavHostController){
     Column {
+
         Box(modifier = Modifier
-            .border(
-                2.dp, Color.DarkGray, shape = CircleShape
-            )
-            .background(
-                Color.Yellow, shape = CircleShape
-            )
+            .clip(CircleShape)
+            .background(Color.White)
             .size(70.dp),
             contentAlignment = Alignment.Center
         ){
-            Box(modifier = Modifier
-                .clip(CircleShape)
-                .background(Color.Black)
-                .size(20.dp),
-                contentAlignment = Alignment.Center
-            ){
-                IconComponentImageVector(icon = Icons.Default.Add, size = 12.dp, tint = Color.Yellow)
+            IconButton(onClick = {
+                MainScope().launch {
+                    try {
+                        val groupService: RoomAPI =
+                            APIService.getApiClient(context).create(RoomAPI::class.java)
+
+                        val name = "SC203"
+                        val removeAPIResponse = groupService.createRoom(NameField(name)).await()
+                    } catch (e: Exception) {
+                        Log.e("Create group", e.toString())
+                    }
+                }
+            }) {
+                IconComponentDrawable(icon = R.drawable.baseline_add_circle_24, size = 70.dp, tint = Color.Gray)
             }
         }
+
         SpacerHeight(8.dp)
-        Text(text = stringResource(id = R.string.add_story),
+        Text(text = "Create group",
                 style = TextStyle(
                     fontSize = 13.sp,
-                    color = Color.White,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold
                 ),
                 modifier = Modifier.align(CenterHorizontally)
             )
