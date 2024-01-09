@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
+import com.example.chatchit.R
 
 @Composable
 fun Avatar(
@@ -18,12 +19,21 @@ fun Avatar(
     size: Dp,
     tint:Color = Color.Unspecified
 ) {
-    val imageBytes = Base64.decode(b64Image, Base64.DEFAULT)
-    val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-    Icon(
-        bitmap = image.asImageBitmap(),
-        contentDescription = "",
-        modifier = modifier.size(size = size),
-        tint = tint
-    )
+    if (b64Image == null) {
+        Icon(
+            painter = painterResource(id = R.drawable.person_2),
+            contentDescription = "",
+            modifier = modifier.size(size = size),
+            tint = tint
+        )
+    } else {
+        val imageBytes = Base64.decode(b64Image, Base64.DEFAULT)
+        val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        Icon(
+            bitmap = image.asImageBitmap(),
+            contentDescription = "",
+            modifier = modifier.size(size = size),
+            tint = tint
+        )
+    }
 }
