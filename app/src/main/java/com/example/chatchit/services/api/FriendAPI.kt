@@ -1,5 +1,6 @@
 package com.example.chatchit.services.api
 
+import com.example.chatchit.services.api.form.EmailField
 import com.example.chatchit.services.api.form.FriendIdField
 import retrofit2.Call
 import retrofit2.http.Body
@@ -20,5 +21,10 @@ interface FriendAPI {
     @DELETE("api/v1/friend/{id}")
     fun deleteFriend(
         @Path("id") friendId: Int
+    ): Call<APIResponse>
+
+    @POST("api/v1/friend/find")
+    fun findFriend(
+        @Body email: EmailField
     ): Call<APIResponse>
 }

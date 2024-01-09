@@ -31,6 +31,7 @@ fun AddFriendScreen(
     navHostController: NavHostController
 ){
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("addfriend") ?: User()
+    val check = navHostController.previousBackStackEntry?.savedStateHandle?.get<Boolean>("checkfriend") ?: true
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -43,13 +44,14 @@ fun AddFriendScreen(
                 modifier = Modifier.padding(top = 30.dp, start = 10.dp, end = 20.dp),
                 navHostController
             )
-            avatarAdd(person = person, modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 20.dp))
+            avatarAdd(check, person = person, modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 20.dp))
         }
     }
 }
 
 @Composable
 fun avatarAdd(
+    check:Boolean,
     person: User,
     modifier: Modifier = Modifier
 ){
@@ -76,8 +78,15 @@ fun avatarAdd(
             modifier = Modifier.align((Alignment.CenterHorizontally))
         )
         SpacerHeight(8.dp)
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Add contact")
+        if(check){
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = "Remove contact")
+            }
+        }
+        else{
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = "Add contact")
+            }
         }
     }
 }

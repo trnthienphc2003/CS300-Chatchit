@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 import java.util.Date
 @Parcelize
 class User (
-    @SerializedName("ID")
+    @SerializedName("id")
     val id: Int? = null,
     @SerializedName("name")
     val name: String? = null,

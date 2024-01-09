@@ -232,7 +232,9 @@ fun MainNavigation(
                 )
             }
             composable(Search){
-                SearchScreen(navHostController)
+                SearchScreen(navHostController,
+                    LocalContext.current
+                )
             }
             composable(AddFriend){
                 AddFriendScreen(navHostController)

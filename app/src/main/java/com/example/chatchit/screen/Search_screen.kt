@@ -1,6 +1,8 @@
 package com.example.chatchit.screen
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,9 +48,19 @@ import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
+import com.example.chatchit.models.FriendAdd
+import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.AddFriend
-
+import com.example.chatchit.services.APIService
+import com.example.chatchit.services.api.FriendAPI
+import com.example.chatchit.services.api.RoomAPI
+import com.example.chatchit.services.api.await
+import com.example.chatchit.services.api.form.EmailField
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 
 class SearchViewModel : ViewModel() {
@@ -63,17 +75,27 @@ class SearchViewModel : ViewModel() {
         searchList.value = listOf(friend) + searchList.value
     }
     fun getsize(): Int = searchList.value.size
+
+
 }
 
+class CheckViewModel : ViewModel(){
+    private val checkFriend = mutableStateOf<Boolean>(true)
 
+    fun setCheck(check:Boolean){
+        checkFriend.value = check
+    }
+
+    fun getCheck(): Boolean = checkFriend.value
+}
 @Composable
 fun SearchScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    context: Context
 ){
     val viewModel = SearchViewModel()
     viewModel.setsearchList(listOf())
-    val lazyColumnListState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
+    val checkViewModel = CheckViewModel()
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -83,7 +105,7 @@ fun SearchScreen(
                 .fillMaxSize()
                 .padding(top = 20.dp)
         ){
-            searchInput(viewModel, modifier = Modifier.align(alignment = Alignment.CenterHorizontally), modifierText = Modifier.align(
+            searchInput(checkViewModel, context, viewModel, modifier = Modifier.align(alignment = Alignment.CenterHorizontally), modifierText = Modifier.align(
                 alignment = Alignment.CenterHorizontally
             ))
             LazyColumn(modifier = Modifier.padding(top = 30.dp, bottom = 15.dp) ){
@@ -93,6 +115,10 @@ fun SearchScreen(
                             "addfriend",
                             it
                         )
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "checkfriend",
+                            checkViewModel.getCheck()
+                        )
                         navHostController.navigate(AddFriend)
                     }
                 }
@@ -101,9 +127,12 @@ fun SearchScreen(
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun searchInput(
+    checkViewModel: CheckViewModel,
+    context: Context,
     viewModel: SearchViewModel,
     modifier: Modifier = Modifier,
     modifierText: Modifier = Modifier,
@@ -138,7 +167,23 @@ fun searchInput(
                     keyboardController?.hide()
                     val content = friend.trim()
                     friend = ""
-                    viewModel.addSearch(User(id = viewModel.getsize(), name = "nghiem"))
+                    MainScope().launch {
+                        try {
+                            val emailContent = EmailField(content)
+                            val friendService: FriendAPI =
+                                APIService.getApiClient(context).create(FriendAPI::class.java)
+                            val friendAPIResponse = friendService.findFriend(emailContent).await()
+                            val json = Gson().toJson(friendAPIResponse.data)
+                            val itemType = object : TypeToken<FriendAdd>() {}.type
+                            val friendInfor = Gson().fromJson<FriendAdd>(json, itemType)
+                            println(Gson().toJson(friendInfor))
+                            checkViewModel.setCheck(friendInfor.isFriendAdded)
+                            viewModel.addSearch(friendInfor.user?: User())
+                        } catch (e: Exception) {
+                            Log.e("FindFriend", e.toString())
+                        }
+                    }
+//                    viewModel.addSearch(User(id = viewModel.getsize(), name = "nghiem"))
                 }
             )
         )
@@ -161,12 +206,12 @@ fun FriendEachRow(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
-            ){
-                Row{
+            ) {
+                Row {
                     IconComponentDrawable(icon = R.drawable.person_2, size = 60.dp)
                     SpacerWidth()
                     Text(
-                        text = person.name?:String(), style = TextStyle(
+                        text = person.name ?: String(), style = TextStyle(
                             color = Color.Black,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
