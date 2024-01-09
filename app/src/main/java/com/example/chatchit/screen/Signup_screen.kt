@@ -111,7 +111,8 @@ fun SignUpScreen(
                 color = Color(0xFF24786D),
             ) },
             textStyle = androidx.compose.ui.text.TextStyle(
-                color = Color.Black
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
             ),
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
@@ -137,7 +138,8 @@ fun SignUpScreen(
                 color = Color(0xFF24786D),
             ) },
             textStyle = androidx.compose.ui.text.TextStyle(
-                color = Color.Black
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
             ),
             singleLine = true,
             isError = !isEmailValid,
@@ -163,7 +165,8 @@ fun SignUpScreen(
                 color = Color(0xFF24786D),
                 ) },
             textStyle = androidx.compose.ui.text.TextStyle(
-                color = Color.Black
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
             ),
             singleLine = true,
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -190,7 +193,8 @@ fun SignUpScreen(
                 color = Color(0xFF24786D),
             ) },
             textStyle = androidx.compose.ui.text.TextStyle(
-                color = Color.Black
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
             ),
             singleLine = true,
             isError = !isPasswordMatching,
@@ -264,6 +268,7 @@ fun SignUpScreen(
             Text(
                 "Create an account",
                 fontWeight = FontWeight.Bold,
+                color = Color.White
             )
         }
     }

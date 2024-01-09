@@ -96,7 +96,10 @@ fun ManageMemberScreen(
     ) {
         Text(
             text = "Members",
-            style = MaterialTheme.typography.headlineSmall,
+            style = TextStyle(
+                color = Color.Black,
+                fontSize = 20.sp,
+            ),
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
 //                modifier = modifier.align(Alignment.CenterHorizontally),
 

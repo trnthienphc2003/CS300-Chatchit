@@ -96,7 +96,8 @@ fun UserInput(
                 color = Color(0xFF24786D)
             ) },
             textStyle = androidx.compose.ui.text.TextStyle(
-                color = Color.Black
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
             ),
             modifier = modifier,
             maxLines = 1,
@@ -121,7 +122,8 @@ fun UserInput(
                 color = Color(0xFF24786D)
             ) },
             textStyle = androidx.compose.ui.text.TextStyle(
-                color = Color.Black
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
             ),
             maxLines = 1,
             modifier = modifier,

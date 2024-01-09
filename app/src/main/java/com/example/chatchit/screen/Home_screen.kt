@@ -280,9 +280,9 @@ fun Header(user: User, navHostController: NavHostController){
         .padding(end = 20.dp), horizontalArrangement = Arrangement.SpaceBetween){
         IconButtonSearch(modifier = Modifier.align(CenterVertically), navHostController = navHostController)
         Text(text = "Home", modifier = Modifier.align(CenterVertically), style = TextStyle(
-            color = Gray,
+            color = Color.Black,
             fontWeight = FontWeight.Bold,
-            fontSize = 40.sp
+            fontSize = 20.sp
         ))
         Avatar(b64Image = user.avatar, modifier = Modifier.align(CenterVertically).clip(
             RoundedCornerShape(25.dp)
