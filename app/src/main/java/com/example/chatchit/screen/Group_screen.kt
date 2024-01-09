@@ -161,8 +161,9 @@ fun groupInput(
                             val json = Gson().toJson(friendAPIResponse.data)
                             val itemType = object : TypeToken<FriendAdd>() {}.type
                             val friendInfor = Gson().fromJson<FriendAdd>(json, itemType)
-
-                            viewModel.addgroup(friendInfor.user?: User())
+                            if (friendInfor.user != null) {
+                                viewModel.addgroup(friendInfor.user ?: User())
+                            }
                         } catch (e: Exception) {
                             Log.e("FindFriend", e.toString())
                         }

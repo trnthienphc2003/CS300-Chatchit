@@ -28,6 +28,7 @@ import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.models.User
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.RoomAPI
+import com.example.chatchit.services.api.await
 import com.example.chatchit.services.api.form.UserIdField
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -40,7 +41,7 @@ fun AddGroupScreen(
 ){
     val roomID = navHostController.previousBackStackEntry?.savedStateHandle?.get<Int>("roomID") ?: -1
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("addgroup") ?: User()
-    val check1 = false
+    val check1 = true
     val check = CheckViewModel()
     check.setCheck(check1)
     Box(
@@ -92,34 +93,24 @@ fun groupAdd(
         )
         SpacerHeight(8.dp)
         if(check.getCheck()){
-            Button(enabled = !check.getCheck(), onClick = {
-                check.setCheck(false)
-//                MainScope().launch {
-//                    try {
-//                        val removeService: FriendAPI =
-//                            APIService.getApiClient(context).create(FriendAPI::class.java)
-//                        val removeAPIResponse = removeService.deleteFriend(person.id?:-1).await()
-//                        check.setCheck(false)
-//                    } catch (e: Exception) {
-//                        Log.e("Add", e.toString())
-//                    }
-//                }
+            Button(enabled = true, onClick = {
+                MainScope().launch {
+                    try {
+                        val addService: RoomAPI =
+                            APIService.getApiClient(context).create(RoomAPI::class.java)
+                        val addAPIResponse = addService.addMember(UserIdField(person.id?:-1), roomID).await()
+                        check.setCheck(false)
+                    } catch (e: Exception) {
+                        Log.e("Add to Group", e.toString())
+                    }
+                }
             }) {
                 Text(text = "Add to Group")
             }
         }
         else{
-            Button(enabled = !check.getCheck(), onClick = {
-                MainScope().launch {
-                    try {
-                        val addService: RoomAPI =
-                            APIService.getApiClient(context).create(RoomAPI::class.java)
-                        val addAPIResponse = addService.addMember(UserIdField(person.id?:-1), roomID)
-                        check.setCheck(true)
-                    } catch (e: Exception) {
-                        Log.e("Add to Group", e.toString())
-                    }
-                }
+            Button(enabled = false, onClick = {
+
             }) {
                 Text(text = "Add to Group")
             }
