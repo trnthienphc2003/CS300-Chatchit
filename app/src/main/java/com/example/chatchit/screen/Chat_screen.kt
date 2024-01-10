@@ -75,6 +75,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatterBuilder
+import java.util.Calendar
 
 class ChatViewModel : ViewModel() {
     private val chatList = mutableStateOf<List<Message>>(emptyList())
@@ -326,9 +330,20 @@ fun chatRow(
             }
         }
         if (true) {
+            var time = ""
+            time = if (Calendar.getInstance().time.date == chat.createdAt?.date!!) {
+                val formatter: SimpleDateFormat = SimpleDateFormat("HH:mm")
+                formatter.format(chat.createdAt)
+            } else if (Calendar.getInstance().time.date - chat.createdAt.date == 1) {
+                val formatter: SimpleDateFormat = SimpleDateFormat("Yesterday at HH:mm")
+                ""
+            } else {
+                val formatter: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+                formatter.format(chat.createdAt)
+            }
             if (chat.senderId != user.id) {
                 Text(
-                    text = "12:55", style = TextStyle(
+                    text = time, style = TextStyle(
                         fontSize = 12.sp,
                         color = Color.Black,
                     ),
@@ -339,7 +354,7 @@ fun chatRow(
             }
             else{
                 Text(
-                    text = "12:55", style = TextStyle(
+                    text = time, style = TextStyle(
                         fontSize = 12.sp,
                         color = Color.Black,
                     ),

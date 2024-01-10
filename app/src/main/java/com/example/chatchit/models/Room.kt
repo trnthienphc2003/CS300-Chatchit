@@ -14,4 +14,8 @@ class Room (
     val type: String? = null,
     @SerializedName("avatar")
     val avatar: String? = null,
+    @SerializedName("createdAt")
+    val createdAt: Date? = null,
+    @SerializedName("lastMessage")
+    val lastMessage: Message? = null,
 ) : Parcelable
