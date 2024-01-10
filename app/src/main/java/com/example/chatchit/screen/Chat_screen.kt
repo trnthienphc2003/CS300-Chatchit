@@ -335,8 +335,8 @@ fun chatRow(
                 val formatter: SimpleDateFormat = SimpleDateFormat("HH:mm")
                 formatter.format(chat.createdAt)
             } else if (Calendar.getInstance().time.date - chat.createdAt.date == 1) {
-                val formatter: SimpleDateFormat = SimpleDateFormat("Yesterday at HH:mm")
-                ""
+                val formatter: SimpleDateFormat = SimpleDateFormat("HH:mm")
+                "Yesterday at " + formatter.format(chat.createdAt)
             } else {
                 val formatter: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
                 formatter.format(chat.createdAt)

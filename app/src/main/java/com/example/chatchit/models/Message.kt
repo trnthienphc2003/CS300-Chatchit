@@ -15,7 +15,7 @@ class Message (
     val roomId:Int ?= null,
     @SerializedName("senderId")
     val senderId:Int ?= null,
-    @SerializedName("user")
+    @SerializedName("sender")
     val user: User ?= null,
     @SerializedName("metadata")
     val metadata:String ?= "test",
