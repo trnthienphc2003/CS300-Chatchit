@@ -1,6 +1,7 @@
 package com.example.chatchit.screen
 
 import Avatar
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,14 +49,18 @@ import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.models.Language
+import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.LanguageAPI
 import com.example.chatchit.services.api.await
 import com.example.chatchit.services.api.form.LanguageIdField
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
@@ -64,76 +69,8 @@ fun SettingScreen(
 ) {
     var openLanguageLog by rememberSaveable { mutableStateOf(false) }
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
-//    Row (
-//        modifier = Modifier.fillMaxWidth()
-//            .padding(vertical = 12.dp, horizontal = 8.dp),
-//        horizontalArrangement = Arrangement.Absolute.SpaceBetween
-//    ){
-//        IconButtonBack(modifier = Modifier.align(Alignment.CenterVertically), navHostController)
-//
-//    }
-    val listOfLanguages = listOf<Language>(
-        Language(
-            24,
-            "Vietnamese",
-            "vi"
-        ),
-        Language(
-            25,
-            "English",
-            "en"
-        ),
-        Language(
-            26,
-            "Chinese (simplified)",
-            "zh-CN"
-        ),
-        Language(
-            27,
-            "Spanish",
-            "es"
-        ),
-        Language(
-            28,
-            "French",
-            "fr"
-        ),
-        Language(
-            29,
-            "German",
-            "de"
-        ),
-        Language(
-            30,
-            "Arabic",
-            "ar"
-        ),
-        Language(
-            31,
-            "Russian",
-            "ru"
-        ),
-        Language(
-            32,
-            "Japanese",
-            "ja"
-        ),
-        Language(
-            33,
-            "Korean",
-            "ko"
-        ),
-        Language(
-            34,
-            "Hindi",
-            "hi"
-        ),
-        Language(
-            35,
-            "Esperanto",
-            "eo"
-        ),
-    )
+    val listOfLanguages = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<Language>>("listOfLanguages") ?: List<Language>(0) { Language() }
+
     val decodeLanguage = emptyMap<String, Language>().toMutableMap()
     for (language in listOfLanguages) {
         decodeLanguage[language.name?: String()] = language
@@ -197,13 +134,16 @@ fun SettingScreen(
                 )
             }
 
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .size(size = 48.dp)
+                    .padding(top = 10.dp, end = 16.dp)) {
                 Icon(
                     painter = painterResource(id = R.drawable.qr_code),
                     contentDescription = "",
-                    modifier = Modifier
-                        .size(size = 36.dp)
-                        .padding(top = 10.dp),
+//                    modifier = Modifier
+//                        .size(size = 48.dp)
+//                        .padding(top = 10.dp),
                     tint = Color.Unspecified
                 )
             }
@@ -212,16 +152,18 @@ fun SettingScreen(
         Spacer(modifier = Modifier.padding(vertical = 24.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(start = 24.dp),
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { /*TODO*/ },
+                modifier = Modifier.size(44.dp)) {
                 Icon(
                     painter = painterResource(id = R.drawable.group_503),
                     contentDescription = "",
                     modifier = Modifier
-                        .size(48.dp)
-                        .padding(top = 10.dp, start = 16.dp),
+//                        .size(44.dp)
+//                        .padding(top = 10.dp, start = 16.dp)
+                        .fillMaxSize(),
                     tint = Color.Unspecified
                 )
             }
@@ -256,19 +198,21 @@ fun SettingScreen(
 
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+        Spacer(modifier = Modifier.padding(vertical = 20.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(start = 24.dp),
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { /*TODO*/ },
+                modifier = Modifier.size(44.dp)) {
                 Icon(
                     painter = painterResource(id = R.drawable.group_504),
                     contentDescription = "",
                     modifier = Modifier
-                        .size(48.dp)
-                        .padding(top = 10.dp, start = 16.dp),
+//                        .size(48.dp)
+                        .fillMaxSize(),
+//                        .padding(top = 10.dp, start = 16.dp),
                     tint = Color.Unspecified
                 )
             }
@@ -302,20 +246,22 @@ fun SettingScreen(
 
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+        Spacer(modifier = Modifier.padding(vertical = 20.dp))
 
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth().padding(start = 24.dp),
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
-            IconButton(onClick = { openLanguageLog = !openLanguageLog }) {
+            IconButton(onClick = { /*TODO*/ },
+                modifier = Modifier.size(44.dp)) {
                 Icon(
                     painter = painterResource(id = R.drawable.group_505),
                     contentDescription = "",
                     modifier = Modifier
-                        .size(48.dp)
-                        .padding(top = 10.dp, start = 16.dp),
+//                        .size(48.dp)
+                        .fillMaxSize(),
+//                        .padding(top = 10.dp, start = 16.dp),
                     tint = Color.Unspecified
                 )
             }
@@ -350,19 +296,21 @@ fun SettingScreen(
 
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+        Spacer(modifier = Modifier.padding(vertical = 20.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(start = 24.dp),
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { /*TODO*/ },
+                modifier = Modifier.size(44.dp)){
                 Icon(
                     painter = painterResource(id = R.drawable.group_506),
                     contentDescription = "",
                     modifier = Modifier
-                        .size(48.dp)
-                        .padding(top = 10.dp, start = 16.dp),
+//                        .size(48.dp)
+//                        .padding(top = 10.dp, start = 16.dp)
+                        .fillMaxSize(),
                     tint = Color.Unspecified
                 )
             }
@@ -396,18 +344,20 @@ fun SettingScreen(
 
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 10.dp))
+        Spacer(modifier = Modifier.padding(vertical = 20.dp))
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(start = 24.dp),
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { /*TODO*/ },
+                modifier = Modifier.size(44.dp)) {
                 Icon(
                     painter = painterResource(id = R.drawable.group_507),
                     contentDescription = "",
                     modifier = Modifier
-                        .size(48.dp)
-                        .padding(top = 10.dp, start = 16.dp),
+//                        .size(48.dp)
+//                        .padding(top = 10.dp, start = 16.dp)
+                        .fillMaxSize(),
                     tint = Color.Unspecified
                 )
             }
@@ -419,6 +369,42 @@ fun SettingScreen(
             ) {
                 Text(
                     text = "Invite a friend",
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
+                    color = Color.Black,
+                    modifier = Modifier
+//                        .align(Alignment.CenterVertically)
+                        .padding(top = 15.dp),
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.padding(vertical = 20.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(start = 24.dp),
+            horizontalArrangement = Arrangement.Absolute.Left
+        ) {
+            IconButton(onClick = { /*TODO*/ },
+                modifier = Modifier.size(44.dp)) {
+                Icon(
+                    painter = painterResource(id = R.drawable.group_510),
+                    contentDescription = "",
+                    modifier = Modifier
+//                        .size(48.dp)
+//                        .padding(top = 10.dp, start = 16.dp)
+                        .fillMaxSize(),
+                    tint = Color.Unspecified
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp)
+            ) {
+                Text(
+                    text = "Sign out",
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,

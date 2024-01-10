@@ -24,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.chatchit.models.Language
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.screen.AddFriendScreen
@@ -45,6 +46,7 @@ import com.example.chatchit.services.APIService
 import com.example.chatchit.services.WebSocketService
 import com.example.chatchit.services.api.AuthAPI
 import com.example.chatchit.services.api.FriendAPI
+import com.example.chatchit.services.api.LanguageAPI
 import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
 import com.example.chatchit.services.api.form.LoginForm
@@ -150,10 +152,21 @@ fun MainNavigation(
                                             val itemUserType = object : TypeToken<User>() {}.type
                                             val user = Gson().fromJson<User>(jsonUser, itemUserType)
 
+                                            val languageAPI: LanguageAPI = APIService.getApiClient(context).create(
+                                                LanguageAPI::class.java)
+                                            val languageAPIResponse = languageAPI.getLanguages().await()
+                                            val json = Gson().toJson(languageAPIResponse.data)
+                                            val itemType = object : TypeToken<List<Language>>() {}.type
+                                            val listOfLanguages = Gson().fromJson<List<Language>>(json, itemType)
+
                                             WebSocketService.getInstance().setup(context, user.id!!)
                                             navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                                 "user",
                                                 user
+                                            )
+                                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                                "listOfLanguages",
+                                                listOfLanguages
                                             )
                                             navHostController.navigate(Setting)
                                         } catch (e: Exception) {
