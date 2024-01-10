@@ -65,6 +65,7 @@ import com.example.chatchit.navigation.Search
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.WebSocketCallback
 import com.example.chatchit.services.WebSocketService
+import com.example.chatchit.services.api.AuthAPI
 import com.example.chatchit.services.api.MessageAPI
 import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
@@ -79,6 +80,7 @@ import java.util.Calendar
 
 class HomeViewModel : ViewModel() {
     private val homeList = mutableStateOf<List<Room>>(emptyList())
+    private val user = mutableStateOf<User>(User())
 
     fun getHomeList(): State<List<Room>> = homeList
 
@@ -107,6 +109,24 @@ class HomeViewModel : ViewModel() {
         }
     }
 
+    fun loadUser(context:Context){
+        MainScope().launch {
+            try {
+                val newAuthService: AuthAPI = APIService.getApiClient(context)
+                    .create(AuthAPI::class.java)
+                val userResponse = newAuthService.getUser().await()
+                val jsonUser = Gson().toJson(userResponse.data)
+                val itemUserType = object : TypeToken<User>() {}.type
+                val user1 = Gson().fromJson<User>(jsonUser, itemUserType)
+                user.value = user1
+            } catch (e: Exception) {
+                Log.e("LoadUser", e.toString())
+            }
+        }
+    }
+
+    fun getUser(): State<User> = user
+
     companion object {
         private var instance: HomeViewModel? = null
         fun getInstance(): HomeViewModel {
@@ -123,8 +143,9 @@ fun HomeScreen(
     context: Context
 ){
     HomeViewModel.getInstance().init(context)
-    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
-
+//    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
+    HomeViewModel.getInstance().loadUser(context)
+    val user = HomeViewModel.getInstance().getUser().value
     WebSocketService.getInstance().setCallback(object : WebSocketCallback {
         override fun onReceiveMessage(message: MessageTranslate) {
             HomeViewModel.getInstance().init(context)

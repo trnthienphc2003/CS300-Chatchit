@@ -271,10 +271,10 @@ fun LoginScreen(
                             sleep(200)
                         }
 
-                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                            "user",
-                            user
-                        )
+//                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+//                            "user",
+//                            user
+//                        )
                         navHostController.navigate(Home)
                     } catch (e: ConnectException) {
                         Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
