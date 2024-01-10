@@ -225,8 +225,8 @@ fun UserEachRow(
             val formatter: SimpleDateFormat = SimpleDateFormat("HH:mm")
             formatter.format(room.lastMessage.createdAt)
         } else if (Calendar.getInstance().time.date - room.lastMessage.createdAt.date == 1) {
-            val formatter: SimpleDateFormat = SimpleDateFormat("Yesterday at HH:mm")
-            formatter.format(room.lastMessage.createdAt)
+            val formatter: SimpleDateFormat = SimpleDateFormat("HH:mm")
+            "Yesterday at " + formatter.format(room.lastMessage.createdAt)
         } else {
             val formatter: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
             formatter.format(room.lastMessage.createdAt)
