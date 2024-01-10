@@ -449,22 +449,17 @@ fun SettingScreen(
 
         if(openSignoutLog) {
             openSignoutLog = false
-//            val authService: AuthAPI = APIService.getApiClient(context).create(
-//                AuthAPI::class.java)
-//            MainScope().launch {
-//                try {
-//                    val response = authService.logout().await()
-//                    Toast.makeText(context, "Log out successfully!", Toast.LENGTH_SHORT).show()
-//                    val logoutService: AuthAPI = APIService.getApiClient(context, clearCookie = true).create(
-//                        AuthAPI::class.java)
-//                    val cookiePrefs: SharedPreferences = context.getSharedPreferences("Cookies", Context.MODE_PRIVATE)
-//                    val cookies = ""
-//
-//                    val editor = cookiePrefs.edit()
-//                } catch (e: Exception) {
-//                    e.printStackTrace()
-//                }
-//            }
+            val authService: AuthAPI = APIService.getApiClient(context).create(
+                AuthAPI::class.java)
+            MainScope().launch {
+                try {
+                    val response = authService.logout().await()
+                    Toast.makeText(context, "Log out successfully!", Toast.LENGTH_SHORT).show()
+                    APIService.clearCookies(context)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
             Toast.makeText(context, "Log out successfully!", Toast.LENGTH_SHORT).show()
             navHostController.navigate(Login)
         }
