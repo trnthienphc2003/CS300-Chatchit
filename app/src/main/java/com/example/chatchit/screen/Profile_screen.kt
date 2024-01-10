@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
-import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.models.User
 
 @Composable
