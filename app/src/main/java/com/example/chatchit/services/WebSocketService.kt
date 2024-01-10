@@ -43,14 +43,14 @@ class WebSocketService private constructor() {
             override fun onMessage(webSocket: WebSocket, text: String) {
                 success = true
                 Log.i("WebSocket", "Received data:$text")
-                if (text == "\"pong\"")
+                if (text.trim() == "\"pong\"")
                     return
                 receiveMessage(text)
             }
 
             override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
                 webSocket.close(1000, reason)
-                Log.i("WebSocket", "Closing: $reason")
+                Log.i("WebSocket", "Closing websocket $reason")
             }
 
             override fun onFailure(
@@ -75,6 +75,7 @@ class WebSocketService private constructor() {
     }
 
     private fun receiveMessage(message: String){
+        Log.i("WebSocket", "hmu: $message \"ping\"")
         callback?.onReceiveMessage(Gson().fromJson(message, MessageTranslate::class.java))
     }
 

@@ -86,26 +86,12 @@ fun MainNavigation(
                             selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
                             onClick = {
                                 if(navItem.route == Home) {
-                                    val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
                                     MainScope().launch {
                                         try {
-                                            val roomService: RoomAPI = APIService.getApiClient(context).create(RoomAPI::class.java)
-                                            val roomAPIResponse = roomService.listFriendChat().await()
-                                            val json = Gson().toJson(roomAPIResponse.data)
-                                            val itemType = object : TypeToken<List<Room>>() {}.type
-                                            val listRoom = Gson().fromJson<List<Room>>(json, itemType)
-
+                                            val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
                                             val userResponse = authService.getUser().await()
                                             val jsonUser = Gson().toJson(userResponse.data)
-                                            val itemUserType = object : TypeToken<User>() {}.type
-                                            val user = Gson().fromJson<User>(jsonUser, itemUserType)
-
-                                            WebSocketService.getInstance().setup(context, user.id!!)
-
-                                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                                "listRoom",
-                                                listRoom
-                                            )
+                                            val user = Gson().fromJson(jsonUser, User::class.java)
                                             navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                                 "user",
                                                 user
@@ -136,7 +122,7 @@ fun MainNavigation(
                                             navHostController.navigate(Contact)
                                         } catch (e: Exception) {
                                             Log.e("Main Navigation", e.toString())
-                                            Toast.makeText(context, "Fail to navigate settings", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(context, "Fail to navigate contact", Toast.LENGTH_SHORT).show()
                                         } catch (e: ConnectException) {
                                             Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
                                         }
@@ -147,10 +133,14 @@ fun MainNavigation(
                                     val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
                                     MainScope().launch {
                                         try {
+                                            val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
                                             val userResponse = authService.getUser().await()
                                             val jsonUser = Gson().toJson(userResponse.data)
-                                            val itemUserType = object : TypeToken<User>() {}.type
-                                            val user = Gson().fromJson<User>(jsonUser, itemUserType)
+                                            val user = Gson().fromJson(jsonUser, User::class.java)
+                                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                                "user",
+                                                user
+                                            )
 
                                             val languageAPI: LanguageAPI = APIService.getApiClient(context).create(
                                                 LanguageAPI::class.java)
@@ -160,30 +150,21 @@ fun MainNavigation(
                                             val listOfLanguages = Gson().fromJson<List<Language>>(json, itemType)
 
                                             navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                                "user",
-                                                user
-                                            )
-                                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                                 "listOfLanguages",
                                                 listOfLanguages
                                             )
                                             navHostController.navigate(Setting)
+
+                                        } catch (e: ConnectException) {
+                                            Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
                                         } catch (e: Exception) {
                                             Log.e("Main Navigation", e.toString())
                                             Toast.makeText(context, "Fail to navigate settings", Toast.LENGTH_SHORT).show()
-                                        } catch (e: ConnectException) {
-                                            Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
                                         }
                                     }
                                 }
                                 else {
-                                    navHostController.navigate(navItem.route) {
-                                        popUpTo(navHostController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
+                                    navHostController.navigate(Call)
                                 }
                             },
                             icon = {
