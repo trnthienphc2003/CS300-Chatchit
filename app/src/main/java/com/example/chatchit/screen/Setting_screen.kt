@@ -216,7 +216,8 @@ fun SettingScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp),
+                .padding(start = 24.dp)
+                .clickable {  },
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
             IconButton(onClick = { /*TODO*/ },
