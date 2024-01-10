@@ -345,6 +345,17 @@ fun chatRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = if (chat.message?.senderId == user.id) Alignment.End else Alignment.Start
     ) {
+        if (person.type == "group" && user.id != chat.message?.senderId){
+            Text(
+                text = chat.message?.user?.name ?:String(), style = TextStyle(
+                    fontSize = 12.sp,
+                    color = Color.Black,
+                ),
+                textAlign = TextAlign.End,
+                modifier = Modifier.padding(horizontal = 55.dp, vertical = 4.dp)
+
+            )
+        }
         Row {
             if (chat.message?.senderId != user.id) {
                 if (true) {
