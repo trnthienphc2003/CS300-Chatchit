@@ -48,6 +48,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import com.example.chatchit.component.IconComponentDrawable
@@ -68,6 +69,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 
 @Composable
@@ -105,7 +108,7 @@ fun HomeScreen(
 //                )
                 LazyColumn(modifier = Modifier.padding(top = 30.dp, bottom = 15.dp) ){
                     items(listRoom, key = { it.id?:Int }) {
-                        UserEachRow(person = it) {
+                        UserEachRow(user = user, room = it) {
 //
                                 navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                     "data",
@@ -132,10 +135,34 @@ fun HomeScreen(
 
 @Composable
 fun UserEachRow(
+    user: User,
     modifier: Modifier = Modifier,
-    person: Room,
+    room: Room,
     onClick: () -> Unit
 ){
+    var time = ""
+    var last_message = ""
+    if (room.lastMessage != null) {
+        if (room.lastMessage.user?.id == user.id) {
+            last_message = "You: "
+        } else {
+            if (room.type == "group") {
+                last_message = "${room.lastMessage.user?.name}: "
+            }
+        }
+        last_message += room.lastMessage.content!!
+        time = if (Calendar.getInstance().time.date == room.lastMessage.createdAt?.date!!) {
+            val formatter: SimpleDateFormat = SimpleDateFormat("HH:mm")
+            formatter.format(room.lastMessage.createdAt)
+        } else if (Calendar.getInstance().time.date - room.lastMessage.createdAt.date == 1) {
+            val formatter: SimpleDateFormat = SimpleDateFormat("Yesterday at HH:mm")
+            formatter.format(room.lastMessage.createdAt)
+        } else {
+            val formatter: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
+            formatter.format(room.lastMessage.createdAt)
+        }
+    }
+
     Box(modifier = modifier
         .fillMaxWidth()
         .background(Color.White)
@@ -148,28 +175,50 @@ fun UserEachRow(
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Row{
-                    Avatar(b64Image = person.avatar, modifier = Modifier.clip(RoundedCornerShape(30.dp)), size = 60.dp)
+                    Avatar(b64Image = room.avatar, modifier = Modifier.clip(RoundedCornerShape(30.dp)), size = 60.dp)
                     SpacerWidth()
                     Column{
                         Text(
-                            text = person.name?:String(), style = TextStyle(
+                            text = room.name?:String(), style = TextStyle(
                                 color = Color.Black,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         )
                         SpacerHeight(5.dp)
-                        Text(
-                            text = stringResource(id = R.string.okay),
-                            style = TextStyle(
-                                color = Color.Gray,
-                                fontSize = 16.sp
+                        if (room.lastMessage != null) {
+                            Text(
+                                text = last_message,
+                                style = TextStyle(
+                                    color = Color.Gray,
+                                    fontSize = 16.sp
+                                )
                             )
-                        )
+                        } else {
+                            if (room.type == "group") {
+                                Text(
+                                    text = "The room has been created",
+                                    fontStyle = FontStyle.Italic,
+                                    style = TextStyle(
+                                        color = Color.Gray,
+                                        fontSize = 16.sp
+                                    )
+                                )
+                            } else {
+                                Text(
+                                    text = "You have not sent any message",
+                                    fontStyle = FontStyle.Italic,
+                                    style = TextStyle(
+                                        color = Color.Gray,
+                                        fontSize = 16.sp
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
                 Text(
-                    text = "12:23 PM", style = TextStyle(
+                    text = time, style = TextStyle(
                         color = Gray,
                         fontSize = 12.sp,
 
