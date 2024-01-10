@@ -168,6 +168,7 @@ fun ChatScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             inforBar(
+                user,
                 ChatViewModel.getInstance(),
                 person,
                 modifier = Modifier.padding(top = 30.dp, start = 10.dp, end = 20.dp),
@@ -278,6 +279,7 @@ fun IconButtonVideoCall(modifier: Modifier = Modifier, navHostController: NavHos
 
 @Composable
 fun inforBar(
+    user: User,
     viewModel: ChatViewModel,
     person: Room,
     modifier: Modifier = Modifier,
@@ -296,6 +298,10 @@ fun inforBar(
                 navHostController.currentBackStackEntry?.savedStateHandle?.set(
                     "data",
                     person
+                )
+                navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                    "user",
+                    user
                 )
                 navHostController.navigate(ChatSetting)}) {
                 Avatar(b64Image = person.avatar, modifier = Modifier.clip(RoundedCornerShape(21.dp)), size = 42.dp)

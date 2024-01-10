@@ -12,14 +12,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -88,6 +91,7 @@ fun ManageMemberScreen(
 ){
 
     val roomID = navHostController.previousBackStackEntry?.savedStateHandle?.get<Int>("roomID") ?: -1
+    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
     MangeViewModel.getInstance().init(roomID, context)
     Column (
         modifier = Modifier
@@ -112,16 +116,20 @@ fun ManageMemberScreen(
         LazyColumn(modifier = Modifier.padding(top = 30.dp, bottom = 15.dp) ) {
             items(MangeViewModel.getInstance().getManageList().value, key = { it.id ?: Int }) {
                 MemberEachRow(member = it) {
-                    MainScope().launch {
-                        try {
-                            val removeService: RoomAPI =
-                                APIService.getApiClient(context).create(RoomAPI::class.java)
-                            Log.d("roomID", roomID.toString())
-                            Log.d("ID", (it.id?:-1).toString())
-                            val removeAPIResponse = removeService.deleteMember(roomId = roomID, id=it.id?:-1).await()
-                            MangeViewModel.getInstance().init(roomID, context)
-                        } catch (e: Exception) {
-                            Log.e("remove Member", e.toString())
+                    if(user.id != it.id) {
+                        MainScope().launch {
+                            try {
+                                val removeService: RoomAPI =
+                                    APIService.getApiClient(context).create(RoomAPI::class.java)
+                                Log.d("roomID", roomID.toString())
+                                Log.d("ID", (it.id ?: -1).toString())
+                                val removeAPIResponse =
+                                    removeService.deleteMember(roomId = roomID, id = it.id ?: -1)
+                                        .await()
+                                MangeViewModel.getInstance().init(roomID, context)
+                            } catch (e: Exception) {
+                                Log.e("remove Member", e.toString())
+                            }
                         }
                     }
                 }
@@ -149,8 +157,13 @@ fun MemberEachRow(
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 Row{
-//                    IconComponentDrawable(icon = member.avatar, size = 60.dp)
-                    Avatar(b64Image = member.avatar, size = 60.dp)
+                    Box(modifier = Modifier
+                        .clip(CircleShape)
+                        .size(60.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Avatar(b64Image = member.avatar, size = 60.dp)
+                    }
                     SpacerWidth()
                     Text(
                         text = member.name?:String(), style = TextStyle(

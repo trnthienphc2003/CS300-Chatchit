@@ -32,6 +32,7 @@ import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.models.Room
+import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Group
 import com.example.chatchit.navigation.ManageMember
 
@@ -40,6 +41,7 @@ fun ChatSettingScreen(
     navHostController: NavHostController
 ){
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
+    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -53,7 +55,7 @@ fun ChatSettingScreen(
                 navHostController
             )
             info(person = person, modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 20.dp))
-            setting(person,navHostController, modifier = Modifier.padding(top = 6.dp))
+            setting(user, person,navHostController, modifier = Modifier.padding(top = 6.dp))
         }
     }
 }
@@ -102,6 +104,7 @@ fun info(
 
 @Composable
 fun setting(
+    user: User,
     person: Room,
     navHostController: NavHostController,
     modifier: Modifier = Modifier,
@@ -257,6 +260,10 @@ fun setting(
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
                             "roomID",
                             person.id
+                        )
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "user",
+                            user
                         )
                         navHostController.navigate(ManageMember)
                     }

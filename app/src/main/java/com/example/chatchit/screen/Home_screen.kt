@@ -63,6 +63,8 @@ import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Chat
 import com.example.chatchit.navigation.Search
 import com.example.chatchit.services.APIService
+import com.example.chatchit.services.WebSocketCallback
+import com.example.chatchit.services.WebSocketService
 import com.example.chatchit.services.api.MessageAPI
 import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
@@ -123,6 +125,11 @@ fun HomeScreen(
     HomeViewModel.getInstance().init(context)
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
 
+    WebSocketService.getInstance().setCallback(object : WebSocketCallback {
+        override fun onReceiveMessage(message: MessageTranslate) {
+            HomeViewModel.getInstance().init(context)
+        }
+    })
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
