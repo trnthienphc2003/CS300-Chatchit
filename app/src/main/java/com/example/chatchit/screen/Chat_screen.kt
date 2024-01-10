@@ -1,17 +1,15 @@
 package com.example.chatchit.screen
 
 
+//import com.example.chatchit.component.data.chatList
 import Avatar
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.layout.Box
-
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,10 +29,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
@@ -55,15 +53,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
-import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.models.Conversation
-//import com.example.chatchit.component.data.chatList
 import com.example.chatchit.models.Message
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
-import com.example.chatchit.navigation.Chat
 import com.example.chatchit.navigation.ChatSetting
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.WebSocketCallback

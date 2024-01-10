@@ -16,7 +16,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -37,23 +36,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.text.isDigitsOnly
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.chatchit.models.Room
-import com.example.chatchit.models.User
-import com.example.chatchit.navigation.Home
 import com.example.chatchit.navigation.Login
 import com.example.chatchit.services.APIService
-import com.example.chatchit.services.WebSocketService
 import com.example.chatchit.services.api.AuthAPI
-import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
-import com.example.chatchit.services.api.form.LoginForm
 import com.example.chatchit.services.api.form.SignupForm
 import com.example.chatchit.ui.theme.Gray
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.net.ConnectException
@@ -69,7 +58,7 @@ fun SignUpScreen(
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
-    var isEmailValid by remember { mutableStateOf(true) }
+    var isEmailValid by remember { mutableStateOf(false) }
     var isPasswordMatching by remember { mutableStateOf(true) }
 
     Column(

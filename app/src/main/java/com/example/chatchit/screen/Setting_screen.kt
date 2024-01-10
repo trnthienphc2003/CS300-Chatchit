@@ -2,6 +2,7 @@ package com.example.chatchit.screen
 
 import Avatar
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,7 +23,6 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
-import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.models.Language
 import com.example.chatchit.models.User
@@ -147,7 +146,8 @@ fun SettingScreen(
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 16.dp, horizontal = 8.dp),
+//            .padding(vertical = 16.dp, horizontal = 8.dp)
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
 //        verticalArrangement = Arrangement.Center
     ) {
@@ -188,6 +188,7 @@ fun SettingScreen(
                     text = user.name?: String(),
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Left,
+                    color = Color.Black,
                     fontSize = 20.sp,
                     maxLines = 2,
                     modifier = Modifier

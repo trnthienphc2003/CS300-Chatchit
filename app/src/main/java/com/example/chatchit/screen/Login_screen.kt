@@ -20,8 +20,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -59,23 +55,16 @@ import com.example.chatchit.navigation.Home
 import com.example.chatchit.navigation.SignUp
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.WebSocketService
-import com.example.chatchit.services.api.APIResponse
 import com.example.chatchit.services.api.AuthAPI
-import com.example.chatchit.services.api.FriendAPI
-import com.example.chatchit.services.api.MessageAPI
 import com.example.chatchit.services.api.RoomAPI
 import com.example.chatchit.services.api.await
 import com.example.chatchit.services.api.form.LoginForm
 import com.example.chatchit.ui.theme.Gray
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.net.ConnectException
-import java.time.format.TextStyle
-import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -150,8 +139,8 @@ fun LoginScreen(
     val email = emailInput.trim()
     val password = passwordInput.trim()
 
-    var emailValid by remember { mutableStateOf(true) }
-    var passwordValid by remember { mutableStateOf(true) }
+    var emailValid by remember { mutableStateOf(false) }
+    var passwordValid by remember { mutableStateOf(false) }
 //    var buttonEnable by remember { mutableStateOf(true) }
 
     Column(
