@@ -256,12 +256,6 @@ fun LoginScreen(
                     try {
                         val loginAPIResponse =
                             authService.login(LoginForm(email, password)).await()
-                        val roomService: RoomAPI =
-                            APIService.getApiClient(context).create(RoomAPI::class.java)
-                        val roomAPIResponse = roomService.listFriendChat().await()
-                        val json = Gson().toJson(roomAPIResponse.data)
-                        val itemType = object : TypeToken<List<Room>>() {}.type
-                        val listRoom = Gson().fromJson<List<Room>>(json, itemType)
 
                         val newAuthService: AuthAPI = APIService.getApiClient(context)
                             .create(AuthAPI::class.java)
@@ -277,10 +271,6 @@ fun LoginScreen(
                             sleep(200)
                         }
 
-                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                            "listRoom",
-                            listRoom
-                        )
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
                             "user",
                             user

@@ -108,7 +108,9 @@ fun ManageMemberScreen(
                         try {
                             val removeService: RoomAPI =
                                 APIService.getApiClient(context).create(RoomAPI::class.java)
-                            val removeAPIResponse = removeService.deleteMember(roomId = roomID, UserIdField(it.id?:-1))
+                            Log.d("roomID", roomID.toString())
+                            Log.d("ID", (it.id?:-1).toString())
+                            val removeAPIResponse = removeService.deleteMember(roomId = roomID, id=it.id?:-1).await()
                             listMember.init(roomID, context)
                         } catch (e: Exception) {
                             Log.e("remove Member", e.toString())

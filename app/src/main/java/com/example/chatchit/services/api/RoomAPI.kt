@@ -29,9 +29,9 @@ interface RoomAPI {
         @Path("id") roomId: Int
     ): Call<APIResponse>
 
-    @DELETE("api/v1/room/{id}/remove-member")
+    @DELETE("api/v1/room/{roomid}/remove-member/{id}")
     fun deleteMember(
-        @Path("id") roomId: Int,
-        @Body userIdField: UserIdField,
+        @Path("roomid") roomId: Int,
+        @Path("id") id: Int,
     ): Call<APIResponse>
 }
