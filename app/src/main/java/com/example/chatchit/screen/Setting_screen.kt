@@ -102,7 +102,8 @@ fun SettingScreen(
                 color = Color.Black
             ),
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
-//                modifier = modifier.align(Alignment.CenterHorizontally),
+
+            modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 60.dp),
 
             fontFamily = FontFamily.SansSerif,
             textAlign = TextAlign.Center
@@ -179,17 +180,18 @@ fun SettingScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp)
+//                    .fillMaxWidth()
+                    .padding(start = 16.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Account",
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,
-                    modifier = Modifier
+                    modifier = Modifier,
 //                        .align(Alignment.CenterVertically)
-                        .padding(top = 10.dp),
+//                        .padding(top = 10.dp),
                     color = Color.Black
                 )
                 Text(
@@ -230,17 +232,18 @@ fun SettingScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp)
+//                    .fillMaxWidth()
+                    .padding(start = 16.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Notifications",
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,
-                    modifier = Modifier
+                    modifier = Modifier,
 //                        .align(Alignment.CenterVertically)
-                        .padding(top = 10.dp),
+//                        .padding(top = 10.dp),
                     color = Color.Black
                 )
                 Text(
@@ -280,8 +283,9 @@ fun SettingScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp)
+//                    .fillMaxWidth()
+                    .padding(start = 16.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Primary language",
@@ -289,9 +293,9 @@ fun SettingScreen(
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,
 //                    color = Color(0xFF797C7B),
-                    modifier = Modifier
+                    modifier = Modifier,
 //                        .align(Alignment.CenterVertically)
-                        .padding(top = 10.dp),
+//                        .padding(top = 10.dp),
                     color = Color.Black
                 )
                 Text(
@@ -331,17 +335,18 @@ fun SettingScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp)
+//                    .fillMaxWidth()
+                    .padding(start = 16.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Help",
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     fontSize = 16.sp,
-                    modifier = Modifier
+                    modifier = Modifier,
 //                        .align(Alignment.CenterVertically)
-                        .padding(top = 10.dp),
+//                        .padding(top = 10.dp),
                     color = Color.Black
                 )
                 Text(
@@ -380,8 +385,9 @@ fun SettingScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp)
+//                    .fillMaxWidth()
+                    .padding(start = 16.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Invite a friend",
@@ -391,7 +397,7 @@ fun SettingScreen(
                     color = Color.Black,
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
-                        .padding(top = 15.dp),
+                        .padding(top = 10.dp),
                 )
             }
         }
@@ -421,8 +427,9 @@ fun SettingScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp)
+//                    .fillMaxWidth()
+                    .padding(start = 16.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = "Sign out",
@@ -432,7 +439,7 @@ fun SettingScreen(
                     color = Color.Black,
                     modifier = Modifier
 //                        .align(Alignment.CenterVertically)
-                        .padding(top = 15.dp),
+                        .padding(top = 10.dp),
                 )
             }
         }
@@ -613,95 +620,11 @@ fun SettingScreen(
     }
 }
 
-//@Composable
-//@Preview(showBackground = true)
-//fun PreviewSettingScreen() {
-//    SettingScreen(
-//        navHostController = NavHostController(androidx.compose.ui.platform.LocalContext.current),
-//        context = androidx.compose.ui.platform.LocalContext.current
-//    )
-//}
-
-@Composable
-fun Dialog() {
-    Dialog(onDismissRequest = { }) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp),
-            shape = RoundedCornerShape(10.dp),
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Sign out",
-                    style = TextStyle(
-                        fontSize = 40.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    textAlign = TextAlign.Left,
-                )
-                SpacerHeight(10.dp)
-                Text(
-                    text = "Are you sure you want to sign out?",
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        color = Color.Gray,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    textAlign = TextAlign.Left,
-                )
-//                SpacerHeight(10.dp)
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp)
-                        .weight(1f),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        text = "Cancel",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            color = Color.Gray,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        textAlign = TextAlign.Left,
-                        modifier = Modifier
-                            .clickable {
-//                                openSignoutLog = false
-                            }
-                    )
-                    SpacerWidth(10.dp)
-                    Text(
-                        text = "Sign out",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            color = Color.Red,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        textAlign = TextAlign.Left,
-                        modifier = Modifier
-                            .clickable {
-//                                openSignoutLog = false
-//                                navHostController.navigate("login")
-                            }
-                    )
-                }
-            }
-        }
-    }
-}
-
 @Composable
 @Preview(showBackground = true)
-fun PreviewDialog() {
-    Dialog()
+fun PreviewSettingScreen() {
+    SettingScreen(
+        navHostController = NavHostController(androidx.compose.ui.platform.LocalContext.current),
+        context = androidx.compose.ui.platform.LocalContext.current
+    )
 }
