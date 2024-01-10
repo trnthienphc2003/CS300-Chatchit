@@ -476,6 +476,7 @@ fun AddStoryLayout(context:Context, navHostController: NavHostController){
 
                                         val name = groupName
                                         val removeAPIResponse = groupService.createRoom(NameField(name)).await()
+                                        HomeViewModel.getInstance().init(context)
                                     } catch (e: Exception) {
                                         Log.e("Create group", e.toString())
                                     }

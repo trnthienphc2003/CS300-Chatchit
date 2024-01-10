@@ -70,6 +70,16 @@ class MangeViewModel : ViewModel() {
             }
         }
     }
+
+    companion object {
+        private var instance: MangeViewModel? = null
+        fun getInstance(): MangeViewModel {
+            if (instance == null) {
+                instance = MangeViewModel()
+            }
+            return instance!!
+        }
+    }
 }
 @Composable
 fun ManageMemberScreen(
@@ -78,9 +88,7 @@ fun ManageMemberScreen(
 ){
 
     val roomID = navHostController.previousBackStackEntry?.savedStateHandle?.get<Int>("roomID") ?: -1
-    val listMember = MangeViewModel()
-
-    listMember.init(roomID, context)
+    MangeViewModel.getInstance().init(roomID, context)
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -102,7 +110,7 @@ fun ManageMemberScreen(
         )
         SpacerHeight()
         LazyColumn(modifier = Modifier.padding(top = 30.dp, bottom = 15.dp) ) {
-            items(listMember.getManageList().value, key = { it.id ?: Int }) {
+            items(MangeViewModel.getInstance().getManageList().value, key = { it.id ?: Int }) {
                 MemberEachRow(member = it) {
                     MainScope().launch {
                         try {
@@ -111,7 +119,7 @@ fun ManageMemberScreen(
                             Log.d("roomID", roomID.toString())
                             Log.d("ID", (it.id?:-1).toString())
                             val removeAPIResponse = removeService.deleteMember(roomId = roomID, id=it.id?:-1).await()
-                            listMember.init(roomID, context)
+                            MangeViewModel.getInstance().init(roomID, context)
                         } catch (e: Exception) {
                             Log.e("remove Member", e.toString())
                         }
