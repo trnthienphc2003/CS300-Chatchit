@@ -64,6 +64,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.lang.AssertionError
+import java.lang.Thread.sleep
 import java.net.ConnectException
 
 
@@ -249,22 +251,32 @@ fun LoginScreen(
         Button(
             onClick = {
 
-                val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
+                val authService: AuthAPI = APIService.getApiClient(context, clearCookie=true).create(AuthAPI::class.java)
                 MainScope().launch {
                     try {
-                        val loginAPIResponse = authService.login(LoginForm(email, password)).await()
-                        val roomService: RoomAPI = APIService.getApiClient(context).create(RoomAPI::class.java)
+                        val loginAPIResponse =
+                            authService.login(LoginForm(email, password)).await()
+                        val roomService: RoomAPI =
+                            APIService.getApiClient(context).create(RoomAPI::class.java)
                         val roomAPIResponse = roomService.listFriendChat().await()
                         val json = Gson().toJson(roomAPIResponse.data)
                         val itemType = object : TypeToken<List<Room>>() {}.type
                         val listRoom = Gson().fromJson<List<Room>>(json, itemType)
 
-                        val userResponse = authService.getUser().await()
+                        val newAuthService: AuthAPI =
+                            APIService.getApiClient(context, clearCookie = true)
+                                .create(AuthAPI::class.java)
+                        val userResponse = newAuthService.getUser().await()
                         val jsonUser = Gson().toJson(userResponse.data)
                         val itemUserType = object : TypeToken<User>() {}.type
                         val user = Gson().fromJson<User>(jsonUser, itemUserType)
 
-                        WebSocketService.getInstance().setup(context, user.id!!)
+                        WebSocketService.getInstance().closeConnection()
+                        while (!WebSocketService.getInstance().isConnected()) {
+                            Log.i("LoginScreen", "Waiting for connection")
+                            WebSocketService.getInstance().setup(context, user.id!!)
+                            sleep(200)
+                        }
 
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
                             "listRoom",
@@ -275,11 +287,11 @@ fun LoginScreen(
                             user
                         )
                         navHostController.navigate(Home)
+                    } catch (e: ConnectException) {
+                        Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
                     } catch (e: Exception) {
                         Log.e("LoginScreen", e.toString())
                         Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
-                    } catch (e: ConnectException) {
-                        Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
                     }
                 }
             },

@@ -17,6 +17,7 @@ class WebSocketService private constructor() {
     private val BASE_URL = "http://103.82.39.199:8000/api/v1/client/ws/"
     private var webSocket: WebSocket? = null
     private var callback: WebSocketCallback? = null
+    private var success = false
 
     fun setup(context: Context, userId: Int) {
         if (webSocket != null) {
@@ -34,9 +35,12 @@ class WebSocketService private constructor() {
         webSocket = OkHttpClient().newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: okhttp3.WebSocket, response: okhttp3.Response) {
                 Log.i("WebSocket", "Connected to server")
+                webSocket.send("ping")
+                Log.i("WebSocket", "Send data: ping")
             }
 
             override fun onMessage(webSocket: WebSocket, text: String) {
+                success = true
                 Log.i("WebSocket", "Received data:$text")
                 receiveMessage(text)
             }
@@ -56,6 +60,7 @@ class WebSocketService private constructor() {
             }
         })
 
+        webSocket?.send("ping")
     }
 
     fun setCallback(callback: WebSocketCallback) {
@@ -63,16 +68,20 @@ class WebSocketService private constructor() {
     }
 
     fun isConnected(): Boolean {
-        return webSocket != null
+        return success
     }
 
     private fun receiveMessage(message: String){
         callback?.onReceiveMessage(Gson().fromJson(message, Message::class.java))
     }
 
-    private fun closeConnection() {
+    fun closeConnection() {
+        if (webSocket == null)
+            return
+        Log.i("WebSocket", "Close connection")
         webSocket?.close(1000, "Close connection")
         webSocket = null
+        success = false
     }
 
     fun sendMessage(messageForm: MessageForm) {
