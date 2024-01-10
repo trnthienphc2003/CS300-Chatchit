@@ -150,8 +150,8 @@ fun LoginScreen(
     val email = emailInput.trim()
     val password = passwordInput.trim()
 
-    var emailValid by remember { mutableStateOf(true) }
-    var passwordValid by remember { mutableStateOf(true) }
+    var emailValid by remember { mutableStateOf(false) }
+    var passwordValid by remember { mutableStateOf(false) }
 //    var buttonEnable by remember { mutableStateOf(true) }
 
     Column(

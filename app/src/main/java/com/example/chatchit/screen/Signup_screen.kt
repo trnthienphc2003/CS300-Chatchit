@@ -69,7 +69,7 @@ fun SignUpScreen(
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
-    var isEmailValid by remember { mutableStateOf(true) }
+    var isEmailValid by remember { mutableStateOf(false) }
     var isPasswordMatching by remember { mutableStateOf(true) }
 
     Column(
