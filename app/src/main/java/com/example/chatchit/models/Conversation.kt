@@ -15,5 +15,5 @@ class Conversation(
     @SerializedName("totalRows")
     val totalRows : Int ?= null,
     @SerializedName("rows")
-    val rows : List<Message> ?= null
+    val rows : List<MessageTranslate> ?= null
 )  : Parcelable

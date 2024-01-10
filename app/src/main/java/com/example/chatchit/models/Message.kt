@@ -9,6 +9,8 @@ import java.util.Date
 class Message (
     @SerializedName("id")
     val id:Int ?= null,
+    @SerializedName("createdAt")
+    val createdAt:Date ?= null,
     @SerializedName("content")
     val content:String ?= null,
     @SerializedName("roomId")
@@ -19,6 +21,4 @@ class Message (
     val user: User ?= null,
     @SerializedName("metadata")
     val metadata:String ?= "test",
-    @SerializedName("createdAt")
-    val createdAt: Date ?= null,
 )  : Parcelable

@@ -57,6 +57,7 @@ import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.models.Conversation
 import com.example.chatchit.models.Message
+import com.example.chatchit.models.MessageTranslate
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.ChatSetting
@@ -76,14 +77,15 @@ import java.time.format.DateTimeFormatterBuilder
 import java.util.Calendar
 
 class ChatViewModel : ViewModel() {
-    private val chatList = mutableStateOf<List<Message>>(emptyList())
+    private val chatList = mutableStateOf<List<MessageTranslate>>(emptyList())
 
-    fun getChatList(): State<List<Message>> = chatList
+    private val stateTranslate = mutableStateOf<Boolean>(false)
+    fun getChatList(): State<List<MessageTranslate>> = chatList
 
-    fun setChatList(list: List<Message>) {
+    fun setChatList(list: List<MessageTranslate>) {
         chatList.value = list
     }
-    fun addMessage(message: Message) {
+    fun addMessage(message: MessageTranslate) {
         chatList.value = listOf(message) + chatList.value
     }
     fun clear(){
@@ -108,6 +110,11 @@ class ChatViewModel : ViewModel() {
             }
         }
     }
+
+    fun setStateTranslate(state: Boolean){
+        stateTranslate.value = state
+    }
+    fun getStateTranslate() : Boolean = stateTranslate.value
 }
 
 @Composable
@@ -123,18 +130,18 @@ fun ChatScreen(
     val lazyColumnListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    WebSocketService.getInstance().setCallback(object : WebSocketCallback {
-        override fun onReceiveMessage(message: Message) {
-            if (message.roomId == roomId) {
-                viewModel.addMessage(message)
-                if (message.senderId == user.id) {
-                    coroutineScope.launch {
-                        lazyColumnListState.animateScrollToItem(0)
-                    }
-                }
-            }
-        }
-    })
+//    WebSocketService.getInstance().setCallback(object : WebSocketCallback {
+//        override fun onReceiveMessage(message: Message) {
+//            if (message.roomId == roomId) {
+//                viewModel.addMessage(message)
+//                if (message.senderId == user.id) {
+//                    coroutineScope.launch {
+//                        lazyColumnListState.animateScrollToItem(0)
+//                    }
+//                }
+//            }
+//        }
+//    })
 
 
     Box(
@@ -161,7 +168,7 @@ fun ChatScreen(
                     state = lazyColumnListState
                 ){
                     items(viewModel.getChatList().value, key = {it.id?:Int}){
-                        chatRow(user, chat = it, person)
+                        chatRow(viewModel, user, chat = it, person)
                     }
                 }
                 chatInput(roomId = roomId, modifier = Modifier.align(BottomCenter), modifierText = Modifier.align(Center))
@@ -211,14 +218,31 @@ fun IconButtonCall(modifier: Modifier = Modifier, navHostController: NavHostCont
 }
 
 @Composable
-fun IconButtonTranslate(modifier: Modifier = Modifier, navHostController: NavHostController) {
-    IconButton(onClick = { /* do something */ }) {
-        Icon(
-            painter = painterResource(id = R.drawable.baseline_g_translate_24),
-            contentDescription = "",
-            modifier = modifier.size(size = 25.dp),
-            tint = Color.Unspecified
-        )
+fun IconButtonTranslate(viewModel: ChatViewModel,modifier: Modifier = Modifier, navHostController: NavHostController) {
+    IconButton(onClick = {
+        if (viewModel.getStateTranslate()){
+            viewModel.setStateTranslate(false)
+        }
+        else{
+            viewModel.setStateTranslate(true)
+        }
+    }) {
+        if (viewModel.getStateTranslate()) {
+            Icon(
+                painter = painterResource(id = R.drawable.translate),
+                contentDescription = "",
+                modifier = modifier.size(size = 30.dp),
+                tint = Color.Unspecified
+            )
+        }
+        else{
+            Icon(
+                painter = painterResource(id = R.drawable.notranslate),
+                contentDescription = "",
+                modifier = modifier.size(size = 30.dp),
+                tint = Color.Unspecified
+            )
+        }
     }
 }
 @Composable
@@ -278,7 +302,7 @@ fun inforBar(
         }
 
         Row {
-            IconButtonTranslate(modifier = Modifier.align(CenterVertically), navHostController)
+            IconButtonTranslate(viewModel, modifier = Modifier.align(CenterVertically), navHostController)
         }
     }
 }
@@ -286,16 +310,17 @@ fun inforBar(
 
 @Composable
 fun chatRow(
+    viewModel: ChatViewModel,
     user: User,
-    chat: Message,
+    chat: MessageTranslate,
     person: Room
 ){
     Column (
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = if (chat.senderId == user.id) Alignment.End else Alignment.Start
+        horizontalAlignment = if (chat.message?.senderId == user.id) Alignment.End else Alignment.Start
     ) {
         Row {
-            if (chat.senderId != user.id) {
+            if (chat.message?.senderId != user.id) {
                 if (true) {
                     Avatar(
                         b64Image = person.avatar,
@@ -310,18 +335,28 @@ fun chatRow(
             }
             Box(
                 modifier = Modifier.background(
-                    if (chat.senderId == user.id) Color.Green else Color.LightGray,
+                    if (chat.message?.senderId == user.id) Color.Green else Color.LightGray,
                     RoundedCornerShape(20.dp)
                 )
             ) {
-                Text(
-                    text = chat.content?: String(), style = TextStyle(
-                        fontSize = 15.sp,
-                        color = Color.Black,
-                    ),
-                    modifier = Modifier.padding(horizontal = 15.dp, vertical = 8.dp)
-                )
-
+                if (!viewModel.getStateTranslate()) {
+                    Text(
+                        text = chat.message?.content ?: String(), style = TextStyle(
+                            fontSize = 15.sp,
+                            color = Color.Black,
+                        ),
+                        modifier = Modifier.padding(horizontal = 15.dp, vertical = 8.dp)
+                    )
+                }
+                else{
+                    Text(
+                        text = chat.translatedContent ?: String(), style = TextStyle(
+                            fontSize = 15.sp,
+                            color = Color.Black,
+                        ),
+                        modifier = Modifier.padding(horizontal = 15.dp, vertical = 8.dp)
+                    )
+                }
             }
         }
         if (true) {
@@ -336,7 +371,7 @@ fun chatRow(
                 val formatter: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm")
                 formatter.format(chat.createdAt)
             }
-            if (chat.senderId != user.id) {
+            if (chat.message?.senderId != user.id) {
                 Text(
                     text = time, style = TextStyle(
                         fontSize = 12.sp,
