@@ -109,116 +109,173 @@ fun setting(
     Column (
         modifier = modifier.fillMaxWidth(),
     ){
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp, start = 20.dp, end = 20.dp)
-                .clickable {
-                    // Your click logic goes here
-                    // For example, you can navigate to another screen or perform some action.
-                }
-        ){
-            Row{
-                IconComponentDrawable(icon = R.drawable.group_403, size = 40.dp)
-                SpacerWidth()
+        if(person.type == "group") {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 20.dp, end = 20.dp)
+                    .clickable {
+                        // Your click logic goes here
+                        // For example, you can navigate to another screen or perform some action.
+                    }
+            ) {
+                Row {
+                    IconComponentDrawable(icon = R.drawable.group_403, size = 40.dp)
+                    SpacerWidth()
 
-                Text(
-                    text = "Change group photo", style = TextStyle(
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.align((Alignment.CenterVertically))
+                    Text(
+                        text = "Change group photo", style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align((Alignment.CenterVertically))
 
-                )
-
-            }
-        }
-
-        SpacerHeight()
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp, start = 20.dp, end = 20.dp)
-                .clickable {
-                    // Your click logic goes here
-                    // For example, you can navigate to another screen or perform some action.
-                }
-        ){
-            Row{
-                IconComponentDrawable(icon = R.drawable.group_404, size = 40.dp)
-                SpacerWidth()
-
-                Text(
-                    text = "Change group name", style = TextStyle(
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.align((Alignment.CenterVertically))
-
-                )
-
-            }
-        }
-
-        SpacerHeight()
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp, start = 20.dp, end = 20.dp)
-                .clickable {
-                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                        "roomID",
-                        person.id
                     )
-                    navHostController.navigate(Group)
-                    // For example, you can navigate to another screen or perform some action.
+
                 }
-        ) {
-            Row {
-                IconComponentDrawable(icon = R.drawable.group_407, size = 40.dp)
-                SpacerWidth()
+            }
 
-                Text(
-                    text = "Invite a friend", style = TextStyle(
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.align((Alignment.CenterVertically))
+            SpacerHeight()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 20.dp, end = 20.dp)
+                    .clickable {
+                        // Your click logic goes here
+                        // For example, you can navigate to another screen or perform some action.
+                    }
+            ) {
+                Row {
+                    IconComponentDrawable(icon = R.drawable.group_404, size = 40.dp)
+                    SpacerWidth()
 
-                )
+                    Text(
+                        text = "Change group name", style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align((Alignment.CenterVertically))
 
+                    )
+
+                }
             }
         }
-        SpacerHeight()
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp, start = 20.dp, end = 20.dp)
-                .clickable {
-                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                        "roomID",
-                        person.id
+        else{
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 20.dp, end = 20.dp)
+                    .clickable {
+                        // Your click logic goes here
+                        // For example, you can navigate to another screen or perform some action.
+                    }
+            ) {
+                Row {
+                    IconComponentDrawable(icon = R.drawable.group_403, size = 40.dp)
+                    SpacerWidth()
+
+                    Text(
+                        text = "Change photo", style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align((Alignment.CenterVertically))
+
                     )
-                    navHostController.navigate(ManageMember)
+
                 }
-        ) {
-            Row {
-                IconComponentDrawable(icon = R.drawable.group_408, size = 40.dp)
-                SpacerWidth()
+            }
 
-                Text(
-                    text = "Manage members", style = TextStyle(
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.align((Alignment.CenterVertically))
+            SpacerHeight()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 20.dp, end = 20.dp)
+                    .clickable {
+                        // Your click logic goes here
+                        // For example, you can navigate to another screen or perform some action.
+                    }
+            ) {
+                Row {
+                    IconComponentDrawable(icon = R.drawable.group_404, size = 40.dp)
+                    SpacerWidth()
 
-                )
+                    Text(
+                        text = "Change name", style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align((Alignment.CenterVertically))
 
+                    )
+
+                }
+            }
+        }
+        if(person.type == "group") {
+            SpacerHeight()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 20.dp, end = 20.dp)
+                    .clickable {
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "roomID",
+                            person.id
+                        )
+                        navHostController.navigate(Group)
+                        // For example, you can navigate to another screen or perform some action.
+                    }
+            ) {
+                Row {
+                    IconComponentDrawable(icon = R.drawable.group_407, size = 40.dp)
+                    SpacerWidth()
+
+                    Text(
+                        text = "Invite a friend", style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align((Alignment.CenterVertically))
+
+                    )
+
+                }
+            }
+            SpacerHeight()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 20.dp, end = 20.dp)
+                    .clickable {
+                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                            "roomID",
+                            person.id
+                        )
+                        navHostController.navigate(ManageMember)
+                    }
+            ) {
+                Row {
+                    IconComponentDrawable(icon = R.drawable.group_408, size = 40.dp)
+                    SpacerWidth()
+
+                    Text(
+                        text = "Manage members", style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align((Alignment.CenterVertically))
+
+                    )
+
+                }
             }
         }
         SpacerHeight()
@@ -272,30 +329,32 @@ fun setting(
                 )
             }
         }
-        SpacerHeight()
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 6.dp, start = 20.dp, end = 20.dp)
-                .clickable {
-                    // Your click logic goes here
-                    // For example, you can navigate to another screen or perform some action.
+        if (person.type == "group") {
+            SpacerHeight()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp, start = 20.dp, end = 20.dp)
+                    .clickable {
+                        // Your click logic goes here
+                        // For example, you can navigate to another screen or perform some action.
+                    }
+            ) {
+                Row {
+                    IconComponentDrawable(icon = R.drawable.group_411, size = 40.dp)
+                    SpacerWidth()
+
+                    Text(
+                        text = "Leave group", style = TextStyle(
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.align((Alignment.CenterVertically))
+
+                    )
+
                 }
-        ) {
-            Row {
-                IconComponentDrawable(icon = R.drawable.group_411, size = 40.dp)
-                SpacerWidth()
-
-                Text(
-                    text = "Leave group", style = TextStyle(
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.align((Alignment.CenterVertically))
-
-                )
-
             }
         }
         SpacerHeight()
