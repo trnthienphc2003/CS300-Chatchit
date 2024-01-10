@@ -5,6 +5,7 @@ package com.example.chatchit.screen
 import Avatar
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.layout.Box
@@ -21,11 +22,16 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -117,6 +123,7 @@ class ChatViewModel : ViewModel() {
     fun getStateTranslate() : Boolean = stateTranslate.value
 }
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen(
     navHostController: NavHostController,
@@ -130,29 +137,35 @@ fun ChatScreen(
     val lazyColumnListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-//    WebSocketService.getInstance().setCallback(object : WebSocketCallback {
-//        override fun onReceiveMessage(message: Message) {
-//            if (message.roomId == roomId) {
-//                viewModel.addMessage(message)
-//                if (message.senderId == user.id) {
-//                    coroutineScope.launch {
-//                        lazyColumnListState.animateScrollToItem(0)
-//                    }
-//                }
-//            }
-//        }
-//    })
-
+    WebSocketService.getInstance().setCallback(object : WebSocketCallback {
+        override fun onReceiveMessage(message: MessageTranslate) {
+            if (message.message?.roomId == roomId) {
+                viewModel.addMessage(message)
+                if (message.message?.senderId == user.id) {
+                    coroutineScope.launch {
+                        lazyColumnListState.animateScrollToItem(0)
+                    }
+                }
+            }
+        }
+    })
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+//                .padding(innerPadding)
     ){
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            inforBar (viewModel, person, modifier = Modifier.padding(top = 30.dp, start = 10.dp, end = 20.dp), navHostController)
+            inforBar(
+                viewModel,
+                person,
+                modifier = Modifier.padding(top = 30.dp, start = 10.dp, end = 20.dp),
+                navHostController
+            )
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -175,7 +188,6 @@ fun ChatScreen(
             }
         }
     }
-
 }
 
 @Composable
@@ -325,7 +337,9 @@ fun chatRow(
                     Avatar(
                         b64Image = person.avatar,
                         size = 42.dp,
-                        modifier = Modifier.align(CenterVertically).clip(RoundedCornerShape(21.dp))
+                        modifier = Modifier
+                            .align(CenterVertically)
+                            .clip(RoundedCornerShape(21.dp))
                     )
                 }
                 else{

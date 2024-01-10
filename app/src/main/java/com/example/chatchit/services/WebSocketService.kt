@@ -3,6 +3,7 @@ package com.example.chatchit.services
 import android.content.Context
 import android.util.Log
 import com.example.chatchit.models.Message
+import com.example.chatchit.models.MessageTranslate
 import com.example.chatchit.services.api.form.MessageForm
 import com.google.gson.Gson
 import kotlinx.coroutines.MainScope
@@ -72,7 +73,7 @@ class WebSocketService private constructor() {
     }
 
     private fun receiveMessage(message: String){
-        callback?.onReceiveMessage(Gson().fromJson(message, Message::class.java))
+        callback?.onReceiveMessage(Gson().fromJson(message, MessageTranslate::class.java))
     }
 
     fun closeConnection() {
