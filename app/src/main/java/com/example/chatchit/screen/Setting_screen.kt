@@ -56,6 +56,7 @@ import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.models.Language
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
+import com.example.chatchit.navigation.Login
 import com.example.chatchit.services.APIService
 import com.example.chatchit.services.api.AuthAPI
 import com.example.chatchit.services.api.LanguageAPI
@@ -103,7 +104,7 @@ fun SettingScreen(
             ),
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
 
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 60.dp),
+            modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 30.dp),
 
             fontFamily = FontFamily.SansSerif,
             textAlign = TextAlign.Center
@@ -162,8 +163,9 @@ fun SettingScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp),
-            horizontalArrangement = Arrangement.Absolute.Left
+                .padding(start = 24.dp)
+                .clickable {  },
+            horizontalArrangement = Arrangement.Absolute.Left,
         ) {
             IconButton(onClick = { /*TODO*/ },
                 modifier = Modifier.size(44.dp)) {
@@ -265,7 +267,8 @@ fun SettingScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp),
+                .padding(start = 24.dp)
+                .clickable { openLanguageLog = true  },
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
             IconButton(onClick = { /*TODO*/ },
@@ -317,7 +320,8 @@ fun SettingScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp),
+                .padding(start = 24.dp)
+                .clickable {  },
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
             IconButton(onClick = { /*TODO*/ },
@@ -367,7 +371,8 @@ fun SettingScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp),
+                .padding(start = 24.dp)
+                .clickable {  },
             horizontalArrangement = Arrangement.Absolute.Left
         ) {
             IconButton(onClick = { /*TODO*/ },
@@ -408,11 +413,9 @@ fun SettingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 24.dp)
-                .clickable {
-                    openSignoutLog = true
-                }
+                .clickable { openSignoutLog = true }
         ) {
-            IconButton(onClick = { /*TODO*/ },
+            IconButton(onClick = { },
                 modifier = Modifier.size(44.dp)) {
                 Icon(
                     painter = painterResource(id = R.drawable.group_510),
@@ -445,97 +448,119 @@ fun SettingScreen(
         }
 
         if(openSignoutLog) {
-            Dialog(onDismissRequest = { openSignoutLog = false }) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp),
-                    shape = RoundedCornerShape(10.dp),
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Sign out",
-                            style = TextStyle(
-                                fontSize = 40.sp,
-                                color = Color.Black,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            textAlign = TextAlign.Left,
-                        )
-                        SpacerHeight(10.dp)
-                        Text(
-                            text = "Are you sure you want to sign out?",
-                            style = TextStyle(
-                                fontSize = 15.sp,
-                                color = Color.Gray,
-                                fontWeight = FontWeight.Bold,
-                            ),
-                            textAlign = TextAlign.Left,
-                        )
-//                SpacerHeight(10.dp)
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 10.dp)
-                                .weight(1f),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.Bottom
-                        ) {
-                            Text(
-                                text = "Cancel",
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    color = Color.Gray,
-                                    fontWeight = FontWeight.Bold
-                                ),
-                                textAlign = TextAlign.Left,
-                                modifier = Modifier
-                                    .clickable {
-                                openSignoutLog = false
-                                    }
-                            )
-                            SpacerWidth(10.dp)
-                            Text(
-                                text = "Sign out",
-                                style = TextStyle(
-                                    fontSize = 20.sp,
-                                    color = Color.Red,
-                                    fontWeight = FontWeight.Bold
-                                ),
-                                textAlign = TextAlign.Left,
-                                modifier = Modifier
-                                    .clickable {
-                                    openSignoutLog = false
-                                            val authService: AuthAPI = APIService.getApiClient(context).create(
-                                                AuthAPI::class.java)
-                                            MainScope().launch {
-                                                try {
-                                                    val response = authService.logout().await()
-                                                    Toast.makeText(context, "Log out successfully!", Toast.LENGTH_SHORT).show()
-                                                    val logoutService: AuthAPI = APIService.getApiClient(context, clearCookie = true).create(
-                                                        AuthAPI::class.java)
-                                                    val cookiePrefs: SharedPreferences = context.getSharedPreferences("Cookies", Context.MODE_PRIVATE)
-                                                    val cookies = ""
-
-                                                    val editor = cookiePrefs.edit()
-                                                } catch (e: Exception) {
-                                                    e.printStackTrace()
-                                                }
-                                            }
-//                                    navHostController.navigate("login")
-                                    }
-                            )
-                        }
-                    }
-                }
-            }
+            openSignoutLog = false
+//            val authService: AuthAPI = APIService.getApiClient(context).create(
+//                AuthAPI::class.java)
+//            MainScope().launch {
+//                try {
+//                    val response = authService.logout().await()
+//                    Toast.makeText(context, "Log out successfully!", Toast.LENGTH_SHORT).show()
+//                    val logoutService: AuthAPI = APIService.getApiClient(context, clearCookie = true).create(
+//                        AuthAPI::class.java)
+//                    val cookiePrefs: SharedPreferences = context.getSharedPreferences("Cookies", Context.MODE_PRIVATE)
+//                    val cookies = ""
+//
+//                    val editor = cookiePrefs.edit()
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                }
+//            }
+            Toast.makeText(context, "Log out successfully!", Toast.LENGTH_SHORT).show()
+            navHostController.navigate(Login)
         }
+
+//        if(openSignoutLog) {
+//            Dialog(onDismissRequest = { openSignoutLog = false }) {
+//                Card(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(200.dp),
+//                    shape = RoundedCornerShape(10.dp),
+//                ) {
+//                    Column(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(10.dp),
+//                        verticalArrangement = Arrangement.Center,
+////                horizontalAlignment = Alignment.CenterHorizontally
+//                    ) {
+//                        Text(
+//                            text = "Sign out",
+//                            style = TextStyle(
+//                                fontSize = 40.sp,
+//                                color = Color.Black,
+//                                fontWeight = FontWeight.Bold
+//                            ),
+//                            textAlign = TextAlign.Left,
+//                        )
+//                        SpacerHeight(10.dp)
+//                        Text(
+//                            text = "Are you sure you want to sign out?",
+//                            style = TextStyle(
+//                                fontSize = 15.sp,
+//                                color = Color.Gray,
+//                                fontWeight = FontWeight.Bold,
+//                            ),
+//                            textAlign = TextAlign.Left,
+//                        )
+////                SpacerHeight(10.dp)
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(top = 10.dp)
+//                                .weight(1f),
+//                            horizontalArrangement = Arrangement.End,
+//                            verticalAlignment = Alignment.Bottom
+//                        ) {
+//                            Text(
+//                                text = "Cancel",
+//                                style = TextStyle(
+//                                    fontSize = 20.sp,
+//                                    color = Color.Gray,
+//                                    fontWeight = FontWeight.Bold
+//                                ),
+//                                textAlign = TextAlign.Left,
+//                                modifier = Modifier
+//                                    .clickable {
+//                                openSignoutLog = false
+//                                    }
+//                            )
+//                            SpacerWidth(10.dp)
+//                            Text(
+//                                text = "Sign out",
+//                                style = TextStyle(
+//                                    fontSize = 20.sp,
+//                                    color = Color.Red,
+//                                    fontWeight = FontWeight.Bold
+//                                ),
+//                                textAlign = TextAlign.Left,
+//                                modifier = Modifier
+//                                    .clickable {
+//                                    openSignoutLog = false
+//                                            val authService: AuthAPI = APIService.getApiClient(context).create(
+//                                                AuthAPI::class.java)
+//                                            MainScope().launch {
+//                                                try {
+//                                                    val response = authService.logout().await()
+//                                                    Toast.makeText(context, "Log out successfully!", Toast.LENGTH_SHORT).show()
+//                                                    val logoutService: AuthAPI = APIService.getApiClient(context, clearCookie = true).create(
+//                                                        AuthAPI::class.java)
+//                                                    val cookiePrefs: SharedPreferences = context.getSharedPreferences("Cookies", Context.MODE_PRIVATE)
+//                                                    val cookies = ""
+//
+//                                                    val editor = cookiePrefs.edit()
+//                                                } catch (e: Exception) {
+//                                                    e.printStackTrace()
+//                                                }
+//                                            }
+////                                    navHostController.navigate("login")
+//                                    }
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
         var isExpanded by remember { mutableStateOf(false) }
         var selectedItem by remember { mutableStateOf("") }
