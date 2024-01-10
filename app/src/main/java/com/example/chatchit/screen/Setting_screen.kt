@@ -2,6 +2,7 @@ package com.example.chatchit.screen
 
 import Avatar
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -147,7 +148,8 @@ fun SettingScreen(
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 16.dp, horizontal = 8.dp),
+//            .padding(vertical = 16.dp, horizontal = 8.dp)
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
 //        verticalArrangement = Arrangement.Center
     ) {
@@ -188,6 +190,7 @@ fun SettingScreen(
                     text = user.name?: String(),
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     textAlign = TextAlign.Left,
+                    color = Color.Black,
                     fontSize = 20.sp,
                     maxLines = 2,
                     modifier = Modifier

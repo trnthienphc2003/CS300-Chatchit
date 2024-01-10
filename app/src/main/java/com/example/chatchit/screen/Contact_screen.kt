@@ -55,7 +55,9 @@ fun ContactScreen(
 
     val grouped = friends.sortedBy { it.name } .groupBy { it.name?.get(0) ?: '$' }
 
-    Box {
+    Box (
+        modifier = Modifier.fillMaxSize().background(Color.White)
+    ) {
         SearchContact(grouped = grouped)
         Row(modifier = Modifier.fillMaxSize().padding(top = 60.dp)) {
             ContactList(grouped = grouped, modifier = Modifier.weight(1f), listState, navHostController)
