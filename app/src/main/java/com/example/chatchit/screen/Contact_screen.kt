@@ -1,5 +1,6 @@
 package com.example.chatchit.screen
 
+import Avatar
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -56,10 +57,16 @@ fun ContactScreen(
     val grouped = friends.sortedBy { it.name } .groupBy { it.name?.get(0) ?: '$' }
 
     Box (
-        modifier = Modifier.fillMaxSize().background(Color.White)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     ) {
         SearchContact(grouped = grouped)
-        Row(modifier = Modifier.fillMaxSize().padding(top = 60.dp)) {
+        Row(modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 60.dp)
+            .background(Color.White),
+            ) {
             ContactList(grouped = grouped, modifier = Modifier.weight(1f), listState, navHostController)
 
             AlphabetBar(grouped = grouped) { pos ->
@@ -79,7 +86,9 @@ fun SearchContact(grouped: Map<Char, List<User>>) {
 
     // search bar
     SearchBar(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White),
         query = text,
         onQueryChange = { text = it },
         onSearch = { active = false },
@@ -87,12 +96,17 @@ fun SearchContact(grouped: Map<Char, List<User>>) {
         onActiveChange = {
             active = it
         },
-        placeholder = { Text("Hinted search text") },
+        placeholder = { Text(
+            "Hinted search text",
+            color = Color.Black
+        ) },
     ) {
         val flat = grouped.values.flatten().filter { it.name?.contains(text, ignoreCase = true) ?: false  }
 
         LazyColumn(
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp),
+            modifier = Modifier
+                .padding(horizontal = 18.dp, vertical = 12.dp)
+                .background(Color.White),
             verticalArrangement = Arrangement.spacedBy(18.dp),
             content = {
                 item { Text(text = "${flat.size} contacts found") }
@@ -142,8 +156,12 @@ fun ContactList (
                             .size(36.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        IconComponentDrawable(
-                            icon = R.drawable.person_2,
+//                        IconComponentDrawable(
+//                            icon = R.drawable.person_2,
+//                            size = 36.dp
+//                        )
+                        Avatar(
+                            b64Image = person.avatar,
                             size = 36.dp
                         )
                     }
@@ -211,7 +229,7 @@ fun contactListHeader(
     Box(
         modifier = androidx.compose.ui.Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
+            .background(Color.White)
             .padding(vertical = 4.dp)
     ) {
         Text(
@@ -226,6 +244,7 @@ fun contactListItem(person: User) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.background(Color.White)
     ) {
         Box(
             modifier = androidx.compose.ui.Modifier
