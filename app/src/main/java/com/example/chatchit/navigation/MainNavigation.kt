@@ -230,7 +230,8 @@ fun MainNavigation(
             }
             composable(ChatSetting){
                 ChatSettingScreen(
-                    navHostController
+                    navHostController,
+                    LocalContext.current
                 )
             }
             composable(Setting) {

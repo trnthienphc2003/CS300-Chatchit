@@ -1,6 +1,8 @@
 package com.example.chatchit.screen
 
 import Avatar
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,11 +36,18 @@ import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Group
+import com.example.chatchit.navigation.Home
 import com.example.chatchit.navigation.ManageMember
+import com.example.chatchit.services.APIService
+import com.example.chatchit.services.api.RoomAPI
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import retrofit2.await
 
 @Composable
 fun ChatSettingScreen(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    context: Context
 ){
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
@@ -55,7 +64,7 @@ fun ChatSettingScreen(
                 navHostController
             )
             info(person = person, modifier = Modifier.padding(top = 6.dp, start = 10.dp, end = 20.dp))
-            setting(user, person,navHostController, modifier = Modifier.padding(top = 6.dp))
+            setting(context,user, person,navHostController, modifier = Modifier.padding(top = 6.dp))
         }
     }
 }
@@ -104,6 +113,7 @@ fun info(
 
 @Composable
 fun setting(
+    context: Context,
     user: User,
     person: Room,
     navHostController: NavHostController,
@@ -343,8 +353,18 @@ fun setting(
                     .fillMaxWidth()
                     .padding(top = 6.dp, start = 20.dp, end = 20.dp)
                     .clickable {
-                        // Your click logic goes here
-                        // For example, you can navigate to another screen or perform some action.
+                        MainScope().launch {
+                            try {
+                                val removeService: RoomAPI =
+                                    APIService.getApiClient(context).create(RoomAPI::class.java)
+                                val removeAPIResponse =
+                                    removeService.deleteMember(roomId = person.id?:-1, id = user.id ?: -1)
+                                        .await()
+                                navHostController.navigate(Home)
+                            } catch (e: Exception) {
+                                Log.e("out group", e.toString())
+                            }
+                        }
                     }
             ) {
                 Row {
