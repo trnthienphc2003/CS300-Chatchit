@@ -43,6 +43,8 @@ class WebSocketService private constructor() {
             override fun onMessage(webSocket: WebSocket, text: String) {
                 success = true
                 Log.i("WebSocket", "Received data:$text")
+                if (text == "\"pong\"")
+                    return
                 receiveMessage(text)
             }
 
