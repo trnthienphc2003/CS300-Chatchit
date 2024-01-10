@@ -15,12 +15,11 @@ class APIService {
 
         fun getApiClient(
             context: Context,
-            clearCookie: Boolean = false,
         ): Retrofit {
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(createOkHttpClient(context, clearCookie))
+                .client(createOkHttpClient(context))
                 .build()
         }
 
@@ -30,9 +29,14 @@ class APIService {
             return cookiePrefs.getStringSet("Cookies-Set", HashSet())
         }
 
+        fun clearCookies(context: Context) {
+            val cookiePrefs: SharedPreferences =
+                context.getSharedPreferences("Cookies", Context.MODE_PRIVATE)
+            cookiePrefs.edit().clear().apply()
+        }
+
         private fun createOkHttpClient(
             context: Context,
-            clearCookie: Boolean = false,
         ): OkHttpClient {
             val loggingInterceptor = HttpLoggingInterceptor()
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)

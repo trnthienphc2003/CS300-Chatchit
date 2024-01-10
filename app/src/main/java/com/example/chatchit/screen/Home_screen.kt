@@ -28,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,12 +50,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.chatchit.R
 import com.example.chatchit.component.IconComponentDrawable
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.models.Conversation
+import com.example.chatchit.models.MessageTranslate
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
 import com.example.chatchit.navigation.Chat
@@ -72,13 +75,52 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
+class HomeViewModel : ViewModel() {
+    private val homeList = mutableStateOf<List<Room>>(emptyList())
 
+    fun getHomeList(): State<List<Room>> = homeList
+
+    fun setHomeList(list: List<Room>) {
+        homeList.value = list
+    }
+    fun addHome(room: Room) {
+        homeList.value = listOf(room) + homeList.value
+    }
+    fun init(context:Context){
+        MainScope().launch {
+            try {
+                val homeService: RoomAPI =
+                    APIService.getApiClient(context).create(
+                        RoomAPI::class.java
+                    )
+                val homeAPIResponse =
+                    homeService.listFriendChat().await()
+                val json = Gson().toJson(homeAPIResponse.data)
+                val itemType = object : TypeToken<List<Room>>() {}.type
+                val listRoom1 = Gson().fromJson<List<Room>>(json, itemType)
+                setHomeList(listRoom1)
+            } catch (e: Exception) {
+                Log.e("moveChat", e.toString())
+            }
+        }
+    }
+
+    companion object {
+        private var instance: HomeViewModel? = null
+        fun getInstance(): HomeViewModel {
+            if (instance == null) {
+                instance = HomeViewModel()
+            }
+            return instance!!
+        }
+    }
+}
 @Composable
 fun HomeScreen(
     navHostController: NavHostController,
     context: Context
 ){
-    val listRoom = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<Room>>("listRoom") ?: emptyList<Room>()
+    HomeViewModel.getInstance().init(context)
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
 
     Box(modifier = Modifier
@@ -90,7 +132,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(top = 20.dp)
         ){
-            HeaderAndStory(context, listRoom, user, navHostController)
+            HeaderAndStory(context, HomeViewModel.getInstance().getHomeList().value, user, navHostController)
             Box(modifier = Modifier
                 .fillMaxSize()
                 .clip(
@@ -107,7 +149,7 @@ fun HomeScreen(
 //
 //                )
                 LazyColumn(modifier = Modifier.padding(top = 30.dp, bottom = 15.dp) ){
-                    items(listRoom, key = { it.id?:Int }) {
+                    items(HomeViewModel.getInstance().getHomeList().value, key = { it.id?:Int }) {
                         UserEachRow(user = user, room = it) {
 //
                                 navHostController.currentBackStackEntry?.savedStateHandle?.set(

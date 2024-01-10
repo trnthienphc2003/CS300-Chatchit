@@ -250,22 +250,15 @@ fun LoginScreen(
 
         Button(
             onClick = {
-
-                val authService: AuthAPI = APIService.getApiClient(context, clearCookie=true).create(AuthAPI::class.java)
+                APIService.clearCookies(context)
+                val authService: AuthAPI = APIService.getApiClient(context).create(AuthAPI::class.java)
                 MainScope().launch {
                     try {
                         val loginAPIResponse =
                             authService.login(LoginForm(email, password)).await()
-                        val roomService: RoomAPI =
-                            APIService.getApiClient(context).create(RoomAPI::class.java)
-                        val roomAPIResponse = roomService.listFriendChat().await()
-                        val json = Gson().toJson(roomAPIResponse.data)
-                        val itemType = object : TypeToken<List<Room>>() {}.type
-                        val listRoom = Gson().fromJson<List<Room>>(json, itemType)
 
-                        val newAuthService: AuthAPI =
-                            APIService.getApiClient(context, clearCookie = true)
-                                .create(AuthAPI::class.java)
+                        val newAuthService: AuthAPI = APIService.getApiClient(context)
+                            .create(AuthAPI::class.java)
                         val userResponse = newAuthService.getUser().await()
                         val jsonUser = Gson().toJson(userResponse.data)
                         val itemUserType = object : TypeToken<User>() {}.type
@@ -278,10 +271,6 @@ fun LoginScreen(
                             sleep(200)
                         }
 
-                        navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                            "listRoom",
-                            listRoom
-                        )
                         navHostController.currentBackStackEntry?.savedStateHandle?.set(
                             "user",
                             user

@@ -159,7 +159,6 @@ fun MainNavigation(
                                             val itemType = object : TypeToken<List<Language>>() {}.type
                                             val listOfLanguages = Gson().fromJson<List<Language>>(json, itemType)
 
-//                                            WebSocketService.getInstance().setup(context, user.id!!)
                                             navHostController.currentBackStackEntry?.savedStateHandle?.set(
                                                 "user",
                                                 user
