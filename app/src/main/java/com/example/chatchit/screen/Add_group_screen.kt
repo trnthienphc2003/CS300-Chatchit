@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -77,7 +78,6 @@ fun groupAdd(
     ) {
         Box(modifier = Modifier
             .clip(CircleShape)
-            .background(Color.Yellow, CircleShape)
             .size(150.dp),
             contentAlignment = Alignment.Center
         ){
@@ -87,7 +87,7 @@ fun groupAdd(
 //            )
             Avatar(
                 b64Image = person.avatar,
-                size = 145.dp
+                size = 150.dp
             )
         }
         SpacerHeight(8.dp)
@@ -102,7 +102,11 @@ fun groupAdd(
         )
         SpacerHeight(8.dp)
         if(check.getCheck()){
-            Button(enabled = true, onClick = {
+            Button(enabled = true,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF20A090)
+                ),
+                onClick = {
                 MainScope().launch {
                     try {
                         val addService: RoomAPI =
@@ -113,8 +117,8 @@ fun groupAdd(
                         Log.e("Add to Group", e.toString())
                         Toast.makeText(context, "This member exist in group", Toast.LENGTH_SHORT).show()
                     }
-                }
-            }) {
+                }},
+            ) {
                 Text(text = "Add to Group")
             }
         }

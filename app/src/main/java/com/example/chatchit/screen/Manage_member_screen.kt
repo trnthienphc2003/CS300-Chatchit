@@ -149,7 +149,8 @@ fun MemberEachRow(
         .fillMaxWidth()
         .background(Color.White)
         .clickable { onClick() }
-        .padding(horizontal = 20.dp, vertical = 5.dp)
+        .padding(horizontal = 20.dp, vertical = 0.dp)
+        .padding(top = 15.dp)
     ){
         Column {
             Row(

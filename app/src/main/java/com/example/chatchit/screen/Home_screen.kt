@@ -232,6 +232,9 @@ fun UserEachRow(
             formatter.format(room.lastMessage.createdAt)
         }
     }
+    if (last_message.length > 23) {
+        last_message = last_message.substring(0, 20) + "..."
+    }
 
     Box(modifier = modifier
         .fillMaxWidth()
@@ -413,7 +416,7 @@ fun UserStoryLayout(
     ) {
         Box(modifier = Modifier
             .clip(CircleShape)
-            .background(Color.Yellow, CircleShape)
+            .background(Color(0xFF20A090), CircleShape)
             .clickable { onClick() }
             .size(70.dp),
         contentAlignment = Center

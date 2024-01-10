@@ -1,5 +1,6 @@
 package com.example.chatchit.screen
 
+import Avatar
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
@@ -21,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -30,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
@@ -131,7 +134,14 @@ fun groupInput(
             modifier = modifier
                 .width(340.dp)
                 .height(50.dp),
-            shape = RoundedCornerShape(10.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color(0xFFF3F6F6),
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                disabledTextColor = Color.Transparent,
+            ),
+            shape = RoundedCornerShape(24.dp),
             placeholder = {
                 Text(
                     text = "Search friend",
@@ -141,7 +151,7 @@ fun groupInput(
                     )
                 )
             },
-            leadingIcon = { IconComponentDrawable(icon = R.drawable.baseline_search_24, size = 35.dp)},
+            leadingIcon = { IconComponentDrawable(icon = R.drawable.baseline_search_24, size = 32.dp)},
 //            trailingIcon = { IconButtonEmoji(modifier = modifierText) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -193,7 +203,7 @@ fun GroupEachRow(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row {
-                    IconComponentDrawable(icon = R.drawable.person_2, size = 60.dp)
+                    Avatar(b64Image = person.avatar, modifier = Modifier.clip(RoundedCornerShape(30.dp)), size = 60.dp)
                     SpacerWidth()
                     Text(
                         text = person.name ?: String(), style = TextStyle(

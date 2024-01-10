@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -70,6 +71,9 @@ fun StartScreen(
 //        }
         Button(
             onClick = {navHostController.navigate(Login)},
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF20A090)
+            ),
             modifier = Modifier
                 .padding(20.dp)
                 .align(Alignment.BottomCenter)

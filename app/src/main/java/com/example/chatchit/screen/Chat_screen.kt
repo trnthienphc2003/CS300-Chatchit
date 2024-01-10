@@ -30,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -362,7 +363,7 @@ fun chatRow(
             }
             Box(
                 modifier = Modifier.background(
-                    if (chat.message?.senderId == user.id) Color.Green else Color.LightGray,
+                    if (chat.message?.senderId == user.id) Color(0xFF20A090) else Color.LightGray,
                     RoundedCornerShape(20.dp)
                 )
             ) {
@@ -405,7 +406,7 @@ fun chatRow(
                         color = Color.Black,
                     ),
                     textAlign = TextAlign.End,
-                    modifier = Modifier.padding(horizontal = 55.dp, vertical = 8.dp)
+                    modifier = Modifier.padding(horizontal = 55.dp, vertical = 4.dp)
 
                 )
             }
@@ -416,7 +417,7 @@ fun chatRow(
                         color = Color.Black,
                     ),
                     textAlign = TextAlign.End,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
 
                 )
             }
@@ -440,8 +441,15 @@ fun chatInput(
         TextField(
             value = message,
             onValueChange = {message = it},
-            modifier = modifier.width(220.dp),
+            modifier = modifier.width(310.dp), //220
             shape = RoundedCornerShape(160.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color(0xFFF3F6F6),
+                disabledTextColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            ),
             placeholder = {
                 Text(
                     text = "Write your message",
@@ -471,11 +479,11 @@ fun chatInput(
             )
         )
 //        SpacerWidth()
-        IconButtonRecord(modifier = modifierText)
+//        IconButtonRecord(modifier = modifierText)
 //        SpacerWidth()
-        IconButtonImageSend(modifier = modifierText)
+        IconButtonImageSend(modifier = modifierText.align(CenterVertically).padding(top = 8.dp))
 //        SpacerWidth()
-        IconButtonCam(modifier = modifierText)
+//        IconButtonCam(modifier = modifierText)
     }
 }
 @Composable
