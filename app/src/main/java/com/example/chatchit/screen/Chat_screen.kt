@@ -31,7 +31,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -62,7 +61,6 @@ import com.example.chatchit.R
 import com.example.chatchit.component.SpacerHeight
 import com.example.chatchit.component.SpacerWidth
 import com.example.chatchit.models.Conversation
-import com.example.chatchit.models.Message
 import com.example.chatchit.models.MessageTranslate
 import com.example.chatchit.models.Room
 import com.example.chatchit.models.User
@@ -77,28 +75,16 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatterBuilder
 import java.util.Calendar
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel() : ViewModel() {
+    private var loaded = false
     private val chatList = mutableStateOf<List<MessageTranslate>>(emptyList())
-
     private val stateTranslate = mutableStateOf<Boolean>(false)
-    fun getChatList(): State<List<MessageTranslate>> = chatList
 
-    fun setChatList(list: List<MessageTranslate>) {
-        chatList.value = list
-    }
-    fun addMessage(message: MessageTranslate) {
-        chatList.value = listOf(message) + chatList.value
-    }
-    fun clear(){
-        chatList.value = emptyList()
-    }
-
-    fun init(roomId: Int, context:Context){
+    fun init(context: Context, roomId: Int) {
         MainScope().launch {
             try {
                 val mesService: MessageAPI =
@@ -117,10 +103,32 @@ class ChatViewModel : ViewModel() {
         }
     }
 
+    public fun getChatList(): State<List<MessageTranslate>> = chatList
+
+    private fun setChatList(list: List<MessageTranslate>) {
+        chatList.value = list
+    }
+    public fun addMessage(message: MessageTranslate) {
+        chatList.value = listOf(message) + chatList.value
+    }
+    fun clear(){
+        chatList.value = emptyList()
+    }
+
     fun setStateTranslate(state: Boolean){
         stateTranslate.value = state
     }
     fun getStateTranslate() : Boolean = stateTranslate.value
+
+    companion object {
+        private var instance: ChatViewModel? = null
+        fun getInstance(): ChatViewModel {
+            if (instance == null) {
+                instance = ChatViewModel()
+            }
+            return instance!!
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -132,16 +140,15 @@ fun ChatScreen(
     val person = navHostController.previousBackStackEntry?.savedStateHandle?.get<Room>("data") ?: Room()
     val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
     val roomId = navHostController.previousBackStackEntry?.savedStateHandle?.get<Int>("roomId") ?: -1
-    val viewModel = ChatViewModel()
-    viewModel.init(roomId, context)
+    ChatViewModel.getInstance().init(context, roomId)
     val lazyColumnListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
     WebSocketService.getInstance().setCallback(object : WebSocketCallback {
         override fun onReceiveMessage(message: MessageTranslate) {
-            if (message.message?.roomId == roomId) {
-                viewModel.addMessage(message)
-                if (message.message?.senderId == user.id) {
+            if (message.message!!.roomId == roomId) {
+                ChatViewModel.getInstance().addMessage(message)
+                if (message.message.senderId == user.id) {
                     coroutineScope.launch {
                         lazyColumnListState.animateScrollToItem(0)
                     }
@@ -161,7 +168,7 @@ fun ChatScreen(
             modifier = Modifier.fillMaxSize()
         ) {
             inforBar(
-                viewModel,
+                ChatViewModel.getInstance(),
                 person,
                 modifier = Modifier.padding(top = 30.dp, start = 10.dp, end = 20.dp),
                 navHostController
@@ -180,8 +187,8 @@ fun ChatScreen(
                     reverseLayout = true,
                     state = lazyColumnListState
                 ){
-                    items(viewModel.getChatList().value, key = {it.id?:Int}){
-                        chatRow(viewModel, user, chat = it, person)
+                    items(ChatViewModel.getInstance().getChatList().value, key = {it.id?:Int}){
+                        chatRow(ChatViewModel.getInstance(), user, chat = it, person)
                     }
                 }
                 chatInput(roomId = roomId, modifier = Modifier.align(BottomCenter), modifierText = Modifier.align(Center))
