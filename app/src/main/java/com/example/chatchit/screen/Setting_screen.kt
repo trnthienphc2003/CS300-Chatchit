@@ -211,7 +211,7 @@ fun SettingScreen(
 
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 20.dp))
+        Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
         Row(
             modifier = Modifier
@@ -263,7 +263,7 @@ fun SettingScreen(
 
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 20.dp))
+        Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
         Row(
             modifier = Modifier
@@ -316,7 +316,7 @@ fun SettingScreen(
 
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 20.dp))
+        Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
         Row(
             modifier = Modifier
@@ -368,7 +368,7 @@ fun SettingScreen(
 
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 20.dp))
+        Spacer(modifier = Modifier.padding(vertical = 10.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -408,7 +408,7 @@ fun SettingScreen(
             }
         }
 
-        Spacer(modifier = Modifier.padding(vertical = 20.dp))
+        Spacer(modifier = Modifier.padding(vertical = 10.dp))
         Row(
             horizontalArrangement = Arrangement.Absolute.Left,
             modifier = Modifier

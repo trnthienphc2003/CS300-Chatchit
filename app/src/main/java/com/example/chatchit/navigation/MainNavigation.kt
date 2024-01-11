@@ -71,6 +71,7 @@ fun MainNavigation(
         .currentBackStackEntryAsState().value?.destination?.route in listOfNavItems.map { it.route }
 
     Scaffold(
+        modifier = Modifier.background(Color(0xFF24786D)),
         bottomBar = {
             if(showBottomBar) {
                 NavigationBar(

@@ -48,7 +48,6 @@ fun StartScreen(
             contentDescription = "",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier.fillMaxSize()
-
         )
 //        Box(
 //            modifier = Modifier
@@ -71,16 +70,19 @@ fun StartScreen(
 //        }
         Button(
             onClick = {navHostController.navigate(Login)},
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF20A090)
-            ),
             modifier = Modifier
                 .padding(20.dp)
                 .align(Alignment.BottomCenter)
                 .height(60.dp)
                 .width(300.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF24786D),
+                contentColor = Color.White
+            ),
+//            shape = RoundedCornerShape(25)
         ) {
-            Text(text = "Get started")
+            Text(text = "Get started",
+                color = Color.White,)
         }
     }
 }

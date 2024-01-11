@@ -3,6 +3,7 @@ package com.example.chatchit.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -15,17 +16,19 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.gms.common.SignInButton
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFF24786D),
-    secondary = Color(0xFF20A090),
-    tertiary = Color(0xFF20A090)
+    primary = Color.Transparent,
+    secondary = Color.Transparent,
+    tertiary = Color.Transparent,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color(0xFF24786D),
-    secondary = Color(0xFF20A090),
-    tertiary = Color(0xFF20A090)
+    primary = Color.Transparent,
+    secondary = Color.Transparent,
+    tertiary = Color.Transparent,
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -45,10 +48,10 @@ fun ChatChitTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicLightColorScheme(context) else dynamicLightColorScheme(context)
-        }
+//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+//            val context = LocalContext.current
+//            if (darkTheme) null
+//        }
 
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
@@ -61,6 +64,7 @@ fun ChatChitTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
+
 
     MaterialTheme(
         colorScheme = colorScheme,

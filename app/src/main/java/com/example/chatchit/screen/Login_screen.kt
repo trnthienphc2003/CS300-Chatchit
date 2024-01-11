@@ -174,42 +174,42 @@ fun LoginScreen(
             color = Color(0xFF797C7B)
         )
 
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 30.dp),
-//            verticalArrangement = Arrangement.Center,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            OutlinedButton(onClick = { /*TODO*/ },
-                modifier= Modifier.size(50.dp),  //avoid the oval shape
-                shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
-                contentPadding = PaddingValues(0.dp),  //avoid the little icon
-//                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
-            ) {
-                Icon (
-                    painterResource(id = R.drawable.group_459),
-                    contentDescription = "Login by Google"
-                )
-            }
-
-            Spacer(modifier = Modifier.width(20.dp))
-
-            OutlinedButton(onClick = { /*TODO*/ },
-                modifier= Modifier.size(50.dp),  //avoid the oval shape
-                shape = CircleShape,
-                border= BorderStroke(1.dp, Color.Blue),
-                contentPadding = PaddingValues(0.dp),  //avoid the little icon
-//                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
-            ) {
-                Icon (
-                    painterResource(id = R.drawable.group_458),
-                    contentDescription = "Login by Facebook"
-                )
-            }
-
-        }
+//        Row (
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 30.dp),
+////            verticalArrangement = Arrangement.Center,
+//            horizontalArrangement = Arrangement.Center
+//        ) {
+//            OutlinedButton(onClick = { /*TODO*/ },
+//                modifier= Modifier.size(50.dp),  //avoid the oval shape
+//                shape = CircleShape,
+//                border= BorderStroke(1.dp, Color.Blue),
+//                contentPadding = PaddingValues(0.dp),  //avoid the little icon
+////                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+//            ) {
+//                Icon (
+//                    painterResource(id = R.drawable.group_459),
+//                    contentDescription = "Login by Google"
+//                )
+//            }
+//
+//            Spacer(modifier = Modifier.width(20.dp))
+//
+//            OutlinedButton(onClick = { /*TODO*/ },
+//                modifier= Modifier.size(50.dp),  //avoid the oval shape
+//                shape = CircleShape,
+//                border= BorderStroke(1.dp, Color.Blue),
+//                contentPadding = PaddingValues(0.dp),  //avoid the little icon
+////                colors = ButtonDefaults.outlinedButtonColors(contentColor =  Color.Blue)
+//            ) {
+//                Icon (
+//                    painterResource(id = R.drawable.group_458),
+//                    contentDescription = "Login by Facebook"
+//                )
+//            }
+//
+//        }
 
         Spacer(modifier = Modifier.height(30.dp))
 
