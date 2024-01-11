@@ -75,22 +75,37 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.lang.Thread.sleep
+import java.sql.Time
 import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.Period
 import java.util.Calendar
+import java.util.Date
+import kotlin.math.abs
 
 class HomeViewModel : ViewModel() {
     private val homeList = mutableStateOf<List<Room>>(emptyList())
     private val user = mutableStateOf<User>(User())
+    private var lastReload: LocalDateTime? = null
 
     fun getHomeList(): State<List<Room>> = homeList
 
     fun setHomeList(list: List<Room>) {
         homeList.value = list
     }
-    fun addHome(room: Room) {
-        homeList.value = listOf(room) + homeList.value
-    }
-    fun init(context:Context){
+
+    fun init(context: Context, force:Boolean = false){
+        val curTime = LocalDateTime.now()
+        if (lastReload != null) {
+            val period = Duration.between(lastReload, curTime)
+            //Log.i("HomeViewModel", abs(period.seconds).toString())
+            if (abs(period.seconds) < 5) {
+                return
+            }
+        }
         MainScope().launch {
             try {
                 val homeService: RoomAPI =
@@ -103,15 +118,7 @@ class HomeViewModel : ViewModel() {
                 val itemType = object : TypeToken<List<Room>>() {}.type
                 val listRoom1 = Gson().fromJson<List<Room>>(json, itemType)
                 setHomeList(listRoom1)
-            } catch (e: Exception) {
-                Log.e("moveChat", e.toString())
-            }
-        }
-    }
 
-    fun loadUser(context:Context){
-        MainScope().launch {
-            try {
                 val newAuthService: AuthAPI = APIService.getApiClient(context)
                     .create(AuthAPI::class.java)
                 val userResponse = newAuthService.getUser().await()
@@ -119,8 +126,9 @@ class HomeViewModel : ViewModel() {
                 val itemUserType = object : TypeToken<User>() {}.type
                 val user1 = Gson().fromJson<User>(jsonUser, itemUserType)
                 user.value = user1
+                lastReload = curTime
             } catch (e: Exception) {
-                Log.e("LoadUser", e.toString())
+                Log.e("moveChat", e.toString())
             }
         }
     }
@@ -135,6 +143,9 @@ class HomeViewModel : ViewModel() {
             }
             return instance!!
         }
+        fun destroyInstance() {
+            instance = null
+        }
     }
 }
 @Composable
@@ -143,12 +154,10 @@ fun HomeScreen(
     context: Context
 ){
     HomeViewModel.getInstance().init(context)
-//    val user = navHostController.previousBackStackEntry?.savedStateHandle?.get<User>("user") ?: User()
-    HomeViewModel.getInstance().loadUser(context)
     val user = HomeViewModel.getInstance().getUser().value
     WebSocketService.getInstance().setCallback(object : WebSocketCallback {
         override fun onReceiveMessage(message: MessageTranslate) {
-            HomeViewModel.getInstance().init(context)
+            HomeViewModel.getInstance().init(context, true)
         }
     })
     Box(modifier = Modifier
@@ -180,21 +189,19 @@ fun HomeScreen(
                     items(HomeViewModel.getInstance().getHomeList().value, key = { it.id?:Int }) {
                         UserEachRow(user = user, room = it) {
 //
-                                navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                    "data",
-                                    it
-                                )
-                                navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                    "user",
-                                    user
-                                )
-                                navHostController.currentBackStackEntry?.savedStateHandle?.set(
-                                    "roomId",
-                                    it.id
-                                )
-                                navHostController.navigate(Chat)
-
-
+                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                "data",
+                                it
+                            )
+                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                "user",
+                                user
+                            )
+                            navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                                "roomId",
+                                it.id
+                            )
+                            navHostController.navigate(Chat)
                         }
                     }
                 }
@@ -385,9 +392,11 @@ fun Header(user: User, navHostController: NavHostController){
             fontWeight = FontWeight.Bold,
             fontSize = 20.sp
         ))
-        Avatar(b64Image = user.avatar, modifier = Modifier.align(CenterVertically).clip(
-            RoundedCornerShape(25.dp)
-        ), size = 50.dp)
+        Avatar(b64Image = user.avatar, modifier = Modifier
+            .align(CenterVertically)
+            .clip(
+                RoundedCornerShape(25.dp)
+            ), size = 50.dp)
     }
 }
 
@@ -507,7 +516,7 @@ fun AddStoryLayout(context:Context, navHostController: NavHostController){
 
                                         val name = groupName
                                         val removeAPIResponse = groupService.createRoom(NameField(name)).await()
-                                        HomeViewModel.getInstance().init(context)
+                                        HomeViewModel.getInstance().init(context, true)
                                     } catch (e: Exception) {
                                         Log.e("Create group", e.toString())
                                     }

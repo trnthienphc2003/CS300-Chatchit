@@ -1,5 +1,6 @@
 package com.example.chatchit.screen
 
+import Avatar
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
@@ -77,7 +78,7 @@ fun avatarAdd(
             .size(150.dp),
             contentAlignment = Alignment.Center
         ){
-            IconComponentDrawable(icon = R.drawable.person_2, size = 145.dp)
+            Avatar(b64Image = person.avatar, size = 145.dp)
         }
         SpacerHeight(8.dp)
         Text(

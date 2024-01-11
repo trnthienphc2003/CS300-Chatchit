@@ -280,7 +280,7 @@ fun LoginScreen(
                         Toast.makeText(context, "Connection error", Toast.LENGTH_SHORT).show()
                     } catch (e: Exception) {
                         Log.e("LoginScreen", e.toString())
-                        Toast.makeText(context, "Login failed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Wrong email or password", Toast.LENGTH_SHORT).show()
                     }
                 }
             },

@@ -1,5 +1,6 @@
 package com.example.chatchit.screen
 
+import Avatar
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.background
@@ -213,7 +214,7 @@ fun FriendEachRow(
             ) {
                 Row {
                     if (person != null){
-                        IconComponentDrawable(icon = R.drawable.person_2, size = 60.dp)
+                        Avatar(b64Image = person.avatar, size = 60.dp)
                         SpacerWidth()
                         Text(
                             text = person?.name ?: String(), style = TextStyle(

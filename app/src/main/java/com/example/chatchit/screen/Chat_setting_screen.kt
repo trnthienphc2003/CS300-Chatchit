@@ -360,6 +360,7 @@ fun setting(
                                 val removeAPIResponse =
                                     removeService.deleteMember(roomId = person.id?:-1, id = user.id ?: -1)
                                         .await()
+                                HomeViewModel.destroyInstance()
                                 navHostController.navigate(Home)
                             } catch (e: Exception) {
                                 Log.e("out group", e.toString())
