@@ -111,7 +111,8 @@ fun SignUpScreen(
                 unfocusedBorderColor = Gray,
                 errorBorderColor = Color.Red,
                 errorLabelColor = Color.Red,
-                errorLeadingIconColor = Color.Red
+                errorLeadingIconColor = Color.Red,
+                cursorColor = Color.Black,
             )
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -139,7 +140,8 @@ fun SignUpScreen(
                 unfocusedBorderColor = Gray,
                 errorBorderColor = Color.Red,
                 errorLabelColor = Color.Red,
-                errorLeadingIconColor = Color.Red
+                errorLeadingIconColor = Color.Red,
+                cursorColor = Color.Black,
             ),
             modifier = Modifier.fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp),
@@ -163,7 +165,8 @@ fun SignUpScreen(
                 unfocusedBorderColor = Gray,
                 errorBorderColor = Color.Red,
                 errorLabelColor = Color.Red,
-                errorLeadingIconColor = Color.Red
+                errorLeadingIconColor = Color.Red,
+                cursorColor = Color.Black,
             ),
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
@@ -193,7 +196,8 @@ fun SignUpScreen(
                 unfocusedBorderColor = Gray,
                 errorBorderColor = Color.Red,
                 errorLabelColor = Color.Red,
-                errorLeadingIconColor = Color.Red
+                errorLeadingIconColor = Color.Red,
+                cursorColor = Color.Black,
             ),
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()

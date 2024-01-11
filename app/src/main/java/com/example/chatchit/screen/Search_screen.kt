@@ -147,7 +147,8 @@ fun searchInput(
                 disabledTextColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
+                disabledIndicatorColor = Color.Transparent,
+                cursorColor = Color.Black,
             ),
             shape = RoundedCornerShape(16.dp),
             placeholder = {

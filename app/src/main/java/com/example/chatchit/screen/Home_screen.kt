@@ -27,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -504,7 +505,15 @@ fun AddStoryLayout(context:Context, navHostController: NavHostController){
                                 value = groupName,
                                 onValueChange = {groupName = it},
                                 maxLines = 1,
-                                modifier = Modifier.align(CenterHorizontally)
+                                modifier = Modifier.align(CenterHorizontally),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    containerColor = Color(0xFFF3F6F6),
+                                    disabledTextColor = Color.Transparent,
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    disabledIndicatorColor = Color.Transparent,
+                                    cursorColor = Color.Black,
+                                ),
                             )
                             SpacerHeight(10.dp)
                             Button(onClick = {

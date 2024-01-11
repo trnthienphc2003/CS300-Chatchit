@@ -99,7 +99,8 @@ fun UserInput(
                 unfocusedBorderColor = Gray,
                 errorBorderColor = Color.Red,
                 errorLabelColor = Color.Red,
-                errorLeadingIconColor = Color.Red
+                errorLeadingIconColor = Color.Red,
+                cursorColor = Color.Black,
             )
         )
     }
@@ -124,7 +125,8 @@ fun UserInput(
                 unfocusedBorderColor = Gray,
                 errorBorderColor = Color.Red,
                 errorLabelColor = Color.Red,
-                errorLeadingIconColor = Color.Red
+                errorLeadingIconColor = Color.Red,
+                cursorColor = Color.Black,
             )
         )
     }
