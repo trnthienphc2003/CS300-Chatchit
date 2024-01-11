@@ -141,6 +141,7 @@ fun groupInput(
                 disabledIndicatorColor = Color.Transparent,
                 disabledTextColor = Color.Transparent,
                 cursorColor = Color.Black,
+                focusedTextColor = Color.Black
             ),
             shape = RoundedCornerShape(24.dp),
             placeholder = {

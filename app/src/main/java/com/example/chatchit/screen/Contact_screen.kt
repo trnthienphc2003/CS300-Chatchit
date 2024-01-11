@@ -111,6 +111,14 @@ fun SearchContact(
         colors = SearchBarDefaults.colors(
             containerColor = Color(0xFFF3F6F6),
             dividerColor = Color(0xFFE7E7E7),
+            inputFieldColors = TextFieldDefaults.textFieldColors(
+                disabledTextColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                cursorColor = Color.Black,
+                focusedTextColor = Color.Black,
+            ),
         ),
         onQueryChange = { text = it },
         onSearch = { active = false },
@@ -134,7 +142,8 @@ fun SearchContact(
             userScrollEnabled = true,
             verticalArrangement = Arrangement.spacedBy(18.dp),
             content = {
-                item { Text(text = "${flat.size} contacts found") }
+                item { Text(text = "${flat.size} contacts found",
+                    color = Color.Black) }
 
                 items(items = flat) { contact ->
 //                    contactListItem(person = contact)

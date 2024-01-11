@@ -13,15 +13,15 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color.Transparent,
-    secondary = Color.Transparent,
-    tertiary = Color.Transparent,
+    primary = Color.White,
+    secondary = Color.White,
+    tertiary = Color.White,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color.Transparent,
-    secondary = Color.Transparent,
-    tertiary = Color.Transparent,
+    primary = Color.White,
+    secondary = Color.White,
+    tertiary = Color.White,
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -46,7 +46,7 @@ fun ChatChitTheme(
 //            if (darkTheme) null
 //        }
 
-        darkTheme -> DarkColorScheme
+        darkTheme -> LightColorScheme
         else -> LightColorScheme
     }
     val view = LocalView.current

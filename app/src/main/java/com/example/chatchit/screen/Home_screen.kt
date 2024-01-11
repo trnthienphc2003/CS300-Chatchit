@@ -512,6 +512,7 @@ fun AddStoryLayout(context:Context, navHostController: NavHostController){
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent,
                                     disabledIndicatorColor = Color.Transparent,
+                                    focusedTextColor = Color.Black,
                                     cursorColor = Color.Black,
                                 ),
                             )
