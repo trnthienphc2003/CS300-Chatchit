@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
@@ -215,7 +216,7 @@ fun FriendEachRow(
             ) {
                 Row {
                     if (person != null){
-                        Avatar(b64Image = person.avatar, size = 60.dp)
+                        Avatar(b64Image = person.avatar, modifier = Modifier.clip(RoundedCornerShape(30.dp)), size = 60.dp)
                         SpacerWidth()
                         Text(
                             text = person?.name ?: String(), style = TextStyle(

@@ -46,16 +46,9 @@ fun StartScreen(
         Image(
             painter = painterResource(id = R.drawable.splash),
             contentDescription = "",
-            contentScale = ContentScale.FillWidth,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillHeight,
         )
-//        Box(
-//            modifier = Modifier
-////                .fillMaxWidth()
-//                .padding(top = 220.dp)
-//                .background(Color.Black)
-//                .align(Alignment.Center)
-//        ) {
 //            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 40.dp)) {
 //                Text(text = stringResource(R.string.stay_with_your_friends),
 //                        style = TextStyle(
